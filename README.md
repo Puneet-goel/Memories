@@ -7,3 +7,6 @@ https://memories-backend-mern.herokuapp.com
 
 Frontend:
 https://memories-puneet.netlify.app/
+
+
+http://localhost:3000/viewPost/61d9778192b77225c460bdff

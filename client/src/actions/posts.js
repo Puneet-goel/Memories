@@ -23,7 +23,6 @@ export const getPosts = () => async(dispatch) => {
 		}
 
 		const {data} = await api.fetchPosts(token);
-
 		dispatch({
 		    type: FETCH_ALL,
 		    payload: data
@@ -41,6 +40,11 @@ export const createPost = (post) => async(dispatch) => {
 		const token = findToken();
 		if(token === null){
 			return;
+		}
+
+		post = {
+			...post,
+			createdAt: new Date()
 		}
 
 		const {data} = await api.createPost(post, token);

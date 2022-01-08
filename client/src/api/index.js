@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const url = "https://memories-backend-mern.herokuapp.com/posts";
-const url = "http://localhost:5000/posts";
+const url = "https://memories-backend-mern.herokuapp.com/posts";
+// const url = "http://localhost:5000/posts";
 
 export const fetchPosts = (token) => axios.get(url, {
     headers: { 
@@ -45,8 +45,8 @@ export const fetchSpecificPost = (id, token) => axios.get(`${url}/${id}`,
 );
 
 
-//const authUrl =  https://memories-backend-mern.herokuapp.com/auth";
-const authUrl = "http://localhost:5000/auth";
+const authUrl = "https://memories-backend-mern.herokuapp.com/auth";
+// const authUrl = "http://localhost:5000/auth";
 
 export const authenticate = (token) => axios.post(authUrl+'/authenticate',{},
     {

@@ -14,7 +14,9 @@ const Home = ({setUserValid}) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const [anchorEl, setAnchorEl] = React.useState(null);
+	const user = useSelector((state) => state.user);
+
+	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 
 	const handleMenu = (event) => {
@@ -33,12 +35,10 @@ const Home = ({setUserValid}) => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
-
-	const user = useSelector((state) => state.user);
 	
 	useEffect(()=>{
 		dispatch(getPosts());
-	},[currentId,dispatch]);
+	},[dispatch]);
 
 	return (
 		<Container maxWidth="lg" className={classes.home}>

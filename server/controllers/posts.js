@@ -15,7 +15,6 @@ export const createPost = async(req,res) => {
 	try{
 		let post = req.body.post;
 		post['creator'] = req.body.username;
-		post['likedBy'] = [req.body.username];
 
 		const newPost = new PostMessage(post);
 

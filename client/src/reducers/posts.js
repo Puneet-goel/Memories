@@ -8,9 +8,9 @@ const postReducer = (posts = [],action) => {
 		case LIKE:
 		    return posts.map((post) => post._id === action.payload._id ? action.payload : post);
 		case FETCH_ALL:
-		    return action.payload;
+			return action.payload.reverse();
 		case CREATE:
-		    return [...posts, action.payload];
+			return [action.payload, ...posts];
 		default:
 		    return posts;
 	}

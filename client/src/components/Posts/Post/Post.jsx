@@ -3,7 +3,7 @@ import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@
 import { Link } from "react-router-dom";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import EditIcon from '@material-ui/icons/Edit';
 import { green, blue } from '@material-ui/core/colors';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
@@ -60,7 +60,7 @@ const Post = ({post, setCurrentId, username}) => {
 				(post.creator === username)?
 				<div className={classes.overlay2}>
 					<Button style={{color: "white"}} size="small" onClick={() => setCurrentId(post._id)}>
-						<MoreHorizIcon fontSize="medium" /> 
+						<EditIcon fontSize="medium" /> 
 					</Button>
 				</div>
 				:null

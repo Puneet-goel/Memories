@@ -114,13 +114,18 @@ export const likePost = (id) => async(dispatch) => {
 	}
 }
 
-export const getSpecificPost = async(id) => {
-	
+export const getUserPost = async(id)  => {
+
 	try{
 
 		const token = findToken();
-		const {data} = await api.fetchSpecificPost(id, token);
+		if(token === null){
+			return;
+		}
+
+		const {data} = await api.fetchUserPosts(id, token);
 		return data;
+
 	}catch(error){
 		console.log(error);
 	}

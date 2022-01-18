@@ -21,7 +21,7 @@ const App = () => {
                 <Route path="/signup" element={ isUserValid?<Navigate to="/" />: <Signup /> } />
                 <Route path="/forgot-password" element={ <ForgotPassword /> } />
                 <Route path="/reset-password/:id/:username" element={ <ResetPassword /> } />
-                <Route path="/viewPost/:id" element={ <ViewPost isUserValid={isUserValid} /> } />
+                <Route path="/viewPost/:id" element={ <ViewPost isUserValid={isUserValid} setUserValid={setUserValid} /> } />
                 <Route path="/*" element={ <Navigate to="/" />} />
             </Routes>
         </BrowserRouter>

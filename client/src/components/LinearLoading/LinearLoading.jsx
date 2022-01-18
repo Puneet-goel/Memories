@@ -41,7 +41,7 @@ const LinearLoading = ({ setUserValid }) => {
         })()
 
 		const timer = setInterval(() => {
-			setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 40));
+			setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 20));
 		}, 300);
 
 		return () => {

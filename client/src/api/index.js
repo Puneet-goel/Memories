@@ -36,7 +36,7 @@ export const likePost = (id, token) => axios.patch(`${url}/${id}/likePost`, {},
         }
     } 
 );
-export const fetchSpecificPost = (id, token) => axios.get(`${url}/${id}`, 
+export const fetchUserPosts = (id, token) => axios.get(`${url}/${id}`, 
     {
         headers: { 
             Authorization: `Bearer ${token}` 

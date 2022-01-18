@@ -98,7 +98,7 @@ export const likePost = async(req,res) => {
 	}
 }
 
-export const getSpecificPost = async(req,res) => {
+export const getUserPost = async(req,res) => {
 
 	try{
 		const { id: _id } = req.params;
@@ -107,7 +107,13 @@ export const getSpecificPost = async(req,res) => {
 		}
 
 		const post = await PostMessage.findById(_id);
-		res.status(200).json(post);
+		const postMessages = await PostMessage.find();
+		const userPost = postMessages.filter((cur) => cur.creator === post.creator && !cur._id.equals(post._id))
+		
+		res.status(200).json({
+			'userPosts': userPost,
+			'specificPost': post
+		});
 	}catch(error){
 		res.status(404).json({message: error.message});
 	}

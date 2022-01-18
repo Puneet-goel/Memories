@@ -119,9 +119,6 @@ export const getUserPost = async(id)  => {
 	try{
 
 		const token = findToken();
-		if(token === null){
-			return;
-		}
 
 		const {data} = await api.fetchUserPosts(id, token);
 		return data;

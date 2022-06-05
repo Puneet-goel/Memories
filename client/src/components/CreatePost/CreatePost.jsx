@@ -29,6 +29,8 @@ const CreatePost = ({ currentId, setCurrentId }) => {
   useEffect(() => {
     if (post) {
       setPostData(post);
+      setModal(true);
+      imageFile.current = post.selectedFile;
     }
   }, [post]);
 
@@ -42,6 +44,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       setError('Message cannot be empty');
       return;
     }
+
     if (currentId) {
       dispatch(updatePost(currentId, postData));
     } else {
@@ -52,6 +55,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
 
   const handleModal = () => {
     setModal((prev) => !prev);
+    clear();
   };
 
   const handleTagData = (e) => {
@@ -64,6 +68,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     setPostData({ ...postData, selectedFile: base64 });
     imageFile.current = base64;
   };
+
   const clear = () => {
     setCurrentId(null);
     setPostData({
@@ -92,7 +97,10 @@ const CreatePost = ({ currentId, setCurrentId }) => {
         aria-describedby="modal-description"
       >
         <div className="form-container p-3 p-md-5">
-          <h5 className="form-header text-center fw-bolder"> ADD A SNAP </h5>
+          <h5 className="form-header text-center fw-bolder">
+            {' '}
+            {currentId ? 'Edit' : 'Add A'} SNAP{' '}
+          </h5>
           <button
             className="form-header-close btn m-1 m-md-3"
             type="button"
@@ -108,6 +116,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-lg"
               placeholder="Title"
+              value={postData.title}
               onChange={(e) =>
                 setPostData({ ...postData, title: e.target.value })
               }
@@ -126,6 +135,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
               placeholder="comma separated tags"
               aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-lg"
+              value={postData.tags}
               onChange={handleTagData}
             />
           </div>
@@ -155,7 +165,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
               type="button"
               onClick={handleModal}
             >
-              Close
+              Clear & Close
             </button>
             <button
               className="btn btn-outline-success"

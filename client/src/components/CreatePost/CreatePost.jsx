@@ -1,30 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import FileBase from "react-file-base64";
-import { Avatar, Modal } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import useStyles from "./styles";
-import { createPost, updatePost } from "../../actions/posts";
-import { parseUsernameInitials } from "../../utility/index.js";
-import PostEditor from "./PostEditor.jsx";
-import "./styles.css";
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import FileBase from 'react-file-base64';
+import { Avatar, Modal } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import useStyles from './styles';
+import { createPost, updatePost } from '../../actions/posts';
+import { parseUsernameInitials } from '../../utility/index.js';
+import PostEditor from './PostEditor.jsx';
+import './styles.css';
 
 const CreatePost = ({ currentId, setCurrentId }) => {
   const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null
+    currentId ? state.posts.find((p) => p._id === currentId) : null,
   );
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [postData, setPostData] = useState({
-    title: "",
-    message: "",
-    tags: "",
-    selectedFile: "",
+    title: '',
+    message: '',
+    tags: '',
+    selectedFile: '',
   });
   const imageFile = useRef(null);
   const [modal, setModal] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (post) {
@@ -35,11 +35,11 @@ const CreatePost = ({ currentId, setCurrentId }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (postData.title === "") {
-      setError("Title cannot be empty");
+    if (postData.title === '') {
+      setError('Title cannot be empty');
       return;
-    } else if (postData.message === "") {
-      setError("Message cannot be empty");
+    } else if (postData.message === '') {
+      setError('Message cannot be empty');
       return;
     }
     if (currentId) {
@@ -56,7 +56,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
 
   const handleTagData = (e) => {
     let arr = e.target.value.split(/[ ,]/);
-    arr = arr.filter((ele) => ele !== "");
+    arr = arr.filter((ele) => ele !== '');
     setPostData({ ...postData, tags: arr });
   };
 
@@ -67,10 +67,10 @@ const CreatePost = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(null);
     setPostData({
-      title: "",
-      message: "",
-      tags: "",
-      selectedFile: "",
+      title: '',
+      message: '',
+      tags: '',
+      selectedFile: '',
     });
     imageFile.current = null;
   };
@@ -131,7 +131,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
           </div>
 
           <FileBase
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             type="file"
             multiple={false}
             onDone={handleImageUpload}
@@ -162,7 +162,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
               type="button"
               onClick={handleSubmit}
             >
-              {currentId ? "Save" : "Add"}
+              {currentId ? 'Save' : 'Add'}
             </button>
           </div>
         </div>

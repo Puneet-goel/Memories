@@ -1,120 +1,125 @@
-import PostMessage from "../models/postMessage.js";
-import mongoose from "mongoose";
+import PostMessage from '../models/postMessage.js';
+import mongoose from 'mongoose';
 
-export const getPosts = async(req,res) => {
-	try{
-		const postMessages = await PostMessage.find();
-		res.status(200).json(postMessages);
-	}catch(error){
-		res.status(404).json({message: error.message});
-	}
-}
+export const getPosts = async (req, res) => {
+  try {
+    const postMessages = await PostMessage.find();
+    return res.status(200).json(postMessages);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
 
-export const createPost = async(req,res) => {
+export const createPost = async (req, res) => {
+  try {
+    let post = req.body.post;
+    post['creator'] = req.body.username;
 
-	try{
-		let post = req.body.post;
-		post['creator'] = req.body.username;
+    const newPost = new PostMessage(post);
 
-		const newPost = new PostMessage(post);
+    await newPost.save();
+    return res.status(201).json(newPost);
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
+};
 
-		await newPost.save();
-		res.status(201).json(newPost);
-	}catch(error){
-		res.status(409).json({message: error.message});
-	}
-}
+export const updatePost = async (req, res) => {
+  try {
+    const { id: _id } = req.params;
+    const post = req.body.post;
+    const username = req.body.username;
 
-export const updatePost = async(req,res) => {
-	
-	try{
-		const { id: _id } = req.params;
-		const post = req.body.post;
-		const username = req.body.username;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send('No post with that id');
+    }
 
-		if(!mongoose.Types.ObjectId.isValid(_id)){
-			return res.status(404).send("No post with that id");
-		}
+    const oldPost = await PostMessage.findById(_id);
+    if (oldPost.creator !== username) {
+      return res.status(401).send('Not authorized');
+    }
 
-		const oldPost = await PostMessage.findById(_id);
-		if(oldPost.creator !== username){
-			return res.status(401).send("Not authorized");
-		}
+    const updatedPost = await PostMessage.findByIdAndUpdate(
+      _id,
+      { ...post, _id },
+      { new: true },
+    );
 
-		const updatedPost = await PostMessage.findByIdAndUpdate(_id, {...post, _id}, {new: true});
-		
-		res.status(204).json(updatedPost);
-	}catch(error){
-		res.status(409).json({message: error.message});
-	}
-}
+    return res.status(204).json(updatedPost);
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
+};
 
-export const deletePost = async(req,res) => {
-	
-	try{
-		const { id: _id } = req.params;
-		const username = req.body.username;
+export const deletePost = async (req, res) => {
+  try {
+    const { id: _id } = req.params;
+    const username = req.body.username;
 
-		if(!mongoose.Types.ObjectId.isValid(_id)){
-			return res.status(404).send("No post with that id");
-		}
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send('No post with that id');
+    }
 
-		const oldPost = await PostMessage.findById(_id);
-		if(oldPost.creator !== username){
-			return res.status(401).send("Not authorized");
-		}
+    const oldPost = await PostMessage.findById(_id);
+    if (oldPost.creator !== username) {
+      return res.status(401).send('Not authorized');
+    }
 
-		await PostMessage.findByIdAndRemove(_id);
-		
-		res.status(204).json({message: "Post Deleted successfully!!"});
-	}catch(error){
-		res.status(409).json({message: error.message});
-	}
-}
+    await PostMessage.findByIdAndRemove(_id);
 
-export const likePost = async(req,res) => {
+    return res.status(204).json({ message: 'Post Deleted successfully!!' });
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
+};
 
-	try{
-		const { id: _id } = req.params;
-		const username = req.body.username;
+export const likePost = async (req, res) => {
+  try {
+    const { id: _id } = req.params;
+    const username = req.body.username;
 
-		if(!mongoose.Types.ObjectId.isValid(_id)){
-			return res.status(404).send("No post with that id");
-		}
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send('No post with that id');
+    }
 
-		let post = await PostMessage.findById(_id);
-		const x = post.likedBy.find(peer => peer === username) || null;
-		
-		if(x){
-			post.likedBy = post.likedBy.filter(peer => peer !== username);
-		}else{
-			post.likedBy.push(username);
-		}
+    let post = await PostMessage.findById(_id);
+    const x = post.likedBy.find((peer) => peer === username) || null;
 
-		const updatedPost = await PostMessage.findByIdAndUpdate(_id, { likedBy: post.likedBy }, {new: true});
-		res.status(200).json(updatedPost);
-	}catch(error){
-		res.status(409).json({message: error.message});
-	}
-}
+    if (x) {
+      post.likedBy = post.likedBy.filter((peer) => peer !== username);
+    } else {
+      post.likedBy.push(username);
+    }
 
-export const getUserPost = async(req,res) => {
+    const updatedPost = await PostMessage.findByIdAndUpdate(
+      _id,
+      { likedBy: post.likedBy },
+      { new: true },
+    );
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.status(409).json({ message: error.message });
+  }
+};
 
-	try{
-		const { id: _id } = req.params;
-		if(!mongoose.Types.ObjectId.isValid(_id)){
-			return res.status(404).send("No post with that id");
-		}
+export const getUserPost = async (req, res) => {
+  try {
+    const { id: _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send('No post with that id');
+    }
 
-		const post = await PostMessage.findById(_id);
-		const postMessages = await PostMessage.find();
-		const userPost = postMessages.filter((cur) => cur.creator === post.creator && !cur._id.equals(post._id))
-		
-		res.status(200).json({
-			'userPosts': userPost,
-			'specificPost': post
-		});
-	}catch(error){
-		res.status(404).json({message: error.message});
-	}
-}
+    const post = await PostMessage.findById(_id);
+    const postMessages = await PostMessage.find();
+    const userPost = postMessages.filter(
+      (cur) => cur.creator === post.creator && !cur._id.equals(post._id),
+    );
+
+    return res.status(200).json({
+      userPosts: userPost,
+      specificPost: post,
+    });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};

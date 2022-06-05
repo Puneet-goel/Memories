@@ -3,7 +3,10 @@ import mongoose from 'mongoose';
 
 export const getPosts = async (req, res) => {
   try {
-    const postMessages = await PostMessage.find();
+    const postMessages = await PostMessage.find()
+      .select({ selectedFile: 0 })
+      .lean();
+
     return res.status(200).json(postMessages);
   } catch (error) {
     return res.status(404).json({ message: error.message });
@@ -34,7 +37,10 @@ export const updatePost = async (req, res) => {
       return res.status(404).send('No post with that id');
     }
 
-    const oldPost = await PostMessage.findById(_id);
+    const oldPost = await PostMessage.findById(_id)
+      .select({ creator: 1 })
+      .lean();
+
     if (oldPost.creator !== username) {
       return res.status(401).send('Not authorized');
     }
@@ -43,7 +49,7 @@ export const updatePost = async (req, res) => {
       _id,
       { ...post, _id },
       { new: true },
-    );
+    ).lean();
 
     return res.status(204).json(updatedPost);
   } catch (error) {
@@ -60,12 +66,15 @@ export const deletePost = async (req, res) => {
       return res.status(404).send('No post with that id');
     }
 
-    const oldPost = await PostMessage.findById(_id);
+    const oldPost = await PostMessage.findById(_id)
+      .select({ creator: 1 })
+      .lean();
+
     if (oldPost.creator !== username) {
       return res.status(401).send('Not authorized');
     }
 
-    await PostMessage.findByIdAndRemove(_id);
+    await PostMessage.findByIdAndRemove(_id).lean();
 
     return res.status(204).json({ message: 'Post Deleted successfully!!' });
   } catch (error) {
@@ -82,7 +91,7 @@ export const likePost = async (req, res) => {
       return res.status(404).send('No post with that id');
     }
 
-    let post = await PostMessage.findById(_id);
+    let post = await PostMessage.findById(_id).select({ likedBy: 1 }).lean();
     const x = post.likedBy.find((peer) => peer === username) || null;
 
     if (x) {
@@ -95,7 +104,8 @@ export const likePost = async (req, res) => {
       _id,
       { likedBy: post.likedBy },
       { new: true },
-    );
+    ).lean();
+
     return res.status(200).json(updatedPost);
   } catch (error) {
     return res.status(409).json({ message: error.message });
@@ -109,8 +119,9 @@ export const getUserPost = async (req, res) => {
       return res.status(404).send('No post with that id');
     }
 
-    const post = await PostMessage.findById(_id);
-    const postMessages = await PostMessage.find();
+    const post = await PostMessage.findById(_id).select({ creator: 1 }).lean();
+    const postMessages = await PostMessage.find().lean();
+
     const userPost = postMessages.filter(
       (cur) => cur.creator === post.creator && !cur._id.equals(post._id),
     );

@@ -58,11 +58,13 @@ export const signup = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const { id, username, password } = req.body;
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.json({ message: 'Invalid Username or Link' });
     }
 
-    const user = await User.findById(id);
+    const user = await User.findById(id).lean();
+
     if (!user || user.username !== username) {
       return res.json({ message: 'Invalid Username or Link' });
     }
@@ -70,6 +72,7 @@ export const resetPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
     user.password = hashedPassword;
     await user.save();
+
     return res.status(200).json({ message: 'ok' });
   } catch (err) {
     res.status(500).json({ message: err.message });

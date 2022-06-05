@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Container, Grid, Grow, AppBar, Typography, Avatar, Toolbar, IconButton, Menu, MenuItem } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { getPosts } from "../../actions/posts"
-import Form from "../Form/Form.jsx";
+import { getPosts } from "../../actions/posts";
+import CreatePost from "../CreatePost/CreatePost.jsx";
 import Posts from "../Posts/Posts.jsx";
 import useStyles from "./styles";
+import { parseUsernameInitials } from "../../utility/index.js";
 
 const Home = ({setUserValid}) => {
 	const [currentId, setCurrentId] = useState(null);
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	const user = useSelector((state) => state.user);
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
@@ -52,8 +51,9 @@ const Home = ({setUserValid}) => {
 							aria-haspopup="true"
 							onClick={handleMenu}
 							color="inherit"
+							className={classes.iconButton}
 						>
-							<Avatar className={classes.avatar}>{user.username[0]+user.username[1]}</Avatar>
+							<Avatar className={classes.avatar}>{parseUsernameInitials()}</Avatar>
 						</IconButton>
 						<Menu
 							id="menu-appbar"
@@ -76,16 +76,18 @@ const Home = ({setUserValid}) => {
 				</Toolbar>
 			</AppBar>
 		    <Grow in>
-		        <Container className="mt-3">
-		            <Grid className={classes.mainContainer} container justifyContent="space-between" alignItems="stretch" spacing={3} >
-		                <Grid item xs={12} sm={8} >
-		                    <Posts setCurrentId={setCurrentId}/>
-		                </Grid>
-		                <Grid item xs={12} sm={4}> 
-		                    <Form currentId={currentId} setCurrentId={setCurrentId}/>
-		                </Grid>
-		            </Grid>
-		        </Container>
+				<Grid className={classes.mainContainer} container justifyContent="space-between" alignItems="stretch" >
+					<Grid item xs={3} className={classes.userContainer}>
+						users and timer
+					</Grid>
+					<Grid item xs={6} className={classes.postContainer}>
+						<CreatePost currentId={currentId} setCurrentId={setCurrentId} />
+						<Posts  setCurrentId={setCurrentId}/>
+					</Grid>
+					<Grid item xs={3} className={classes.apiContainer}>
+						weather and news
+					</Grid>
+				</Grid>
 		    </Grow>
 		</Container>
 	);

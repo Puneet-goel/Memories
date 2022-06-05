@@ -15,8 +15,8 @@ const Posts = ({ setCurrentId }) => {
 			(!posts.length)
 			?<Grid className={classes.container}  container alignItems="stretch" spacing={3} >
 				{
-					[1,2,3,4].map((cur) => (
-						<Grid key={cur} item xs={12} sm={6}>
+					[1,2,3,4,5,6].map((cur) => (
+						<Grid key={cur} item xs={12}>
 							<SkeletonPost />
 						</Grid>
 					))
@@ -25,7 +25,7 @@ const Posts = ({ setCurrentId }) => {
 			:<Grid className={classes.container}  container alignItems="stretch" spacing={3} >
 			{
 				posts.map((post) => (
-					<Grid key={post._id} item xs={12} sm={6}>
+					<Grid key={post._id} item xs={12}>
 						<Post post={post} setCurrentId={setCurrentId} username={user.username}/>
 					</Grid>
 				))

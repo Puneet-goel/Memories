@@ -19,7 +19,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     title: '',
     message: '',
     tags: '',
-    selectedFile: '',
   });
   const [file, setFile] = useState(null);
   const [modal, setModal] = useState(false);
@@ -28,6 +27,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
   useEffect(() => {
     if (post) {
       setPostData(post);
+      setFile(post.selectedFile.url);
       setModal(true);
     }
   }, [post]);
@@ -65,7 +65,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
 
   const handleImageUpload = (e) => {
     setFile(e.target.files[0]);
-    setPostData({ ...postData, selectedFile: e.target.files[0] });
   };
 
   const clear = () => {
@@ -74,7 +73,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       title: '',
       message: '',
       tags: '',
-      selectedFile: '',
     });
     setFile(null);
   };

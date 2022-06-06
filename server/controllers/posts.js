@@ -1,20 +1,12 @@
 import PostMessage from '../models/postMessage.js';
 import mongoose from 'mongoose';
+import functions from '../sanity/apiCalls.js';
 
-
-// import functions from "../sanity/apiCalls.js";
-// const {
-//   getPostImage,
-//   updatePostImage,
-//   deletePostImage,
-//   getAllPostImages  
-// } = functions;
+const { addPostImage, getSpecificPostImage } = functions;
 
 export const getPosts = async (req, res) => {
   try {
-    const postMessages = await PostMessage.find()
-      .select({ selectedFile: 0 })
-      .lean();
+    const postMessages = await PostMessage.find().lean();
 
     return res.status(200).json(postMessages);
   } catch (error) {
@@ -24,14 +16,30 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    // let post = req.body.post;
-    // post['creator'] = req.body.username;
-    console.log(req.body); 
-    return res.status(200);
+    const post = {
+      title: req.body.title,
+      message: req.body.message,
+      tags: req.body.tags,
+      creator: req.body.username,
+      selectedFile: {},
+      likedBy: [],
+      createdAt: new Date(),
+    };
 
-    const newPost = new PostMessage(post);
+    let newPost = new PostMessage(post);
 
-    await newPost.save();
+    //host image on sanity
+    await addPostImage(req.file, newPost._id);
+    const data = await getSpecificPostImage(newPost._id);
+
+    //update image metadata
+    newPost.selectedFile = {
+      url: data[0].photo.asset.url,
+      id: data[0]._id,
+      imageId: data[0].photo.asset._id,
+    };
+
+    // await newPost.save();
     return res.status(201).json(newPost);
   } catch (error) {
     return res.status(409).json({ message: error.message });

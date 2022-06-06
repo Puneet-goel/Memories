@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // const url = 'https://memories-backend-mern.herokuapp.com/posts';
 // const authUrl = 'https://memories-backend-mern.herokuapp.com/auth';
-const authUrl = "http://localhost:5000/auth";
+const authUrl = 'http://localhost:5000/auth';
 const url = 'http://localhost:5000/posts';
 
 export const fetchPosts = (token) =>
@@ -12,16 +12,12 @@ export const fetchPosts = (token) =>
     },
   });
 
-export const createPost = (newPost, token) => 
-  axios.post(
-    `${url}/`,
-    newPost,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+export const createPost = (newPost, token) =>
+  axios.post(`${url}/`, newPost, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
 
 export const updatePost = (id, updatedPost, token) =>
   axios.patch(

@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from '../../../actions/posts';
 import Skeleton from '@material-ui/lab/Skeleton';
 import useStyles from './styles';
+import { isValidImageURL } from '../../utility/index.js';
 
 const Post = ({ post, setCurrentId, username }) => {
   const classes = useStyles();
@@ -44,21 +45,18 @@ const Post = ({ post, setCurrentId, username }) => {
     }
   }, [post, username]);
 
-  const validFile =
-    typeof post.selectedFile === 'string' && post.selectedFile.length > 1;
-
   return (
     <Card className={classes.card}>
-      {!validFile ? (
+      {!isValidImageURL(post.selectedFile.url) ? (
         <Skeleton animation="wave" className={classes.media} variant="rect" />
       ) : (
         <CardMedia
           className={classes.media}
-          image={post.selectedFile}
+          image={post.selectedFile.url}
           title={post.title}
         />
       )}
-      {!validFile ? (
+      {!isValidImageURL(post.selectedFile.url) ? (
         <div className={classes.overlay}>
           <Typography variant="h6" className={classes.dark}>
             {post.creator}

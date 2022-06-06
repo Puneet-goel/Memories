@@ -9,13 +9,13 @@ import {
   likePost,
   getUserPost,
 } from '../controllers/posts.js';
-import { upload, authorize } from "../middleware/index.js";
+import { upload, authorize } from '../middleware/index.js';
 
 const router = express.Router();
 
 router.get('/', authorize, getPosts);
 router.get('/:id', getUserPost);
-router.post('/', upload.single("selectedFile"), createPost);
+router.post('/', upload.single('selectedFile'), authorize, createPost);
 router.patch('/:id', authorize, updatePost);
 router.delete('/:id', authorize, deletePost);
 router.patch('/:id/likePost', authorize, likePost);

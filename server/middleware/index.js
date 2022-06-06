@@ -1,16 +1,19 @@
-import multer from "multer";
+import multer from 'multer';
 import jwt from 'jsonwebtoken';
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "./public");
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
-    },
-  });
-  
+  destination: function (req, file, cb) {
+    cb(null, './public');
+  },
+  filename: function (req, file, cb) {
+    //added prefix for unique file names
+    //used originalname as it contains extensions .png/.jpg/.pdf
+
+    const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniquePrefix + '--' + file.originalname);
+  },
+});
+
 export const upload = multer({ storage: storage });
 
 export const authorize = async (req, res, next) => {

@@ -33,3 +33,11 @@ export const parseUsername = () => {
     : '';
   return initial;
 };
+
+export const isValidImageURL = (url) => {
+  if (url === '' || typeof url !== 'string') {
+    return false;
+  }
+
+  return true;
+};

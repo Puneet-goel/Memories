@@ -12,7 +12,17 @@ const postSchema = mongoose.Schema({
     type: [String],
     default: [],
   },
-  selectedFile: String,
+  selectedFile: {
+    url: {
+      type: String,
+    },
+    imageId: {
+      type: String,
+    },
+    id: {
+      type: String,
+    },
+  },
   createdAt: {
     type: Date,
     default: new Date(),

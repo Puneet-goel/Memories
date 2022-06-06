@@ -36,7 +36,7 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, file) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
@@ -44,11 +44,10 @@ export const createPost = (post) => async (dispatch) => {
     }
 
     const formData = new FormData();
-    formData.append("title", post.title);
-    formData.append("selectedFile", post.selectedFile);
-    formData.append("message", post.message);
-    formData.append("tags", post.tags);
-    formData.append("createdAt", new Date());
+    formData.append('title', post.title);
+    formData.append('selectedFile', file);
+    formData.append('message', post.message);
+    formData.append('tags', post.tags);
 
     const { data } = await api.createPost(formData, token);
     dispatch({

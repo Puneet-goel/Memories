@@ -10,7 +10,7 @@ export default {
         },
         { 
             title: 'PostId',
-            name: 'postid',
+            name: 'post_id',
             type: 'string'
         }
     ]

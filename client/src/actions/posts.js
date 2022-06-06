@@ -43,12 +43,14 @@ export const createPost = (post) => async (dispatch) => {
       return;
     }
 
-    post = {
-      ...post,
-      createdAt: new Date(),
-    };
+    const formData = new FormData();
+    formData.append("title", post.title);
+    formData.append("selectedFile", post.selectedFile);
+    formData.append("message", post.message);
+    formData.append("tags", post.tags);
+    formData.append("createdAt", new Date());
 
-    const { data } = await api.createPost(post, token);
+    const { data } = await api.createPost(formData, token);
     dispatch({
       type: CREATE,
       payload: data,

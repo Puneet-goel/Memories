@@ -1,0 +1,33 @@
+import multer from "multer";
+import jwt from 'jsonwebtoken';
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "./public");
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix)
+    },
+  });
+  
+export const upload = multer({ storage: storage });
+
+export const authorize = async (req, res, next) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.sendStatus(403);
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.body.email = decoded.email;
+    req.body.username = decoded.username;
+    next();
+  } catch (err) {
+    return res.sendStatus(401);
+  }
+};

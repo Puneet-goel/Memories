@@ -1,6 +1,15 @@
 import PostMessage from '../models/postMessage.js';
 import mongoose from 'mongoose';
 
+
+// import functions from "../sanity/apiCalls.js";
+// const {
+//   getPostImage,
+//   updatePostImage,
+//   deletePostImage,
+//   getAllPostImages  
+// } = functions;
+
 export const getPosts = async (req, res) => {
   try {
     const postMessages = await PostMessage.find()
@@ -15,8 +24,10 @@ export const getPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    let post = req.body.post;
-    post['creator'] = req.body.username;
+    // let post = req.body.post;
+    // post['creator'] = req.body.username;
+    console.log(req.body); 
+    return res.status(200);
 
     const newPost = new PostMessage(post);
 

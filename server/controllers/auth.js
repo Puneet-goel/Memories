@@ -137,22 +137,3 @@ export const authenticate = async (req, res) => {
     return res.sendStatus(401);
   }
 };
-
-export const authorize = async (req, res, next) => {
-  try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-      return res.sendStatus(403);
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.body.email = decoded.email;
-    req.body.username = decoded.username;
-    next();
-  } catch (err) {
-    return res.sendStatus(401);
-  }
-};

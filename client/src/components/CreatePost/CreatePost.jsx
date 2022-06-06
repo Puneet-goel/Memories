@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FileBase from 'react-file-base64';
 import { Avatar, Modal } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from './styles';
@@ -22,7 +21,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     tags: '',
     selectedFile: '',
   });
-  const imageFile = useRef(null);
+  const [file, setFile] = useState(null);
   const [modal, setModal] = useState(false);
   const [error, setError] = useState('');
 
@@ -30,7 +29,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     if (post) {
       setPostData(post);
       setModal(true);
-      imageFile.current = post.selectedFile;
     }
   }, [post]);
 
@@ -51,8 +49,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       dispatch(createPost(postData));
     }
 
-    setModal(false);
-    clear();
+    handleModal();
   };
 
   const handleModal = () => {
@@ -66,9 +63,9 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     setPostData({ ...postData, tags: arr });
   };
 
-  const handleImageUpload = ({ base64 }) => {
-    setPostData({ ...postData, selectedFile: base64 });
-    imageFile.current = base64;
+  const handleImageUpload = (e) => {
+    setFile(e.target.files[0]);
+    setPostData({ ...postData, selectedFile: e.target.files[0] });
   };
 
   const clear = () => {
@@ -79,7 +76,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       tags: '',
       selectedFile: '',
     });
-    imageFile.current = null;
+    setFile(null);
   };
 
   return (
@@ -142,17 +139,17 @@ const CreatePost = ({ currentId, setCurrentId }) => {
             />
           </div>
 
-          <FileBase
+          <input
             style={{ width: '100%' }}
             type="file"
-            multiple={false}
-            onDone={handleImageUpload}
+            accept="image/*"
+            onChange={handleImageUpload}
           />
-          {postData.selectedFile && (
+          {file && (
             <div className="post-photo-container">
               <img
                 className="user-photo"
-                src={imageFile.current}
+                src={file ? URL.createObjectURL(file) : null}
                 alt="snap uploaded by user"
               />
             </div>

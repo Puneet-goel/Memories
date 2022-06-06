@@ -44,9 +44,12 @@ const Post = ({ post, setCurrentId, username }) => {
     }
   }, [post, username]);
 
+  const validFile =
+    typeof post.selectedFile === 'string' && post.selectedFile.length > 1;
+
   return (
     <Card className={classes.card}>
-      {post.selectedFile === '' ? (
+      {!validFile ? (
         <Skeleton animation="wave" className={classes.media} variant="rect" />
       ) : (
         <CardMedia
@@ -55,7 +58,7 @@ const Post = ({ post, setCurrentId, username }) => {
           title={post.title}
         />
       )}
-      {post.selectedFile === '' ? (
+      {!validFile ? (
         <div className={classes.overlay}>
           <Typography variant="h6" className={classes.dark}>
             {post.creator}

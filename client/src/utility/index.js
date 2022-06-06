@@ -22,6 +22,14 @@ export const parseUsernameInitials = () => {
   const nameArray = localStorage.getItem('username').split('_');
   const initials =
     (nameArray.length ? nameArray[0][0] : '') +
-    (nameArray.length > 1 ? nameArray[1][0] : '');
+    (nameArray.length > 1 ? nameArray[nameArray.length - 1][0] : '');
   return initials.toUpperCase();
+};
+
+export const parseUsername = () => {
+  const nameArray = localStorage.getItem('username').split('_');
+  const initial = nameArray.length
+    ? nameArray[0][0].toUpperCase() + nameArray[0].slice(1)
+    : '';
+  return initial;
 };

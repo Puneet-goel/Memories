@@ -50,6 +50,8 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     } else {
       dispatch(createPost(postData));
     }
+
+    setModal(false);
     clear();
   };
 

@@ -65,10 +65,10 @@ export const updatePost = (id, post) => async (dispatch) => {
       return;
     }
 
-    const { data } = await api.updatePost(id, post, token);
+    await api.updatePost(id, post, token);
     dispatch({
       type: UPDATE,
-      payload: data,
+      payload: post,
     });
   } catch (error) {
     console.log(error);

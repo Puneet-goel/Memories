@@ -45,13 +45,13 @@ export const updatePost = async (req, res) => {
       return res.status(401).send('Not authorized');
     }
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(
+    await PostMessage.findByIdAndUpdate(
       _id,
       { ...post, _id },
       { new: true },
     ).lean();
 
-    return res.status(204).json(updatedPost);
+    return res.status(204).json({ message: 'Post updated' });
   } catch (error) {
     return res.status(409).json({ message: error.message });
   }
@@ -92,21 +92,24 @@ export const likePost = async (req, res) => {
     }
 
     let post = await PostMessage.findById(_id).select({ likedBy: 1 }).lean();
-    const x = post.likedBy.find((peer) => peer === username) || null;
 
-    if (x) {
-      post.likedBy = post.likedBy.filter((peer) => peer !== username);
+    const index = post.likedBy.indexOf(username);
+
+    if (index >= 0) {
+      post.likedBy.splice(index, 1);
     } else {
       post.likedBy.push(username);
     }
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(
+    const updatePost = await PostMessage.findByIdAndUpdate(
       _id,
       { likedBy: post.likedBy },
       { new: true },
-    ).lean();
+    )
+      .select({ likedBy: 1 })
+      .lean();
 
-    return res.status(200).json(updatedPost);
+    return res.status(200).json(updatePost);
   } catch (error) {
     return res.status(409).json({ message: error.message });
   }
@@ -119,17 +122,9 @@ export const getUserPost = async (req, res) => {
       return res.status(404).send('No post with that id');
     }
 
-    const post = await PostMessage.findById(_id).select({ creator: 1 }).lean();
-    const postMessages = await PostMessage.find().lean();
+    const post = await PostMessage.findById(_id).lean();
 
-    const userPost = postMessages.filter(
-      (cur) => cur.creator === post.creator && !cur._id.equals(post._id),
-    );
-
-    return res.status(200).json({
-      userPosts: userPost,
-      specificPost: post,
-    });
+    return res.status(200).json(post);
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }

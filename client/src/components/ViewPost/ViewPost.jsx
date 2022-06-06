@@ -4,11 +4,7 @@ import { useDispatch } from 'react-redux';
 import { getUserPost } from '../../actions/posts';
 import { authenticate } from '../../actions/auth';
 import Skeleton from '@material-ui/lab/Skeleton';
-import creatorImage from './creator.jpg';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
-import './viewpost.css';
 
 let options = {
   weekday: 'long',
@@ -37,7 +33,6 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
   };
   scrollTop();
 
-  const [creatorPost, setCreatorPost] = useState([]);
   const handleLog = () => {
     navigate('/login');
   };
@@ -49,9 +44,8 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
         setUserValid(x);
       }
 
-      const { specificPost, userPosts } = await getUserPost(id);
-      setCreatorPost(userPosts || []);
-      setCurPost(specificPost || []);
+      const post = await getUserPost(id);
+      setCurPost(post);
     })();
   }, [id, dispatch, setUserValid, isUserValid]);
 
@@ -171,67 +165,6 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
                 ))}
               </ul>
             </div>
-          </div>
-
-          <div
-            id="carouselExampleCaptions"
-            className="carousel slide carousel-fade mb-5"
-            data-bs-ride="carousel"
-          >
-            <div className="carousel-inner">
-              <div className="carousel-item active">
-                <img
-                  id="myCarousel"
-                  src={creatorImage}
-                  className="d-block w-100"
-                  alt="post view"
-                />
-                <div className="carousel-caption d-block">
-                  <h5 className="text-dark fs-4 fw-bolder">
-                    More Posts from the same Creator...
-                  </h5>
-                </div>
-              </div>
-              {creatorPost.map((post) => (
-                <div className="carousel-item" key={post._id}>
-                  {post.selectedFile === '' ? (
-                    <Skeleton variant="rect" height={400} width="100%" />
-                  ) : (
-                    <img
-                      id="myCarousel"
-                      src={post.selectedFile}
-                      className="d-block "
-                      alt="post view"
-                    />
-                  )}
-                  <div className="carousel-caption d-block">
-                    <h5 className="fs-4 fw-bolder" style={{ color: '#000000' }}>
-                      {' '}
-                      {post.title}{' '}
-                    </h5>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button
-              className="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="prev"
-            >
-              <ArrowBackIcon style={{ fontSize: 40 }} color="primary" />
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button
-              className="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="next"
-            >
-              <ArrowForwardIcon style={{ fontSize: 40 }} color="primary" />
-              <span className="visually-hidden">Next</span>
-            </button>
           </div>
         </div>
       )}

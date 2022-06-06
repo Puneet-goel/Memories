@@ -4,7 +4,10 @@ const postSchema = mongoose.Schema({
   title: String,
   message: String,
   creator: String,
-  tags: [String],
+  tags: {
+    type: [String],
+    default: [],
+  },
   likedBy: {
     type: [String],
     default: [],

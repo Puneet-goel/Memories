@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { getPosts } from '../../actions/posts';
 import CreatePost from '../CreatePost/CreatePost.jsx';
 import Posts from '../Posts/Posts.jsx';
+import WelcomeSection from '../WelcomeSection/WelcomeSection.jsx';
 import useStyles from './styles';
 import { parseUsernameInitials } from '../../utility/index.js';
 
@@ -102,7 +103,7 @@ const Home = ({ setUserValid }) => {
           alignItems="stretch"
         >
           <Grid item xs={3} className={classes.userContainer}>
-            users and timer
+            <WelcomeSection />
           </Grid>
           <Grid item xs={6} className={classes.postContainer}>
             <CreatePost currentId={currentId} setCurrentId={setCurrentId} />

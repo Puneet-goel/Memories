@@ -12,12 +12,7 @@ const Posts = ({ setCurrentId }) => {
   const classes = useStyles();
 
   return !posts.length ? (
-    <Grid
-      className={classes.container}
-      container
-      alignItems="stretch"
-      spacing={3}
-    >
+    <Grid className={classes.container} container alignItems="stretch">
       {[1, 2, 3, 4, 5, 6].map((cur) => (
         <Grid key={cur} item xs={12}>
           <SkeletonPost />
@@ -25,14 +20,9 @@ const Posts = ({ setCurrentId }) => {
       ))}
     </Grid>
   ) : (
-    <Grid
-      className={classes.container}
-      container
-      alignItems="stretch"
-      spacing={3}
-    >
+    <Grid className={classes.container} container alignItems="stretch">
       {posts.map((post) => (
-        <Grid key={post._id} item xs={12}>
+        <Grid key={post._id} item xs={12} className="my-2">
           <Post
             post={post}
             setCurrentId={setCurrentId}

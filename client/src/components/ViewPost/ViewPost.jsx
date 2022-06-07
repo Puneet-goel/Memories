@@ -5,6 +5,7 @@ import { getUserPost } from '../../actions/posts';
 import { authenticate } from '../../actions/auth';
 import Skeleton from '@material-ui/lab/Skeleton';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
+import { isValidImageURL } from '../../utility/index.js';
 
 let options = {
   weekday: 'long',
@@ -23,7 +24,7 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
     title: '',
     message: '',
     tags: '#tags',
-    selectedFile: '',
+    selectedFile: {},
     likedBy: [],
     createdAt: '',
   });
@@ -95,12 +96,12 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
           <div className="row">
             <div className="col-12 col-md-5 px-2">
               <div className="card border-0">
-                {curPost.selectedFile === '' ? (
+                {!isValidImageURL(curPost.selectedFile.url) ? (
                   <Skeleton variant="rect" height={300} />
                 ) : (
                   <img
                     alt="Post"
-                    src={curPost.selectedFile}
+                    src={curPost.selectedFile.url}
                     className="card-img-top"
                   />
                 )}

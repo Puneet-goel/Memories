@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import FileBase from 'react-file-base64';
 import { Avatar, Modal } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from './styles';
@@ -20,17 +19,16 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     title: '',
     message: '',
     tags: '',
-    selectedFile: '',
   });
-  const imageFile = useRef(null);
+  const [file, setFile] = useState(null);
   const [modal, setModal] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (post) {
       setPostData(post);
+      setFile(post.selectedFile.url);
       setModal(true);
-      imageFile.current = post.selectedFile;
     }
   }, [post]);
 
@@ -46,13 +44,12 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     }
 
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(updatePost(currentId, postData, file));
     } else {
-      dispatch(createPost(postData));
+      dispatch(createPost(postData, file));
     }
 
-    setModal(false);
-    clear();
+    handleModal();
   };
 
   const handleModal = () => {
@@ -60,15 +57,12 @@ const CreatePost = ({ currentId, setCurrentId }) => {
     clear();
   };
 
-  const handleTagData = (e) => {
-    let arr = e.target.value.split(/[ ,]/);
-    arr = arr.filter((ele) => ele !== '');
-    setPostData({ ...postData, tags: arr });
-  };
+  const handleImageUpload = (e) => {
+    setFile(e.target.files[0]);
 
-  const handleImageUpload = ({ base64 }) => {
-    setPostData({ ...postData, selectedFile: base64 });
-    imageFile.current = base64;
+    if (post?.selectedFile?.url) {
+      post.selectedFile.url = '';
+    }
   };
 
   const clear = () => {
@@ -77,9 +71,8 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       title: '',
       message: '',
       tags: '',
-      selectedFile: '',
     });
-    imageFile.current = null;
+    setFile(null);
   };
 
   return (
@@ -95,8 +88,8 @@ const CreatePost = ({ currentId, setCurrentId }) => {
         open={modal}
         className={classes.modal}
         onClose={handleModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        aria-labelledby="modal"
+        aria-describedby="modal"
       >
         <div className="form-container p-3 p-md-5">
           <h5 className="form-header text-center fw-bolder">
@@ -115,8 +108,8 @@ const CreatePost = ({ currentId, setCurrentId }) => {
             <input
               type="text"
               className="form-control"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-lg"
+              aria-label="post title"
+              aria-describedby="post title"
               placeholder="Title"
               value={postData.title}
               onChange={(e) =>
@@ -128,31 +121,37 @@ const CreatePost = ({ currentId, setCurrentId }) => {
           <PostEditor postData={postData.message} setPostData={setPostData} />
 
           <div className="input-group input-group-lg my-3">
-            <span className="input-group-text" id="inputGroup-sizing-lg">
-              @
-            </span>
+            <span className="input-group-text">@</span>
             <input
               type="text"
               className="form-control"
               placeholder="comma separated tags"
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-lg"
+              aria-label="tags"
+              aria-describedby="tags"
               value={postData.tags}
-              onChange={handleTagData}
+              onChange={(e) =>
+                setPostData({ ...postData, tags: e.target.value })
+              }
             />
           </div>
 
-          <FileBase
+          <input
             style={{ width: '100%' }}
             type="file"
-            multiple={false}
-            onDone={handleImageUpload}
+            accept="image/*"
+            onChange={handleImageUpload}
           />
-          {postData.selectedFile && (
+          {file && (
             <div className="post-photo-container">
               <img
                 className="user-photo"
-                src={imageFile.current}
+                src={
+                  file
+                    ? post?.selectedFile?.url
+                      ? file
+                      : URL.createObjectURL(file)
+                    : null
+                }
                 alt="snap uploaded by user"
               />
             </div>

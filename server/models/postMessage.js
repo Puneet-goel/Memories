@@ -1,9 +1,18 @@
 import mongoose from 'mongoose';
 
 const postSchema = mongoose.Schema({
-  title: String,
-  message: String,
-  creator: String,
+  title: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+  creator: {
+    type: String,
+    required: true,
+  },
   tags: {
     type: [String],
     default: [],
@@ -12,7 +21,20 @@ const postSchema = mongoose.Schema({
     type: [String],
     default: [],
   },
-  selectedFile: String,
+  selectedFile: {
+    url: {
+      type: String,
+      default: '',
+    },
+    imageId: {
+      type: String,
+      default: '',
+    },
+    sanityId: {
+      type: String,
+      default: '',
+    },
+  },
   createdAt: {
     type: Date,
     default: new Date(),

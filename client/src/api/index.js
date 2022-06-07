@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const url = 'https://memories-backend-mern.herokuapp.com/posts';
-// const url = 'http://localhost:5000/posts';
+// const url = 'https://memories-backend-mern.herokuapp.com/posts';
+// const authUrl = 'https://memories-backend-mern.herokuapp.com/auth';
+const authUrl = 'http://localhost:5000/auth';
+const url = 'http://localhost:5000/posts';
 
 export const fetchPosts = (token) =>
   axios.get(`${url}/`, {
@@ -9,32 +11,28 @@ export const fetchPosts = (token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
 export const createPost = (newPost, token) =>
-  axios.post(
-    `${url}/`,
-    { post: newPost },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  axios.post(`${url}/`, newPost, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
+
 export const updatePost = (id, updatedPost, token) =>
-  axios.patch(
-    `${url}/${id}/`,
-    { post: updatedPost },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  axios.patch(`${url}/${id}/`, updatedPost, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
+
 export const deletePost = (id, token) =>
   axios.delete(`${url}/${id}/`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
 export const likePost = (id, token) =>
   axios.patch(
     `${url}/${id}/likePost/`,
@@ -45,15 +43,13 @@ export const likePost = (id, token) =>
       },
     },
   );
+
 export const fetchUserPosts = (id, token) =>
   axios.get(`${url}/${id}/`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-
-const authUrl = 'https://memories-backend-mern.herokuapp.com/auth';
-// const authUrl = "http://localhost:5000/auth";
 
 export const authenticate = (token) =>
   axios.post(
@@ -65,9 +61,11 @@ export const authenticate = (token) =>
       },
     },
   );
+
 export const loginUser = (user) => axios.post(authUrl + '/login/', user);
 export const signupUser = (user) => axios.post(authUrl + '/signup/', user);
 export const resetPasswordUser = (user) =>
   axios.post(authUrl + '/reset-password/', user);
+
 export const forgotPasswordUser = (email) =>
   axios.post(authUrl + '/forgot/', { email: email });

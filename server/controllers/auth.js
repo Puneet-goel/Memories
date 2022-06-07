@@ -89,13 +89,13 @@ export const forgot = async (req, res) => {
     }
 
     const html = `
-            <h3>Hello ${user.username}, </h3>
-            <p>Please click on the link below to reset your password for ${email}.</p>
-            <p>Reset Link: ${forgotURL + user._id + '/' + user.username}</p>
-            <br/>
-            <p> If you didn't request this, please ignore this email.</p>
-            <p>Thank You</p>
-        `;
+      <h3>Hello ${user.username}, </h3>
+      <p>Please click on the link below to reset your password for ${email}.</p>
+      <p>Reset Link: ${forgotURL + user._id + '/' + user.username}</p>
+      <br/>
+      <p> If you didn't request this, please ignore this email.</p>
+      <p>Thank You</p>
+    `;
 
     let mailTransporter = nodemailer.createTransport({
       service: 'gmail',
@@ -113,7 +113,7 @@ export const forgot = async (req, res) => {
     };
 
     await mailTransporter.sendMail(mailDetails);
-    return res.status(200).send({ message: 'ok' });
+    return res.status(200).json({ message: 'ok' });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -125,7 +125,7 @@ export const authenticate = async (req, res) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -134,25 +134,6 @@ export const authenticate = async (req, res) => {
       username: decoded.username,
     });
   } catch (err) {
-    return res.sendStatus(401);
-  }
-};
-
-export const authorize = async (req, res, next) => {
-  try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-      return res.sendStatus(403);
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.body.email = decoded.email;
-    req.body.username = decoded.username;
-    next();
-  } catch (err) {
-    return res.sendStatus(401);
+    return res.sendStatus(500);
   }
 };

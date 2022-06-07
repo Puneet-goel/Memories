@@ -6,7 +6,7 @@ import {
   AUTHORIZE,
 } from '../constants/actionTypes';
 import * as api from '../api';
-import { findToken } from './posts';
+import { findToken } from '../utility/index.js';
 
 export const login = (email, password, username, check) => async (dispatch) => {
   try {

@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from '../../../actions/posts';
 import Skeleton from '@material-ui/lab/Skeleton';
 import useStyles from './styles';
-import { isValidImageURL } from '../../utility/index.js';
+import { isValidImageURL } from '../../../utility/index.js';
 
 const Post = ({ post, setCurrentId, username }) => {
   const classes = useStyles();

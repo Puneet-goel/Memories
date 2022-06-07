@@ -102,15 +102,15 @@ const Home = ({ setUserValid }) => {
           justifyContent="space-between"
           alignItems="stretch"
         >
-          <Grid item xs={3} className={classes.userContainer}>
-            <WelcomeSection />
+          <Grid item xs={1} className={classes.userContainer}>
+            <div />
           </Grid>
-          <Grid item xs={6} className={classes.postContainer}>
+          <Grid item xs={7} className={classes.postContainer}>
             <CreatePost currentId={currentId} setCurrentId={setCurrentId} />
             <Posts setCurrentId={setCurrentId} />
           </Grid>
-          <Grid item xs={3} className={classes.apiContainer}>
-            weather and news
+          <Grid item xs={4} className={classes.userContainer}>
+            <WelcomeSection />
           </Grid>
         </Grid>
       </Grow>

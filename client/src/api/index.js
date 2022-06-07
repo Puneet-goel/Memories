@@ -22,7 +22,7 @@ export const createPost = (newPost, token) =>
 export const updatePost = (id, updatedPost, token) =>
   axios.patch(
     `${url}/${id}/`,
-    { post: updatedPost },
+    updatedPost,
     {
       headers: {
         Authorization: `Bearer ${token}`,

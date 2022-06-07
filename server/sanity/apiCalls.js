@@ -33,7 +33,7 @@ export const getSpecificPostImage = async (id) => {
 
 export const updatePostImage = async (image, sanityPostId) => {
   return sanityClient.assets
-    .upload("image", createReadStream(image.path), {
+    .upload('image', createReadStream(image.path), {
       filename: basename(image.path),
     })
     .then((data) => {
@@ -42,11 +42,10 @@ export const updatePostImage = async (image, sanityPostId) => {
         .set({
           photo: { asset: { _ref: data._id } },
         })
-        .commit()
+        .commit();
     });
 };
 
 export const deletePostImage = async (sanityPostId) => {
-  return sanityClient
-    .delete(sanityPostId)
+  return sanityClient.delete(sanityPostId);
 };

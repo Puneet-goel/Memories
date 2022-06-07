@@ -20,15 +20,11 @@ export const createPost = (newPost, token) =>
   });
 
 export const updatePost = (id, updatedPost, token) =>
-  axios.patch(
-    `${url}/${id}/`,
-    updatedPost,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  axios.patch(`${url}/${id}/`, updatedPost, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
 
 export const deletePost = (id, token) =>
   axios.delete(`${url}/${id}/`, {

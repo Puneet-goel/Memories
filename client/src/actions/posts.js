@@ -6,18 +6,9 @@ import {
   LIKE,
 } from '../constants/actionTypes';
 import * as api from '../api';
+import { findToken } from '../utility/index.js';
 
 //Action Creators
-
-export const findToken = () => {
-  var token = decodeURIComponent(document.cookie);
-  if (!token || token.length < 6) {
-    return null;
-  }
-
-  token = token.substring(6);
-  return token;
-};
 
 export const getPosts = () => async (dispatch) => {
   try {
@@ -43,12 +34,10 @@ export const createPost = (post, file) => async (dispatch) => {
       return;
     }
 
-    const arrayOFTags = post.tags.split(/[ ,]/).filter((ele) => ele);
     const formData = new FormData();
-
     formData.append('title', post.title);
     formData.append('message', post.message);
-    formData.append('tags', arrayOFTags);
+    formData.append('tags', post.tags);
     formData.append('selectedFile', file);
 
     const { data } = await api.createPost(formData, token);
@@ -68,15 +57,13 @@ export const updatePost = (id, post, file) => async (dispatch) => {
       return;
     }
 
-    const arrayOFTags = post.tags.split(/[ ,]/).filter((ele) => ele);
     const formData = new FormData();
-
     formData.append('title', post.title);
     formData.append('message', post.message);
-    formData.append('tags', arrayOFTags);
+    formData.append('tags', post.tags);
     formData.append('selectedFile', file);
 
-    const { data } =  await api.updatePost(id, formData, token);
+    const { data } = await api.updatePost(id, formData, token);
     dispatch({
       type: UPDATE,
       payload: data,

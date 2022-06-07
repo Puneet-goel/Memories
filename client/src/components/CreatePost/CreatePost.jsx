@@ -59,6 +59,10 @@ const CreatePost = ({ currentId, setCurrentId }) => {
 
   const handleImageUpload = (e) => {
     setFile(e.target.files[0]);
+
+    if (post?.selectedFile?.url) {
+      post.selectedFile.url = '';
+    }
   };
 
   const clear = () => {
@@ -141,7 +145,13 @@ const CreatePost = ({ currentId, setCurrentId }) => {
             <div className="post-photo-container">
               <img
                 className="user-photo"
-                src={file ? URL.createObjectURL(file) : null}
+                src={
+                  file
+                    ? post?.selectedFile?.url
+                      ? file
+                      : URL.createObjectURL(file)
+                    : null
+                }
                 alt="snap uploaded by user"
               />
             </div>

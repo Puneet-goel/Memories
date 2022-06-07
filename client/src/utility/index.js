@@ -41,3 +41,13 @@ export const isValidImageURL = (url) => {
 
   return true;
 };
+
+export const findToken = () => {
+  var token = decodeURIComponent(document.cookie);
+  if (!token || token.length < 6) {
+    return null;
+  }
+
+  token = token.substring(6);
+  return token;
+};

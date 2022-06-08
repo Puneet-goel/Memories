@@ -110,7 +110,10 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
             <div className="col-12 col-md-7 px-2">
               <div className="card border-0">
                 <div className="card-body">
-                  <p className="card-text fs-5">{curPost.message}</p>
+                  <p
+                    className="card-text fs-5"
+                    dangerouslySetInnerHTML={curPost.message}
+                  />
                 </div>
               </div>
             </div>

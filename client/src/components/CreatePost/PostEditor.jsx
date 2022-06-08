@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 const editorConfiguration = {
@@ -9,30 +9,17 @@ const editorConfiguration = {
       '|',
       'bold',
       'italic',
-      'underline',
       'link',
       'bulletedList',
       'numberedList',
       '|',
-      'blockQuote',
-      'strikethrough',
-      'subscript',
-      'superscript',
-      '|',
       'outdent',
       'indent',
       '|',
+      'blockQuote',
+      'insertTable',
       'undo',
       'redo',
-      '|',
-      'fontSize',
-      'fontFamily',
-      'fontColor',
-      'fontBackgroundColor',
-      '|',
-      'highlight',
-      'insertTable',
-      'horizontalLine',
     ],
     shouldNotGroupWhenFull: true,
   },
@@ -47,7 +34,7 @@ const PostEditor = ({ postData, setPostData }) => {
 
   return (
     <CKEditor
-      editor={Editor}
+      editor={ClassicEditor}
       config={editorConfiguration}
       data={postData.message}
       onReady={(editor) => {

@@ -94,7 +94,11 @@ const Post = ({ post, setCurrentId, username }) => {
       </Typography>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {post.message.split(' ').splice(0, 20).join(' ')}
+          {post.message
+            .replace(/<[^>]+>/g, '')
+            .split(' ')
+            .splice(0, 20)
+            .join(' ')}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>

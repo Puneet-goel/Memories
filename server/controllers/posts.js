@@ -76,16 +76,12 @@ export const updatePost = async (req, res) => {
       title: req.body.title,
       message: req.body.message,
       tags: req.body.tags.split(/[ ,]/).filter((ele) => ele),
-      selectedFile: {
-        url: '',
-        sanityId: '',
-        imageId: '',
-      },
+      selectedFile: oldPost.selectedFile,
     };
 
     if (req.file) {
-      if (oldPost.selectedFile.sanityId) {
-        await updatePostImage(req.file, oldPost.selectedFile.sanityId);
+      if (post.selectedFile.sanityId) {
+        await updatePostImage(req.file, post.selectedFile.sanityId);
       } else {
         await createPostImage(req.file, _id);
       }
@@ -97,8 +93,6 @@ export const updatePost = async (req, res) => {
         sanityId: data[0]._id,
         imageId: data[0].photo.asset._id,
       };
-    } else if (oldPost.selectedFile.sanityId) {
-      await deletePostImage(oldPost.selectedFile.sanityId);
     }
 
     const updatePost = await PostMessage.findByIdAndUpdate(

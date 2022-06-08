@@ -35,7 +35,7 @@ export const createPost = (post, file) => async (dispatch) => {
     }
 
     const formData = new FormData();
-    formData.append('title', post.title);
+    formData.append('title', post.title.trim());
     formData.append('message', post.message);
     formData.append('tags', post.tags);
     formData.append('selectedFile', file);
@@ -58,7 +58,7 @@ export const updatePost = (id, post, file) => async (dispatch) => {
     }
 
     const formData = new FormData();
-    formData.append('title', post.title);
+    formData.append('title', post.title.trim());
     formData.append('message', post.message);
     formData.append('tags', post.tags);
     formData.append('selectedFile', file);

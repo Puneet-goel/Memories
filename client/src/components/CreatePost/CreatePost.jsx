@@ -27,7 +27,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
   useEffect(() => {
     if (post) {
       setPostData(post);
-      setFile(post.selectedFile.url);
       setModal(true);
     }
   }, [post]);
@@ -59,10 +58,6 @@ const CreatePost = ({ currentId, setCurrentId }) => {
 
   const handleImageUpload = (e) => {
     setFile(e.target.files[0]);
-
-    if (post?.selectedFile?.url) {
-      post.selectedFile.url = '';
-    }
   };
 
   const clear = () => {
@@ -118,7 +113,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
             />
           </div>
 
-          <PostEditor postData={postData.message} setPostData={setPostData} />
+          <PostEditor postData={postData} setPostData={setPostData} />
 
           <div className="input-group input-group-lg my-3">
             <span className="input-group-text">@</span>
@@ -145,13 +140,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
             <div className="post-photo-container">
               <img
                 className="user-photo"
-                src={
-                  file
-                    ? post?.selectedFile?.url
-                      ? file
-                      : URL.createObjectURL(file)
-                    : null
-                }
+                src={file ? URL.createObjectURL(file) : null}
                 alt="snap uploaded by user"
               />
             </div>

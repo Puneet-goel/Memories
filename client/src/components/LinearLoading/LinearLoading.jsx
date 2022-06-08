@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { LinearProgress, Typography } from '@material-ui/core';
 import memoriesText from './memoriesText.png';
@@ -39,49 +39,46 @@ const BorderLinearProgress = withStyles((theme) => ({
 const LinearLoading = ({ setUserValid }) => {
   const classes = useStyles();
   const [progress, setProgress] = useState(0);
-  const [jump, setJump] = useState(2);
-  const [auth, setAuth] = useState('auth');
+  const auth = useRef('auth');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const x = await dispatch(authenticate());
-      setJump(30);
-      setAuth(x);
-    })();
-  }, [navigate, dispatch]);
+    dispatch(authenticate()).then((data) => {
+      setProgress(99);
+      auth.current = data;
+    });
+  }, [dispatch]);
 
   useEffect(() => {
-    if (progress >= 100 && auth === false) {
-      navigate('/login');
-    } else if (progress >= 100 && auth === true) {
-      setUserValid(true);
-    } else if (progress >= 100) {
-      alert(
-        'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
-      );
-      setProgress(0);
-      setJump(2);
+    if (progress >= 100) {
+      if (auth.current === false) {
+        navigate('/login');
+      } else if (auth.current === true) {
+        setUserValid(true);
+      } else {
+        alert(
+          'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
+        );
+        setProgress(0);
+      }
     }
-  }, [progress, auth, navigate, setUserValid]);
+  }, [progress, navigate, setUserValid]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => {
-        return prevProgress >= 100
-          ? 100
-          : prevProgress + jump >= 100
-          ? 100
-          : prevProgress + jump;
+        const jumps = [2, 3, 4];
+        const jump = jumps[Math.floor(Math.random() * jumps.length)];
+        return prevProgress + jump >= 100 ? 100 : prevProgress + jump;
       });
     }, 300);
 
     return () => {
       clearInterval(timer);
     };
-  }, [navigate, dispatch, jump]);
+  }, []);
 
   return (
     <div className={classes.mainLine}>

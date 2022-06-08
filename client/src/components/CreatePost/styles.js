@@ -6,6 +6,7 @@ export default makeStyles(() => ({
     width: '45px',
     height: '45px',
     backgroundColor: stringToColor(),
+    marginRight: '5px',
   },
   modal: {
     height: '100%',

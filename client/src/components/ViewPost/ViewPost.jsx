@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserPost } from '../../actions/posts';
-import { authenticate } from '../../actions/auth';
+import { authenticate, logout } from '../../actions/auth';
 import Skeleton from '@material-ui/lab/Skeleton';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
 import { isValidImageURL } from '../../utility/index.js';
@@ -14,7 +14,7 @@ let options = {
   day: 'numeric',
 };
 
-const ViewPost = ({ isUserValid, setUserValid }) => {
+const ViewPost = () => {
   const params = useParams();
   const navigate = useNavigate();
   const id = params.id;
@@ -28,6 +28,7 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
     likedBy: [],
     createdAt: '',
   });
+  const isUserValid = useSelector((state) => state.user);
 
   var scrollTop = function () {
     window.scrollTo(0, 0);
@@ -35,20 +36,24 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
   scrollTop();
 
   const handleLog = () => {
-    navigate('/login');
+    if (isUserValid) {
+      dispatch(logout());
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
   };
 
   useEffect(() => {
-    (async () => {
-      if (!isUserValid) {
-        const x = await dispatch(authenticate());
-        setUserValid(x);
-      }
+    if (!isUserValid) {
+      dispatch(authenticate());
+    }
 
+    (async () => {
       const post = await getUserPost(id);
       setCurPost(post);
     })();
-  }, [id, dispatch, setUserValid, isUserValid]);
+  }, [id, dispatch, isUserValid]);
 
   return (
     <div
@@ -61,19 +66,15 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
       >
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            {' '}
             <Link to="/" className="text-primary">
               Home
-            </Link>{' '}
+            </Link>
           </li>
           <li className="breadcrumb-item"> View Post </li>
         </ol>
-        {isUserValid ? null : (
-          <button onClick={handleLog} className="btn btn-primary">
-            {' '}
-            Login
-          </button>
-        )}
+        <button onClick={handleLog} className="btn btn-primary">
+          {isUserValid ? 'Logout' : 'Login'}
+        </button>
       </nav>
 
       {curPost.creator === '' ? (
@@ -89,8 +90,7 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
             </p>
           </div>
           <h4 className="text-end pe-3 fst-italic text-primary mb-3">
-            {' '}
-            - {curPost.creator}{' '}
+            - {curPost.creator}
           </h4>
 
           <div className="row">
@@ -112,7 +112,7 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
                 <div className="card-body">
                   <p
                     className="card-text fs-5"
-                    dangerouslySetInnerHTML={curPost.message}
+                    dangerouslySetInnerHTML={{ __html: curPost.message }}
                   />
                 </div>
               </div>
@@ -163,8 +163,7 @@ const ViewPost = ({ isUserValid, setUserValid }) => {
                     className="list-group-item list-group-item-action"
                     key={user}
                   >
-                    {' '}
-                    {user}{' '}
+                    {user}
                   </li>
                 ))}
               </ul>

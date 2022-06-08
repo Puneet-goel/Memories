@@ -5,6 +5,7 @@ export const UPDATE = 'UPDATE';
 export const LIKE = 'LIKE';
 
 export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 export const SIGNUP = 'SIGNUP';
 export const FORGOTPASSWORD = 'FORGOTPASSWORD';
 export const RESETPASSWORD = 'RESETPASSWORD';

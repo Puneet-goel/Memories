@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -21,10 +21,9 @@ const schema = Yup.object().shape({
     .required('Required'),
 });
 
-const Login = ({ setUserValid }) => {
+const Login = () => {
   const serverError = useRef('');
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   return (
     <div className="container-fluid pt-3">
@@ -48,10 +47,6 @@ const Login = ({ setUserValid }) => {
                   values.toggle,
                 ),
               );
-              if (serverError.current === 'ok') {
-                setUserValid(true);
-                navigate('/');
-              }
             }}
           >
             {() => (
@@ -115,8 +110,7 @@ const Login = ({ setUserValid }) => {
                     type="checkbox"
                     name="toggle"
                     style={{ width: 'auto' }}
-                  />{' '}
-                  {'  '}
+                  />
                   Remember me for a month
                 </label>
                 <br />
@@ -132,8 +126,7 @@ const Login = ({ setUserValid }) => {
 
                 <div className="form-group text-center mt-3">
                   <Link to="/forgot-password" className="text-center">
-                    {' '}
-                    Forgot password?{' '}
+                    Forgot password?
                   </Link>
                   <br />
                   Don't have an account?

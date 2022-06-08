@@ -5,15 +5,27 @@ import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
 import useStyles from './styles';
 
-const Posts = ({ setCurrentId }) => {
+const Posts = ({ setCurrentId, searchText }) => {
+  const classes = useStyles();
+
   const posts = useSelector((state) => state.posts);
   const user = useSelector((state) => state.user);
 
-  const classes = useStyles();
+  const searchedPosts = posts.filter((post) => {
+    const pattern = searchText.toLowerCase();
+    if (pattern === '') return true;
+    if (post?.title.includes(pattern)) return true;
+    if (post?.message.includes(pattern)) return true;
+    if (post?.creator.includes(pattern)) return true;
+    for (let i = 0; i < post?.tags.length; i++) {
+      if (post.tags[i].includes(pattern)) return true;
+    }
+    return false;
+  });
 
   return !posts.length ? (
     <Grid className={classes.container} container alignItems="stretch">
-      {[1, 2, 3, 4, 5, 6].map((cur) => (
+      {[1, 2, 3, 4, 5].map((cur) => (
         <Grid key={cur} item xs={12}>
           <SkeletonPost />
         </Grid>
@@ -21,7 +33,7 @@ const Posts = ({ setCurrentId }) => {
     </Grid>
   ) : (
     <Grid className={classes.container} container alignItems="stretch">
-      {posts.map((post) => (
+      {searchedPosts.map((post) => (
         <Grid key={post._id} item xs={12} className="my-2">
           <Post
             post={post}

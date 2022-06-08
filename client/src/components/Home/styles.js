@@ -13,6 +13,14 @@ export default makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontFamily: 'Proxima Nova',
+  },
+  searchBar: {
+    color: 'white',
+    padding: '6px',
+    background: '#27282c87',
+    margin: '5px',
+    borderRadius: '4px',
   },
   iconButton: {
     padding: '0',
@@ -24,15 +32,11 @@ export default makeStyles((theme) => ({
   },
   postContainer: {
     overflow: 'scroll',
-    height: 'calc(100vh - 45px)',
+    height: 'calc(100vh - 70px)',
+    padding: '10px',
   },
   userContainer: {
-    overflow: 'scroll',
-    height: 'calc(100vh - 45px)',
-  },
-  apiContainer: {
-    overflow: 'scroll',
-    height: 'calc(100vh - 45px)',
+    padding: '10px',
   },
   [theme.breakpoints.down('xs')]: {
     mainContainer: {

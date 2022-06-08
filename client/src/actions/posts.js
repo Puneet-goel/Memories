@@ -23,7 +23,7 @@ export const getPosts = () => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -46,7 +46,7 @@ export const createPost = (post, file) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -69,7 +69,7 @@ export const updatePost = (id, post, file) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -86,7 +86,7 @@ export const deletePost = (id) => async (dispatch) => {
       payload: id,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -103,7 +103,7 @@ export const likePost = (id) => async (dispatch) => {
       payload: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -114,6 +114,6 @@ export const getUserPost = async (id) => {
     const { data } = await api.fetchUserPosts(id, token);
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

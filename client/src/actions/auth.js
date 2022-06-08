@@ -1,5 +1,6 @@
 import {
   LOGIN,
+  LOGOUT,
   SIGNUP,
   FORGOTPASSWORD,
   RESETPASSWORD,
@@ -44,7 +45,25 @@ export const login = (email, password, username, check) => async (dispatch) => {
 
     return data.message;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    return 'Error';
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    //delete the token cookie
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    localStorage.clear();
+
+    dispatch({
+      type: LOGOUT,
+      payload: null,
+    });
+
+    return;
+  } catch (err) {
+    console.error(err);
   }
 };
 
@@ -60,12 +79,12 @@ export const register = (email, password, username) => async (dispatch) => {
 
     dispatch({
       type: SIGNUP,
-      payload: data,
+      payload: null,
     });
 
     return data.message;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -75,12 +94,13 @@ export const forgotPassword = (email) => async (dispatch) => {
 
     dispatch({
       type: FORGOTPASSWORD,
-      payload: data,
+      payload: null,
     });
 
     return data.message;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    return 'Error';
   }
 };
 
@@ -96,12 +116,13 @@ export const resetPassword = (id, username, password) => async (dispatch) => {
 
     dispatch({
       type: RESETPASSWORD,
-      payload: data,
+      payload: null,
     });
 
     return data.message;
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    return 'Error';
   }
 };
 
@@ -122,9 +143,8 @@ export const authenticate = () => async (dispatch) => {
       payload: data,
     });
 
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
+    return;
+  } catch (err) {
+    console.error(err);
   }
 };

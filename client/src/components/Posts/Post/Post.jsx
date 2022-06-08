@@ -118,8 +118,7 @@ const Post = ({ post, setCurrentId, username }) => {
           </Button>
         ) : null}
         <Link to={`/viewPost/${post._id}`} style={{ textDecoration: 'none' }}>
-          {' '}
-          ...see more{' '}
+          ...see more
         </Link>
       </CardActions>
     </Card>

@@ -87,10 +87,9 @@ const CreatePost = ({ currentId, setCurrentId }) => {
         aria-describedby="modal"
       >
         <div className="form-container p-3 p-md-5">
-          <h5 className="form-header text-center fw-bolder">
-            {' '}
-            {currentId ? 'Edit' : 'Add A'} SNAP{' '}
-          </h5>
+          <h4 className="form-header text-center fw-bolder header-modal-form">
+            {currentId ? 'Edit' : 'Add A'} SNAP
+          </h4>
           <button
             className="form-header-close btn m-1 m-md-3"
             type="button"
@@ -151,7 +150,7 @@ const CreatePost = ({ currentId, setCurrentId }) => {
               {error}
             </span>
             <button
-              className="btn me-2 btn-outline-warning"
+              className="btn me-2 btn-outline-primary"
               type="button"
               onClick={handleModal}
             >

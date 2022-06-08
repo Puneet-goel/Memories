@@ -36,35 +36,13 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-const LinearLoading = ({ setUserValid }) => {
+const LinearLoading = () => {
   const classes = useStyles();
   const [progress, setProgress] = useState(0);
-  const auth = useRef('auth');
+  const auth = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(authenticate()).then((data) => {
-      setProgress(99);
-      auth.current = data;
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      if (auth.current === false) {
-        navigate('/login');
-      } else if (auth.current === true) {
-        setUserValid(true);
-      } else {
-        alert(
-          'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
-        );
-        setProgress(0);
-      }
-    }
-  }, [progress, navigate, setUserValid]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,10 +53,33 @@ const LinearLoading = ({ setUserValid }) => {
       });
     }, 300);
 
+    //fix the React memory leak warning
+    let cancel = false;
+
+    dispatch(authenticate()).then(() => {
+      if (cancel) return;
+      setProgress(80);
+      auth.current = false;
+    });
+
     return () => {
+      cancel = true;
       clearInterval(timer);
     };
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (progress >= 100) {
+      if (auth.current === false) {
+        navigate('/login');
+      } else {
+        alert(
+          'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
+        );
+        setProgress(0);
+      }
+    }
+  }, [progress, navigate]);
 
   return (
     <div className={classes.mainLine}>

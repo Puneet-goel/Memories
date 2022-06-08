@@ -1,20 +1,21 @@
 import {
   LOGIN,
+  LOGOUT,
   AUTHORIZE,
   SIGNUP,
   FORGOTPASSWORD,
   RESETPASSWORD,
 } from '../constants/actionTypes';
 
-const userReducer = (user = {}, action) => {
+const userReducer = (user = null, action) => {
   switch (action.type) {
     case LOGIN:
     case AUTHORIZE:
-      return action.payload;
+    case LOGOUT:
     case SIGNUP:
     case FORGOTPASSWORD:
     case RESETPASSWORD:
-      return user;
+      return action.payload;
     default:
       return user;
   }

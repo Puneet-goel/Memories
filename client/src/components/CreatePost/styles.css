@@ -24,6 +24,10 @@
   background-color: #fff;
 }
 
+.header-modal-form {
+  font-family: 'Proxima Nova';
+}
+
 .form-header-close {
   position: absolute;
   top: 0;

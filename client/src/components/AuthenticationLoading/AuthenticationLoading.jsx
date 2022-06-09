@@ -36,7 +36,7 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-const LinearLoading = () => {
+const AuthenticationLoading = ({ failure }) => {
   const classes = useStyles();
   const [progress, setProgress] = useState(0);
   const auth = useRef(null);
@@ -56,10 +56,10 @@ const LinearLoading = () => {
     //fix the React memory leak warning
     let cancel = false;
 
-    dispatch(authenticate()).then(() => {
+    dispatch(authenticate()).then((data) => {
       if (cancel) return;
       setProgress(80);
-      auth.current = false;
+      auth.current = data;
     });
 
     return () => {
@@ -71,7 +71,7 @@ const LinearLoading = () => {
   useEffect(() => {
     if (progress >= 100) {
       if (auth.current === false) {
-        navigate('/login');
+        navigate(failure);
       } else {
         alert(
           'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
@@ -79,7 +79,7 @@ const LinearLoading = () => {
         setProgress(0);
       }
     }
-  }, [progress, navigate]);
+  }, [progress, navigate, failure]);
 
   return (
     <div className={classes.mainLine}>
@@ -94,4 +94,4 @@ const LinearLoading = () => {
   );
 };
 
-export default LinearLoading;
+export default AuthenticationLoading;

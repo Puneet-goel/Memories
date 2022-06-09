@@ -8,7 +8,8 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword.jsx';
 import ResetPassword from './components/ResetPassword/ResetPassword.jsx';
 import Home from './components/Home/Home.jsx';
 import ViewPost from './components/ViewPost/ViewPost.jsx';
-import LinearLoading from './components/LinearLoading/LinearLoading.jsx';
+import AuthenticationLoading from './components/AuthenticationLoading/AuthenticationLoading.jsx';
+import UserBox from './components/UserBox/UserBox.jsx';
 
 const App = () => {
   const isUserValid = useSelector((state) => state.user);
@@ -16,7 +17,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={isUserValid ? <Home /> : <LinearLoading />} />
+        <Route path="/" element={isUserValid ? <Home /> : <AuthenticationLoading failure='/login' />} />
         <Route
           path="/login"
           element={isUserValid ? <Navigate to="/" /> : <Login />}
@@ -30,6 +31,7 @@ const App = () => {
           path="/reset-password/:id/:username"
           element={<ResetPassword />}
         />
+        <Route path="/users" element={isUserValid ? <UserBox /> : <AuthenticationLoading failure='/'/>} />
         <Route path="/viewPost/:id" element={<ViewPost />} />
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>

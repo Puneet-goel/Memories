@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
+import "./style.css";
 
 const UserBox = () => {
-  const users = ['ddfdf', 'fsfsdf', 'dsfdsf', 'sdfds', 'sdfdfsd'];
+  const userDetails = useSelector(state => state.user);
+  const [allUsers, setAllUsers] = useState([]);
+  const [searchUser, setSearchUser] = useState('');
+
   return (
-    <div className="user-container">
-      <div className="user-list">
-        <ul>
-          {users.map((user) => {
-            return <li key={user}> {user} </li>;
-          })}
-        </ul>
-      </div>
+    <div>
+
     </div>
   );
-};
 
-export default UserBox;
+}
+
+export default UserBox;  

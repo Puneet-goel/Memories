@@ -18,33 +18,35 @@ import { deletePost, likePost } from '../../../actions/posts';
 import Skeleton from '@material-ui/lab/Skeleton';
 import useStyles from './styles';
 import { isValidImageURL } from '../../../utility/index.js';
+import { toast } from 'react-toastify';
 
-const Post = ({ post, setCurrentId, username }) => {
+const Post = ({ post, setCurrentId, username, toastID }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [color, setColor] = useState(() => blue[700]);
-  const [isLike, setIsLike] = useState(false);
 
   const handleLikePost = () => {
-    dispatch(likePost(post._id)).then((isExecuted) => {
-      if (isExecuted) {
-        if (isLike) {
-          setColor(blue[700]);
-        } else {
-          setColor(green[700]);
-        }
-        setIsLike((like) => !like);
-      }
+    dispatch(likePost(post._id));
+  };
+
+  const handleDeletePost = () => {
+    toast.dismiss(toastID.current);
+    toastID.current = toast.loading('Deleting your post');
+    dispatch(deletePost(post._id, username)).then((message) => {
+      toast.update(toastID.current, {
+        render: `${
+          message === 'ok'
+            ? 'Post successfully deleted'
+            : 'Could not delete your post'
+        }`,
+        type: `${message === 'ok' ? 'success' : 'error'}`,
+        hideProgressBar: true,
+        isLoading: false,
+        autoClose: 3000,
+      });
     });
   };
 
-  useEffect(() => {
-    const x = post.likedBy.find((peer) => peer === username);
-    if (x) {
-      setColor(green[700]);
-      setIsLike(true);
-    }
-  }, [post, username]);
+  const isLikedByUser = (post?.likedBy || []).find((peer) => peer === username);
 
   return (
     <Card className={classes.card}>
@@ -104,16 +106,15 @@ const Post = ({ post, setCurrentId, username }) => {
       </CardContent>
       <CardActions className={classes.cardActions}>
         <Button size="small" color="primary" onClick={handleLikePost}>
-          <ThumbUpAltIcon style={{ color: color }} fontSize="small" />
+          <ThumbUpAltIcon
+            style={{ color: isLikedByUser ? green[700] : blue[700] }}
+            fontSize="small"
+          />
           &nbsp; &nbsp;
           {post.likedBy ? post.likedBy.length : 0}
         </Button>
         {post.creator === username ? (
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => dispatch(deletePost(post._id, username))}
-          >
+          <Button size="small" color="primary" onClick={handleDeletePost}>
             <DeleteIcon fontSize="small" />
             Delete
           </Button>

@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-
 import { login } from '../../actions/auth';
 
 const regex = /^[a-z0-9_]+$/;
@@ -39,6 +40,7 @@ const Login = () => {
             }}
             validationSchema={schema}
             onSubmit={async (values) => {
+              const toastID = toast.loading('Logging in');
               serverError.current = await dispatch(
                 login(
                   values.email,
@@ -47,6 +49,16 @@ const Login = () => {
                   values.toggle,
                 ),
               );
+
+              if (serverError.current !== 'ok') {
+                toast.update(toastID, {
+                  render: 'Could not log in to your account',
+                  type: 'error',
+                  hideProgressBar: true,
+                  isLoading: false,
+                  autoClose: 3000,
+                });
+              }
             }}
           >
             {() => (
@@ -137,6 +149,7 @@ const Login = () => {
           </Formik>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

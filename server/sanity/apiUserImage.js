@@ -47,8 +47,5 @@ export const updateUserImage = async (image, sanityUserId) => {
 };
 
 export const deleteUserImage = async (sanityUserId) => {
-  return sanityClient.delete(
-    `*[_type == "usermedia" && user_id == $sanityUserId][0]`,
-    { sanityUserId },
-  );
+  return sanityClient.delete(sanityUserId);
 };

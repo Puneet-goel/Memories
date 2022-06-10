@@ -35,7 +35,7 @@ export const createPost = (post, file) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return false;
+      return 'Error';
     }
 
     const formData = new FormData();
@@ -50,20 +50,20 @@ export const createPost = (post, file) => async (dispatch) => {
         type: CREATE,
         payload: data.post,
       });
-      return true;
     }
+
+    return data.message;
   } catch (error) {
     console.error(error);
+    return 'Error';
   }
-
-  return false;
 };
 
 export const updatePost = (id, post, file) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return false;
+      return 'Error';
     }
 
     const formData = new FormData();
@@ -78,20 +78,20 @@ export const updatePost = (id, post, file) => async (dispatch) => {
         type: UPDATE,
         payload: data.post,
       });
-      return true;
     }
+
+    return data.message;
   } catch (error) {
     console.error(error);
+    return 'Error';
   }
-
-  return false;
 };
 
 export const deletePost = (id) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return false;
+      return 'Error';
     }
 
     const { data } = await api.deletePost(id, token);
@@ -100,20 +100,20 @@ export const deletePost = (id) => async (dispatch) => {
         type: DELETE,
         payload: id,
       });
-      return true;
     }
+
+    return data.message;
   } catch (error) {
     console.error(error);
+    return 'Error';
   }
-
-  return false;
 };
 
 export const likePost = (id) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return;
+      return false;
     }
 
     const { data } = await api.likePost(id, token);

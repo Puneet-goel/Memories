@@ -5,10 +5,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import useStyles from './styles';
 import { createPost, updatePost } from '../../actions/posts';
 import { parseUsernameInitials } from '../../utility/index.js';
+import { toast } from 'react-toastify';
 import PostEditor from './PostEditor.jsx';
 import './styles.css';
 
-const CreatePost = ({ currentId, setCurrentId }) => {
+const CreatePost = ({ currentId, setCurrentId, toastID }) => {
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null,
   );
@@ -42,10 +43,38 @@ const CreatePost = ({ currentId, setCurrentId }) => {
       return;
     }
 
+    toast.dismiss(toastID.current);
+    toastID.current = toast.loading(
+      `${currentId ? 'Updating' : 'Creating'} your post`,
+    );
     if (currentId) {
-      dispatch(updatePost(currentId, postData, file));
+      dispatch(updatePost(currentId, postData, file)).then((message) => {
+        toast.update(toastID.current, {
+          render: `${
+            message === 'ok'
+              ? 'Post successfully updated'
+              : 'Could not update your post'
+          }`,
+          type: `${message === 'ok' ? 'success' : 'error'}`,
+          hideProgressBar: true,
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
     } else {
-      dispatch(createPost(postData, file));
+      dispatch(createPost(postData, file)).then((message) => {
+        toast.update(toastID.current, {
+          render: `${
+            message === 'ok'
+              ? 'Post successfully created'
+              : 'Could not create your post'
+          }`,
+          type: `${message === 'ok' ? 'success' : 'error'}`,
+          hideProgressBar: true,
+          isLoading: false,
+          autoClose: 3000,
+        });
+      });
     }
 
     handleModal();

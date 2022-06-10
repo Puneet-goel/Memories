@@ -5,7 +5,7 @@ import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
 import useStyles from './styles';
 
-const Posts = ({ setCurrentId, searchText }) => {
+const Posts = ({ setCurrentId, searchText, toastID }) => {
   const classes = useStyles();
 
   const posts = useSelector((state) => state.posts);
@@ -37,6 +37,7 @@ const Posts = ({ setCurrentId, searchText }) => {
         <Grid key={post._id} item xs={12} className="my-2">
           <Post
             post={post}
+            toastID={toastID}
             setCurrentId={setCurrentId}
             username={profile.username}
           />

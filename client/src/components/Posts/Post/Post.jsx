@@ -26,15 +26,16 @@ const Post = ({ post, setCurrentId, username }) => {
   const [isLike, setIsLike] = useState(false);
 
   const handleLikePost = () => {
-    dispatch(likePost(post._id));
-
-    if (isLike) {
-      setColor(blue[700]);
-    } else {
-      setColor(green[700]);
-    }
-
-    setIsLike((like) => !like);
+    dispatch(likePost(post._id)).then((isExecuted) => {
+      if (isExecuted) {
+        if (isLike) {
+          setColor(blue[700]);
+        } else {
+          setColor(green[700]);
+        }
+        setIsLike((like) => !like);
+      }
+    });
   };
 
   useEffect(() => {

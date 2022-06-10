@@ -18,20 +18,24 @@ export const getPosts = () => async (dispatch) => {
     }
 
     const { data } = await api.fetchPosts(token);
-    dispatch({
-      type: FETCH_ALL,
-      payload: data,
-    });
+
+    if (data.message === 'ok') {
+      dispatch({
+        type: FETCH_ALL,
+        payload: data.posts,
+      });
+    }
   } catch (error) {
     console.error(error);
   }
+  return;
 };
 
 export const createPost = (post, file) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return;
+      return false;
     }
 
     const formData = new FormData();
@@ -41,20 +45,25 @@ export const createPost = (post, file) => async (dispatch) => {
     formData.append('selectedFile', file);
 
     const { data } = await api.createPost(formData, token);
-    dispatch({
-      type: CREATE,
-      payload: data,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: CREATE,
+        payload: data.post,
+      });
+      return true;
+    }
   } catch (error) {
     console.error(error);
   }
+
+  return false;
 };
 
 export const updatePost = (id, post, file) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
-      return;
+      return false;
     }
 
     const formData = new FormData();
@@ -64,13 +73,18 @@ export const updatePost = (id, post, file) => async (dispatch) => {
     formData.append('selectedFile', file);
 
     const { data } = await api.updatePost(id, formData, token);
-    dispatch({
-      type: UPDATE,
-      payload: data,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: UPDATE,
+        payload: data.post,
+      });
+      return true;
+    }
   } catch (error) {
     console.error(error);
   }
+
+  return false;
 };
 
 export const deletePost = (id) => async (dispatch) => {
@@ -80,14 +94,19 @@ export const deletePost = (id) => async (dispatch) => {
       return false;
     }
 
-    await api.deletePost(id, token);
-    dispatch({
-      type: DELETE,
-      payload: id,
-    });
+    const { data } = await api.deletePost(id, token);
+    if (data.message === 'ok') {
+      dispatch({
+        type: DELETE,
+        payload: id,
+      });
+      return true;
+    }
   } catch (error) {
     console.error(error);
   }
+
+  return false;
 };
 
 export const likePost = (id) => async (dispatch) => {
@@ -98,22 +117,16 @@ export const likePost = (id) => async (dispatch) => {
     }
 
     const { data } = await api.likePost(id, token);
-    dispatch({
-      type: LIKE,
-      payload: data,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: LIKE,
+        payload: data.post,
+      });
+      return true;
+    }
   } catch (error) {
     console.error(error);
   }
-};
 
-export const getUserPost = async (id) => {
-  try {
-    const token = findToken();
-
-    const { data } = await api.fetchUserPosts(id, token);
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
+  return false;
 };

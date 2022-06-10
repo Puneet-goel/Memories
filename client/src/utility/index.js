@@ -51,3 +51,25 @@ export const findToken = () => {
   token = token.substring(6);
   return token;
 };
+
+export const dummyUser = {
+  username: '',
+  email: '',
+  profileImage: {
+    sanityId: '',
+    imageId: '',
+    url: '',
+  },
+  following: [],
+  joinedAt: new Date(),
+};
+
+export const dummyPost = {
+  creator: '',
+  title: '',
+  message: '',
+  tags: '#tags',
+  selectedFile: {},
+  likedBy: [],
+  createdAt: '',
+};

@@ -2,8 +2,8 @@ import {
   LOGIN,
   LOGOUT,
   SIGNUP,
-  FORGOTPASSWORD,
-  RESETPASSWORD,
+  FORGOT_PASSWORD,
+  RESET_PASSWORD,
   AUTHORIZE,
 } from '../constants/actionTypes';
 import * as api from '../api';
@@ -32,14 +32,10 @@ export const login = (email, password, username, check) => async (dispatch) => {
       document.cookie = `token=${data.token}; ${expires}; path=/;`;
 
       localStorage.setItem('username', username);
-      localStorage.setItem('email', email);
 
       dispatch({
         type: LOGIN,
-        payload: {
-          email: email,
-          username: username,
-        },
+        payload: data.user,
       });
     }
 
@@ -76,26 +72,29 @@ export const register = (email, password, username) => async (dispatch) => {
     };
 
     const { data } = await api.signupUser(user);
-
-    dispatch({
-      type: SIGNUP,
-      payload: null,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: SIGNUP,
+        payload: null,
+      });
+    }
 
     return data.message;
   } catch (err) {
     console.error(err);
+    return 'Error';
   }
 };
 
 export const forgotPassword = (email) => async (dispatch) => {
   try {
     const { data } = await api.forgotPasswordUser(email);
-
-    dispatch({
-      type: FORGOTPASSWORD,
-      payload: null,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: FORGOT_PASSWORD,
+        payload: null,
+      });
+    }
 
     return data.message;
   } catch (err) {
@@ -113,11 +112,12 @@ export const resetPassword = (id, username, password) => async (dispatch) => {
     };
 
     const { data } = await api.resetPasswordUser(user);
-
-    dispatch({
-      type: RESETPASSWORD,
-      payload: null,
-    });
+    if (data.message === 'ok') {
+      dispatch({
+        type: RESET_PASSWORD,
+        payload: null,
+      });
+    }
 
     return data.message;
   } catch (err) {
@@ -134,17 +134,19 @@ export const authenticate = () => async (dispatch) => {
     }
 
     const { data } = await api.authenticate(token);
+    if (data.message === 'ok') {
+      localStorage.setItem('username', data.user.username);
 
-    localStorage.setItem('username', data.username);
-    localStorage.setItem('email', data.email);
+      dispatch({
+        type: AUTHORIZE,
+        payload: data.user,
+      });
 
-    dispatch({
-      type: AUTHORIZE,
-      payload: data,
-    });
-
-    return;
+      return true;
+    }
   } catch (err) {
     console.error(err);
   }
+
+  return false;
 };

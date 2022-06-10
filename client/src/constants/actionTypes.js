@@ -7,6 +7,9 @@ export const LIKE = 'LIKE';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SIGNUP = 'SIGNUP';
-export const FORGOTPASSWORD = 'FORGOTPASSWORD';
-export const RESETPASSWORD = 'RESETPASSWORD';
+export const FORGOT_PASSWORD = 'FORGOTPASSWORD';
+export const RESET_PASSWORD = 'RESETPASSWORD';
 export const AUTHORIZE = 'AUTHORIZE';
+export const FOLLOW_USER = 'FOLLOW_USER';
+
+export const GET_ALL_USERS = 'GET_ALL_USERS';

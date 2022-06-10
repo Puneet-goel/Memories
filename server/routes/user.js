@@ -1,11 +1,12 @@
 //localhost:5000/users
 
 import express from 'express';
-import { getUsers } from '../controllers/users.js';
-import { authorize } from '../middleware/index.js';
+import { getAllUsers, followUser } from '../controllers/users.js';
+import { authenticate } from '../middleware/index.js';
 
 const router = express.Router();
 
-router.get('/', authorize, getUsers);
+router.get('/', authenticate, getAllUsers);
+router.patch('/followUser', authenticate, followUser);
 
 export default router;

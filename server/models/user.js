@@ -12,6 +12,28 @@ const UserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    following: {
+      type: [String],
+      default: [],
+    },
+    profileImage: {
+      url: {
+        type: String,
+        default: '',
+      },
+      imageId: {
+        type: String,
+        default: '',
+      },
+      sanityId: {
+        type: String,
+        default: '',
+      },
+    },
+    joinedAt: {
+      type: Date,
+      default: new Date(),
+    },
     password: {
       type: String,
       required: true,

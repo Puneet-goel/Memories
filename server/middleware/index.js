@@ -16,13 +16,13 @@ const storage = multer.diskStorage({
 
 export const upload = multer({ storage: storage });
 
-export const authorize = async (req, res, next) => {
+export const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -31,6 +31,6 @@ export const authorize = async (req, res, next) => {
     req.body.username = decoded.username;
     next();
   } catch (err) {
-    return res.sendStatus(401);
+    return res.sendStatus(500);
   }
 };

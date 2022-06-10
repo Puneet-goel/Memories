@@ -12,12 +12,17 @@ import AuthenticationLoading from './components/AuthenticationLoading/Authentica
 import UserBox from './components/UserBox/UserBox.jsx';
 
 const App = () => {
-  const isUserValid = useSelector((state) => state.user);
+  const isUserValid = useSelector((state) => state.profile);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={isUserValid ? <Home /> : <AuthenticationLoading failure='/login' />} />
+        <Route
+          path="/"
+          element={
+            isUserValid ? <Home /> : <AuthenticationLoading failure="/login" />
+          }
+        />
         <Route
           path="/login"
           element={isUserValid ? <Navigate to="/" /> : <Login />}
@@ -31,8 +36,22 @@ const App = () => {
           path="/reset-password/:id/:username"
           element={<ResetPassword />}
         />
-        <Route path="/users" element={isUserValid ? <UserBox /> : <AuthenticationLoading failure='/'/>} />
-        <Route path="/viewPost/:id" element={<ViewPost />} />
+        <Route
+          path="/users"
+          element={
+            isUserValid ? <UserBox /> : <AuthenticationLoading failure="/" />
+          }
+        />
+        <Route
+          path="/viewPost/:id"
+          element={
+            isUserValid ? (
+              <ViewPost />
+            ) : (
+              <AuthenticationLoading failure="/login" />
+            )
+          }
+        />
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

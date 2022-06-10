@@ -28,7 +28,17 @@ export const login = async (req, res) => {
       process.env.JWT_SECRET,
     );
 
-    return res.status(200).json({ message: 'ok', token: token });
+    return res.status(200).json({
+      message: 'ok',
+      token: token,
+      user: {
+        username: user.username,
+        email: user.email,
+        joinedAt: user.joinedAt,
+        followers: user.followers,
+        profileImage: user.profileImage,
+      },
+    });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -63,7 +73,7 @@ export const resetPassword = async (req, res) => {
       return res.json({ message: 'Invalid Username or Link' });
     }
 
-    const user = await User.findById(id).lean();
+    const user = await User.findById(id);
 
     if (!user || user.username !== username) {
       return res.json({ message: 'Invalid Username or Link' });
@@ -82,7 +92,7 @@ export const resetPassword = async (req, res) => {
 export const forgot = async (req, res) => {
   try {
     const email = req.body.email;
-    const user = await User.findOne({ email }).lean();
+    const user = await User.findOne({ email }).select({ password: 0 }).lean();
 
     if (!user) {
       return res.json({ message: 'Invalid Email' });
@@ -129,11 +139,15 @@ export const authenticate = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ username: decoded.username })
+      .select({ password: 0 })
+      .lean();
+
     return res.status(200).json({
-      email: decoded.email,
-      username: decoded.username,
+      message: 'ok',
+      user: user,
     });
   } catch (err) {
-    return res.sendStatus(500);
+    return res.sendStatus(500).json({ message: err.message });
   }
 };

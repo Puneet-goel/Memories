@@ -9,15 +9,15 @@ import {
   likePost,
   getUserPost,
 } from '../controllers/posts.js';
-import { upload, authorize } from '../middleware/index.js';
+import { upload, authenticate } from '../middleware/index.js';
 
 const router = express.Router();
 
-router.get('/', authorize, getPosts);
+router.get('/', authenticate, getPosts);
 router.get('/:id', getUserPost);
-router.post('/', upload.single('selectedFile'), authorize, createPost);
-router.patch('/:id', upload.single('selectedFile'), authorize, updatePost);
-router.delete('/:id', authorize, deletePost);
-router.patch('/:id/likePost', authorize, likePost);
+router.post('/', upload.single('selectedFile'), authenticate, createPost);
+router.patch('/:id', upload.single('selectedFile'), authenticate, updatePost);
+router.delete('/:id', authenticate, deletePost);
+router.patch('/:id/likePost', authenticate, likePost);
 
 export default router;

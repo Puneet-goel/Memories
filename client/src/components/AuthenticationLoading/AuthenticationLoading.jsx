@@ -58,7 +58,7 @@ const AuthenticationLoading = ({ failure }) => {
 
     dispatch(authenticate()).then((data) => {
       if (cancel) return;
-      setProgress(80);
+      setProgress(85);
       auth.current = data;
     });
 
@@ -72,11 +72,11 @@ const AuthenticationLoading = ({ failure }) => {
     if (progress >= 100) {
       if (auth.current === false) {
         navigate(failure);
-      } else {
+      } else if (auth.current === null) {
         alert(
           'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
         );
-        setProgress(0);
+        window.location.reload();
       }
     }
   }, [progress, navigate, failure]);

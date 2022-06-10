@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserPost } from '../../actions/posts';
-import { authenticate, logout } from '../../actions/auth';
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
-import { isValidImageURL } from '../../utility/index.js';
+import { isValidImageURL, dummyPost } from '../../utility/index.js';
+import NavBar from '../NavBar/NavBar.jsx';
 
 let options = {
   weekday: 'long',
@@ -16,50 +15,27 @@ let options = {
 
 const ViewPost = () => {
   const params = useParams();
-  const navigate = useNavigate();
-  const id = params.id;
-  const dispatch = useDispatch();
-  const [curPost, setCurPost] = useState({
-    creator: '',
-    title: '',
-    message: '',
-    tags: '#tags',
-    selectedFile: {},
-    likedBy: [],
-    createdAt: '',
+
+  const post = useSelector((state) => {
+    const id = params.id;
+    let data = state.posts.filter((post) => post._id === id)[0];
+    if (!data) {
+      data = dummyPost;
+    }
+    return data;
   });
-  const isUserValid = useSelector((state) => state.user);
 
   var scrollTop = function () {
     window.scrollTo(0, 0);
   };
   scrollTop();
 
-  const handleLog = () => {
-    if (isUserValid) {
-      dispatch(logout());
-      navigate('/');
-    } else {
-      navigate('/login');
-    }
-  };
-
-  useEffect(() => {
-    if (!isUserValid) {
-      dispatch(authenticate());
-    }
-
-    (async () => {
-      const post = await getUserPost(id);
-      setCurPost(post);
-    })();
-  }, [id, dispatch, isUserValid]);
-
   return (
     <div
-      className="container-fluid bg-white"
+      className="container-fluid bg-white p-0"
       style={{ backgroundColor: '#f1f1f1' }}
     >
+      <NavBar disableSearch={true} />
       <nav
         aria-label="breadcrumb"
         className="p-3 d-flex justify-content-between"
@@ -72,36 +48,33 @@ const ViewPost = () => {
           </li>
           <li className="breadcrumb-item"> View Post </li>
         </ol>
-        <button onClick={handleLog} className="btn btn-primary">
-          {isUserValid ? 'Logout' : 'Login'}
-        </button>
       </nav>
 
-      {curPost.creator === '' ? (
+      {post.creator === '' ? (
         <SkeletonSpecificPost />
       ) : (
-        <div>
+        <div className="px-3">
           <div className="d-flex flex-column align-items-center">
             <h2 className="fs-1 fw-bolder fst-italic text-primary">
-              {curPost.title}
+              {post.title}
             </h2>
             <p className="fw-light">
-              {new Date(curPost.createdAt).toLocaleString('en-US', options)}
+              {new Date(post.createdAt).toLocaleString('en-US', options)}
             </p>
           </div>
           <h4 className="text-end pe-3 fst-italic text-primary mb-3">
-            - {curPost.creator}
+            - {post.creator}
           </h4>
 
           <div className="row">
             <div className="col-12 col-md-5 px-2">
               <div className="card border-0">
-                {!isValidImageURL(curPost.selectedFile.url) ? (
+                {!isValidImageURL(post.selectedFile.url) ? (
                   <Skeleton variant="rect" height={300} />
                 ) : (
                   <img
                     alt="Post"
-                    src={curPost.selectedFile.url}
+                    src={post.selectedFile.url}
                     className="card-img-top"
                   />
                 )}
@@ -112,7 +85,7 @@ const ViewPost = () => {
                 <div className="card-body">
                   <p
                     className="card-text fs-5"
-                    dangerouslySetInnerHTML={{ __html: curPost.message }}
+                    dangerouslySetInnerHTML={{ __html: post.message }}
                   />
                 </div>
               </div>
@@ -129,7 +102,7 @@ const ViewPost = () => {
             >
               Likes
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {curPost.likedBy.length}
+                {post.likedBy.length}
                 <span className="visually-hidden">Likes on Post</span>
               </span>
             </button>
@@ -158,7 +131,7 @@ const ViewPost = () => {
             </div>
             <div className="offcanvas-body">
               <ul className="list-group list-group-flush">
-                {curPost.likedBy.map((user) => (
+                {post.likedBy.map((user) => (
                   <li
                     className="list-group-item list-group-item-action"
                     key={user}

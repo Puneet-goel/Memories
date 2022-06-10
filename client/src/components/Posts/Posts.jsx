@@ -9,15 +9,15 @@ const Posts = ({ setCurrentId, searchText }) => {
   const classes = useStyles();
 
   const posts = useSelector((state) => state.posts);
-  const user = useSelector((state) => state.user);
+  const profile = useSelector((state) => state.profile);
 
   const searchedPosts = posts.filter((post) => {
-    const pattern = searchText.toLowerCase();
+    const pattern = searchText.toLowerCase().trim();
     if (pattern === '') return true;
-    if (post?.title.includes(pattern)) return true;
-    if (post?.message.includes(pattern)) return true;
-    if (post?.creator.includes(pattern)) return true;
-    for (let i = 0; i < post?.tags.length; i++) {
+    if (post.title.includes(pattern)) return true;
+    if (post.message.includes(pattern)) return true;
+    if (post.creator.includes(pattern)) return true;
+    for (let i = 0; i < post.tags.length; i++) {
       if (post.tags[i].includes(pattern)) return true;
     }
     return false;
@@ -38,7 +38,7 @@ const Posts = ({ setCurrentId, searchText }) => {
           <Post
             post={post}
             setCurrentId={setCurrentId}
-            username={user.username}
+            username={profile.username}
           />
         </Grid>
       ))}

@@ -1,34 +1,35 @@
 import axios from 'axios';
 
-const url = 'https://memories-backend-mern.herokuapp.com/posts';
-const authUrl = 'https://memories-backend-mern.herokuapp.com/auth';
-const userUrl = 'https://memories-backend-mern.herokuapp.com/user';
-// const authUrl = 'http://localhost:5000/auth';
-// const url = 'http://localhost:5000/posts';
+// const URL = 'https://memories-backend-mern.herokuapp.com';
+const URL = 'http://localhost:5000';
+
+const postUrl = URL + '/posts';
+const authUrl = URL + '/auth';
+const userUrl = URL + '/user';
 
 export const fetchPosts = (token) =>
-  axios.get(`${url}/`, {
+  axios.get(`${postUrl}/`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
 export const createPost = (newPost, token) =>
-  axios.post(`${url}/`, newPost, {
+  axios.post(`${postUrl}/`, newPost, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
 export const updatePost = (id, updatedPost, token) =>
-  axios.patch(`${url}/${id}/`, updatedPost, {
+  axios.patch(`${postUrl}/${id}/`, updatedPost, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
 export const deletePost = (id, token) =>
-  axios.delete(`${url}/${id}/`, {
+  axios.delete(`${postUrl}/${id}/`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -36,7 +37,7 @@ export const deletePost = (id, token) =>
 
 export const likePost = (id, token) =>
   axios.patch(
-    `${url}/${id}/likePost/`,
+    `${postUrl}/${id}/likePost/`,
     {},
     {
       headers: {
@@ -45,12 +46,15 @@ export const likePost = (id, token) =>
     },
   );
 
-export const fetchUserPosts = (id, token) =>
-  axios.get(`${url}/${id}/`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const loginUser = (user) => axios.post(authUrl + '/login/', user);
+
+export const signupUser = (user) => axios.post(authUrl + '/signup/', user);
+
+export const resetPasswordUser = (user) =>
+  axios.post(authUrl + '/reset-password/', user);
+
+export const forgotPasswordUser = (email) =>
+  axios.post(authUrl + '/forgot/', { email: email });
 
 export const authenticate = (token) =>
   axios.post(
@@ -63,30 +67,16 @@ export const authenticate = (token) =>
     },
   );
 
+export const getAllUsers = (token) =>
+  axios.get(userUrl + '/', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-export const loginUser = (user) => axios.post(authUrl + '/login/', user);
-export const signupUser = (user) => axios.post(authUrl + '/signup/', user);
-export const resetPasswordUser = (user) =>
-  axios.post(authUrl + '/reset-password/', user);
-
-export const forgotPasswordUser = (email) =>
-  axios.post(authUrl + '/forgot/', { email: email });
-
-
-export const getUser = (token) => axios.get(userUrl + '/user/', {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-
-export const getAllUsers = (token) => axios.get(userUrl + '/allUsers/', {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-
-export const updateFollowUser = (userToBeFollowed, token) => axios.post(userUrl + '/follow/', userToBeFollowed, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
+export const followUser = (data, token) =>
+  axios.post(userUrl + '/followUser/', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

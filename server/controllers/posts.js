@@ -5,7 +5,7 @@ import {
   deletePostImage,
   updatePostImage,
   getSpecificPostImage,
-} from '../sanity/apiCalls.js';
+} from '../sanity/apiPostImage.js';
 import fs from 'fs';
 import { promisify } from 'util';
 
@@ -15,7 +15,10 @@ export const getPosts = async (req, res) => {
   try {
     const postMessages = await PostMessage.find().lean();
 
-    return res.status(200).json(postMessages);
+    return res.status(200).json({
+      message: 'ok',
+      posts: postMessages,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -48,7 +51,10 @@ export const createPost = async (req, res) => {
     }
 
     await newPost.save();
-    return res.status(201).json(newPost);
+    return res.status(201).json({
+      message: 'ok',
+      post: newPost,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -95,13 +101,16 @@ export const updatePost = async (req, res) => {
       };
     }
 
-    const updatePost = await PostMessage.findByIdAndUpdate(
+    const updatedPost = await PostMessage.findByIdAndUpdate(
       _id,
       { ...post, _id },
       { new: true },
     ).lean();
 
-    return res.status(200).json(updatePost);
+    return res.status(200).json({
+      message: 'ok',
+      post: updatedPost,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -133,7 +142,7 @@ export const deletePost = async (req, res) => {
 
     await PostMessage.findByIdAndRemove(_id).lean();
 
-    return res.status(200).json({ message: 'Post Deleted successfully!!' });
+    return res.status(200).json({ message: 'ok' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -158,7 +167,7 @@ export const likePost = async (req, res) => {
       post.likedBy.push(username);
     }
 
-    const updatePost = await PostMessage.findByIdAndUpdate(
+    const updatedPost = await PostMessage.findByIdAndUpdate(
       _id,
       { likedBy: post.likedBy },
       { new: true },
@@ -166,7 +175,10 @@ export const likePost = async (req, res) => {
       .select({ likedBy: 1 })
       .lean();
 
-    return res.status(200).json(updatePost);
+    return res.status(200).json({
+      message: 'ok',
+      post: updatedPost,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -175,13 +187,15 @@ export const likePost = async (req, res) => {
 export const getUserPost = async (req, res) => {
   try {
     const { id: _id } = req.params;
-
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(400).message({ message: 'Invalid Id' });
+      return res.status(400).json({ message: 'Invalid Id' });
     }
 
     const post = await PostMessage.findById(_id).lean();
-    return res.status(200).json(post);
+    return res.status(200).json({
+      message: 'ok',
+      post: post,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

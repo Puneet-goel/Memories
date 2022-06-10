@@ -75,7 +75,7 @@ export const getAllUsers = (token) =>
   });
 
 export const followUser = (data, token) =>
-  axios.post(userUrl + '/followUser/', data, {
+  axios.patch(userUrl + '/followUser/', data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

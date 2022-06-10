@@ -1,5 +1,9 @@
 import * as api from '../api';
-import { FOLLOW_USER, GET_ALL_USERS } from '../constants/actionTypes';
+import {
+  FOLLOW_USER,
+  GET_ALL_USERS,
+  UPDATE_FOLLOW_USER_FOR_USERS,
+} from '../constants/actionTypes';
 import { findToken } from '../utility/index.js';
 //Action Creators
 
@@ -22,7 +26,7 @@ export const getAllUsers = () => async (dispatch) => {
   }
 };
 
-export const followUser = (whomToFollow, id) => async (dispatch) => {
+export const followUser = (whomToFollow, profile) => async (dispatch) => {
   try {
     const token = findToken();
     if (token === null) {
@@ -32,7 +36,7 @@ export const followUser = (whomToFollow, id) => async (dispatch) => {
     const { data } = await api.followUser(
       {
         whomToFollow: whomToFollow,
-        id: id,
+        id: profile._id,
       },
       token,
     );
@@ -40,7 +44,12 @@ export const followUser = (whomToFollow, id) => async (dispatch) => {
     if (data.message === 'ok') {
       dispatch({
         type: FOLLOW_USER,
-        payload: whomToFollow,
+        payload: data.updatedUser,
+      });
+
+      dispatch({
+        type: UPDATE_FOLLOW_USER_FOR_USERS,
+        payload: data.updatedUser,
       });
       return true;
     }

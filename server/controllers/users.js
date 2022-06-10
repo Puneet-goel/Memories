@@ -24,10 +24,14 @@ export const getAllUsers = async (req, res) => {
 
 export const followUser = async (req, res) => {
   try {
-    const whomToFollow = req.body.whomToFollow;
-    const id = req.body.id;
+    const { whomToFollow, id } = req.body;
+    const _id = mongoose.Types.ObjectId(id);
 
-    let user = await User.findById(id).select({ following: 1 }).lean();
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
+
+    let user = await User.findById(_id).select({ following: 1 }).lean();
 
     const index = user.following.indexOf(whomToFollow);
 
@@ -37,11 +41,18 @@ export const followUser = async (req, res) => {
       user.following.push(whomToFollow);
     }
 
-    await User.findByIdAndUpdate(_id, { following: user.following })
-      .select({ _id: 1 })
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { following: user.following },
+      { new: true },
+    )
+      .select({ following: 1 })
       .lean();
 
-    return res.status(200).json({ message: 'ok' });
+    return res.status(200).json({
+      message: 'ok',
+      updatedUser: updatedUser,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

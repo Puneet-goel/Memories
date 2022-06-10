@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../NavBar/NavBar.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllUsers, followUser } from '../../actions/user.js';
-import { Link } from 'react-router-dom';
-import './style.css';
+import memoriesText from '../AuthenticationLoading/memoriesText.png';
+import { useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import './styles.css';
 
-const UserBox = () => {
+const Profile = () => {
+  const params = useParams();
+  console.log(params.username);
   const profile = useSelector((state) => state.profile);
   const allUsers = useSelector((state) => state.users);
   const [searchUser, setSearchUser] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -44,16 +49,17 @@ const UserBox = () => {
                   >
                     <div className="card text-center">
                       <img
-                        src={user.profileImage.url}
+                        src={user.photoURL || memoriesText}
                         className="card-img-top user-image"
                         alt="user-pic"
                       />
                       <div className="card-body d-flex flex-column">
-                        <Link to={`/profile/${user.username}`}>
-                          <span className="card-title fs-5 fw-bolder">
-                            @{user.username}
-                          </span>
-                        </Link>
+                        <span
+                          className="card-title fs-5 fw-bolder"
+                          onClick={() => navigate(`/profile/${user._id}`)}
+                        >
+                          @{user.username}
+                        </span>
                         <span className="fst-italic mb-2">{user.email}</span>
                         {(profile.following || []).includes(user.username) ? (
                           <button
@@ -83,4 +89,4 @@ const UserBox = () => {
   );
 };
 
-export default UserBox;
+export default Profile;

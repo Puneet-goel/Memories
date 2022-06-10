@@ -43,8 +43,11 @@ const Home = () => {
           </Grid>
           <Grid item xs={12} sm={5} md={4} className={classes.userContainer}>
             <h2 className="fw-bolder my-3 font-monospace welcome-name">
-              Hi {parseUsername()},
+              Hi {parseUsername()}, &nbsp;
             </h2>
+            <h5 className="fw-bolder my-3 font-monospace welcome-name text-center">
+              Welcome to Memories
+            </h5>
             <CreatePost
               currentId={currentId}
               setCurrentId={setCurrentId}

@@ -18,18 +18,9 @@ const profileReducer = (profile = null, action) => {
     case RESET_PASSWORD:
       return action.payload;
     case FOLLOW_USER:
-      return () => {
-        const user = { ...profile };
-        const whomToFollow = action.payload;
-        const index = user.following.indexOf(whomToFollow);
-
-        if (index >= 0) {
-          user.splice(index, 1);
-        } else {
-          user.push(whomToFollow);
-        }
-
-        return user;
+      return {
+        ...profile,
+        following: action.payload.following,
       };
     default:
       return profile;

@@ -1,24 +1,69 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { stringToColor } from '../../utility/index.js';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
-  title: {
+  grow: {
     flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    display: 'none',
     fontFamily: 'Proxima Nova',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
   },
-  searchBar: {
-    color: 'white',
-    padding: '6px',
-    background: '#27282c87',
-    margin: '5px',
-    borderRadius: '4px',
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
   },
-  iconButton: {
-    padding: '0',
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  avatar: {
-    width: '45px',
-    height: '45px',
-    backgroundColor: stringToColor(),
+  inputRoot: {
+    color: 'inherit',
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+  list: {
+    width: 250,
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
 }));

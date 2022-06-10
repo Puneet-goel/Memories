@@ -10,6 +10,7 @@ import Home from './components/Home/Home.jsx';
 import ViewPost from './components/ViewPost/ViewPost.jsx';
 import AuthenticationLoading from './components/AuthenticationLoading/AuthenticationLoading.jsx';
 import UserBox from './components/UserBox/UserBox.jsx';
+import Profile from './components/Profile/Profile.jsx';
 
 const App = () => {
   const isUserValid = useSelector((state) => state.profile);
@@ -37,9 +38,15 @@ const App = () => {
           element={<ResetPassword />}
         />
         <Route
-          path="/users"
+          path="/connect"
           element={
             isUserValid ? <UserBox /> : <AuthenticationLoading failure="/" />
+          }
+        />
+        <Route
+          path="/profile/:username"
+          element={
+            isUserValid ? <Profile /> : <AuthenticationLoading failure="/" />
           }
         />
         <Route

@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container, Grid, Grow } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { getPosts } from '../../actions/posts';
-
 import CreatePost from '../CreatePost/CreatePost.jsx';
 import NavBar from '../NavBar/NavBar.jsx';
 import Posts from '../Posts/Posts.jsx';
@@ -17,11 +14,6 @@ const Home = () => {
   const [searchText, setSearchText] = useState('');
   const toastID = useRef(null);
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
 
   return (
     <Container maxWidth="lg" className={classes.home}>

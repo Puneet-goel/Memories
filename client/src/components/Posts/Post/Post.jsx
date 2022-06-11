@@ -119,7 +119,7 @@ const Post = ({ post, setCurrentId, username, toastID }) => {
             Delete
           </Button>
         ) : null}
-        <Link to={`/viewPost/${post._id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/post/${post._id}`} style={{ textDecoration: 'none' }}>
           ...see more
         </Link>
       </CardActions>

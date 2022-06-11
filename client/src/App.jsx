@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { getPosts } from './actions/posts';
+import { getAllUsers } from './actions/user';
 
 import Login from './components/Login/Login.jsx';
 import Signup from './components/Signup/Signup.jsx';
@@ -14,6 +17,14 @@ import Profile from './components/Profile/Profile.jsx';
 
 const App = () => {
   const isUserValid = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isUserValid) {
+      dispatch(getPosts());
+      dispatch(getAllUsers());
+    }
+  }, [dispatch, isUserValid]);
 
   return (
     <BrowserRouter>
@@ -50,7 +61,7 @@ const App = () => {
           }
         />
         <Route
-          path="/viewPost/:id"
+          path="/post/:id"
           element={
             isUserValid ? (
               <ViewPost />

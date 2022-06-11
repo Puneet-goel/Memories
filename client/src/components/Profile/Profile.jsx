@@ -1,89 +1,128 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import NavBar from '../NavBar/NavBar.jsx';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsers, followUser } from '../../actions/user.js';
-import memoriesText from '../AuthenticationLoading/memoriesText.png';
 import { useNavigate } from 'react-router-dom';
-import { useParams, Link } from 'react-router-dom';
+import { followUser } from '../../actions/user.js';
+import { useParams } from 'react-router-dom';
+import { options } from '../../utility/index.js';
 import './styles.css';
 
 const Profile = () => {
   const params = useParams();
-  console.log(params.username);
-  const profile = useSelector((state) => state.profile);
-  const allUsers = useSelector((state) => state.users);
-  const [searchUser, setSearchUser] = useState('');
+  const username = params.username;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
+  const profile = useSelector((state) => state.profile);
+  const allUsers = useSelector((state) => state.users);
+  const posts = useSelector((state) =>
+    state.posts.filter((post) => post.creator === username),
+  );
 
-  const handleFollowUser = (whomToFollow) => {
-    dispatch(followUser(whomToFollow, profile));
+  const userDetails = allUsers.filter((user) => user.username === username)[0];
+  const followers = allUsers.reduce((total, user) => {
+    if (user.username !== username && user.following.includes(username)) {
+      return total + 1;
+    }
+    return total;
+  }, 0);
+  const followingThisUser = (profile.following || []).includes(username);
+
+  const handleEditAndFollow = () => {
+    if (username === profile.username) {
+      return; //enable edit
+    }
+    dispatch(followUser(username, profile));
   };
 
-  const finalUsersToDispaly = allUsers.filter((user) => {
-    const pattern = searchUser.toLowerCase().trim();
-    if (pattern === '') return true;
-    if (user.username.includes(pattern)) return true;
-    if (user.email.includes(pattern)) return true;
-    return false;
-  });
+  if (!userDetails) {
+    return (
+      <div className="container-fluid p-0 bg-white vh-100">
+        <NavBar disableSearch={true} />
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid p-0 bg-white vh-100">
-      <NavBar searchText={searchUser} setSearchText={setSearchUser} />
-      <div className="row m-0">
-        <div className="col-1 col-sm-2 p-0" />
-        <div className="col-10 col-sm-8 p-0">
-          <div className="container-fluid overflow-auto p-0 users-container">
-            <div className="row">
-              {finalUsersToDispaly
-                .filter((user) => user.username !== profile.username)
-                .map((user) => (
-                  <div
-                    className="col-12 col-sm-6 pt-4 px-4"
-                    key={user.username}
+      <NavBar disableSearch={true} />
+      <div className="profile-container">
+        <div className="row justify-content-center py-4 w-100 m-0">
+          <div
+            className="card col-10 col-6-sm p-0"
+            style={{ maxWidth: '540px' }}
+          >
+            <div className="row g-0 align-items-center">
+              <div className="col-md-4">
+                <img
+                  src={userDetails.profileImage.url}
+                  className="img-fluid rounded-start"
+                  alt="user profile"
+                />
+              </div>
+              <div className="col-md-8 text-center">
+                <div className="card-body">
+                  <h5 className="card-title fw-bolder">
+                    @{userDetails.username}
+                  </h5>
+                  <p className="card-text">Followers: {followers}</p>
+                  <p className="card-text">
+                    Following: {userDetails.following.length}
+                  </p>
+                  <p className="card-text">Email: {userDetails.email}</p>
+                  <p className="card-text">
+                    Joined Us:{' '}
+                    {new Date(userDetails.joinedAt).toLocaleString(
+                      'en-US',
+                      options,
+                    )}
+                  </p>
+                  <button
+                    className={`btn btn-${
+                      username === profile.username
+                        ? 'primary'
+                        : followingThisUser
+                        ? 'danger'
+                        : 'success'
+                    }`}
+                    onClick={handleEditAndFollow}
                   >
-                    <div className="card text-center">
-                      <img
-                        src={user.photoURL || memoriesText}
-                        className="card-img-top user-image"
-                        alt="user-pic"
-                      />
-                      <div className="card-body d-flex flex-column">
-                        <span
-                          className="card-title fs-5 fw-bolder"
-                          onClick={() => navigate(`/profile/${user._id}`)}
-                        >
-                          @{user.username}
-                        </span>
-                        <span className="fst-italic mb-2">{user.email}</span>
-                        {(profile.following || []).includes(user.username) ? (
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => handleFollowUser(user.username)}
-                          >
-                            UnFollow
-                          </button>
-                        ) : (
-                          <button
-                            className="btn btn-success"
-                            onClick={() => handleFollowUser(user.username)}
-                          >
-                            Follow
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    {username === profile.username
+                      ? 'Edit Profile'
+                      : followingThisUser
+                      ? 'UnFollow'
+                      : 'Follow'}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="col-1 col-sm-2 p-0" />
+
+        <div className="row justify-content-center w-100 p-3 m-0">
+          {posts &&
+            posts.length > 0 &&
+            posts.map((post) => (
+              <div className="col-12 col-sm-6 col-md-4 m-2" key={post._id}>
+                <div className="card h-100 card-hover">
+                  <img
+                    src={post.selectedFile.url}
+                    className="card-img-top h-100"
+                    alt={post.title}
+                  />
+                  <div className="middle">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate(`/post/${post._id}`)}
+                    >
+                      View Post
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

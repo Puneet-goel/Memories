@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../NavBar/NavBar.jsx';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsers, followUser } from '../../actions/user.js';
+import { followUser } from '../../actions/user.js';
 import { Link } from 'react-router-dom';
 import './style.css';
 
@@ -10,10 +10,6 @@ const UserBox = () => {
   const allUsers = useSelector((state) => state.users);
   const [searchUser, setSearchUser] = useState('');
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
 
   const handleFollowUser = (whomToFollow) => {
     dispatch(followUser(whomToFollow, profile));
@@ -42,11 +38,11 @@ const UserBox = () => {
                     className="col-12 col-sm-6 pt-4 px-4"
                     key={user.username}
                   >
-                    <div className="card text-center">
+                    <div className="card text-center h-100">
                       <img
                         src={user.profileImage.url}
                         className="card-img-top user-image"
-                        alt="user-pic"
+                        alt="user profile"
                       />
                       <div className="card-body d-flex flex-column">
                         <Link to={`/profile/${user.username}`}>

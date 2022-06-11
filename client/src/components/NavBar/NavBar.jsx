@@ -144,7 +144,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                 <List>
                   <ListItem button>
                     <ListItemText
-                      primary="Home Page"
+                      primary="Home"
                       onClick={() => navigate('/')}
                     />
                   </ListItem>
@@ -156,8 +156,14 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                   </ListItem>
                   <ListItem button>
                     <ListItemText
-                      primary="Profile Page"
+                      primary="Profile"
                       onClick={() => navigate(`/profile/${user.username}`)}
+                    />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemText
+                      primary="Logout"
+                      onClick={() => handleLogout()}
                     />
                   </ListItem>
                 </List>
@@ -167,7 +173,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
           <Typography className={classes.title} variant="h6" noWrap>
             Memories
           </Typography>
-          {disableSearch ? null : (
+          {!disableSearch && (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
@@ -194,7 +200,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircle fontSize="large" />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>

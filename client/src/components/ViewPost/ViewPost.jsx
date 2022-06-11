@@ -3,15 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
-import { isValidImageURL, dummyPost } from '../../utility/index.js';
+import { isValidImageURL, dummyPost, options } from '../../utility/index.js';
 import NavBar from '../NavBar/NavBar.jsx';
-
-let options = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-};
 
 const ViewPost = () => {
   const params = useParams();
@@ -24,11 +17,6 @@ const ViewPost = () => {
     }
     return data;
   });
-
-  var scrollTop = function () {
-    window.scrollTo(0, 0);
-  };
-  scrollTop();
 
   return (
     <div

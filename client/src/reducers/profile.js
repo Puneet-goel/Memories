@@ -6,6 +6,7 @@ import {
   FORGOT_PASSWORD,
   RESET_PASSWORD,
   FOLLOW_USER,
+  UPDATE_PROFILE,
 } from '../constants/actionTypes';
 
 const profileReducer = (profile = null, action) => {
@@ -21,6 +22,11 @@ const profileReducer = (profile = null, action) => {
       return {
         ...profile,
         following: action.payload.following,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...profile,
+        profileImage: action.payload.profileImage,
       };
     default:
       return profile;

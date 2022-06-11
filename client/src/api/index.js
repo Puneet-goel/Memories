@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const URL = 'https://memories-backend-mern.herokuapp.com';
-const URL = 'http://localhost:5000';
+const URL = 'https://memories-backend-mern.herokuapp.com';
+// const URL = 'http://localhost:5000';
 
 const postUrl = URL + '/posts';
 const authUrl = URL + '/auth';
@@ -76,6 +76,13 @@ export const getAllUsers = (token) =>
 
 export const followUser = (data, token) =>
   axios.patch(userUrl + '/followUser/', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+export const updateProfile = (id, updatedUser, token) =>
+  axios.patch(`${userUrl}/${id}/`, updatedUser, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -1,6 +1,9 @@
-import React, { useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
+import ResetPassword from './ResetPassword.jsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
@@ -13,9 +16,15 @@ const schema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
+  const [reset, setReset] = useState(false);
+  const [email, setEmail] = useState('');
   const serverError = useRef('');
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+  if (reset) {
+    return <ResetPassword email={email} />;
+  }
 
   return (
     <div className="container-fluid pt-5">
@@ -28,14 +37,21 @@ const ForgotPassword = () => {
             }}
             validationSchema={schema}
             onSubmit={async (values) => {
+              const toastID = toast.loading('Sending Email');
               serverError.current = await dispatch(
                 forgotPassword(values.email),
               );
               if (serverError.current === 'ok') {
-                alert(
-                  'A password reset link was sent. Click the link in the email to create a new password. If you do not receive an email within 5 minutes, please try again.',
-                );
-                navigate('/login');
+                setEmail(values.email);
+                setReset(true);
+              } else {
+                toast.update(toastID, {
+                  render: 'An error occurred while sending you an email',
+                  type: 'error',
+                  hideProgressBar: true,
+                  isLoading: false,
+                  autoClose: 3000,
+                });
               }
             }}
           >
@@ -76,6 +92,7 @@ const ForgotPassword = () => {
           </Formik>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

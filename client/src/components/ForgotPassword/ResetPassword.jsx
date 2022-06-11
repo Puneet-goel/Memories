@@ -1,17 +1,19 @@
 import React, { useRef } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 
 import { resetPassword } from '../../actions/auth';
 
-const regex = /^[a-z0-9_]+$/;
+const regex = /^[0-9]+$/;
 const schema = Yup.object().shape({
-  username: Yup.string('Enter your username')
-    .min(3, 'Too Short')
-    .max(15, 'Must be 15 characters or less')
-    .matches(regex, 'Must be a valid username')
+  otp: Yup.string('Enter your OTP')
+    .min(6, 'Must be exactly 6 digits')
+    .max(6, 'Must be exactly 6 digits')
+    .matches(regex, 'Must be only digits')
     .required('Required'),
   password: Yup.string('Enter your password')
     .min(5, 'Too Short!')
@@ -21,14 +23,10 @@ const schema = Yup.object().shape({
     .required('Required'),
 });
 
-const ResetPassword = () => {
+const ResetPassword = ({ email }) => {
   const serverError = useRef('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
-
-  const id = params.id;
-  const username = params.username;
 
   return (
     <div className="container-fluid pt-3">
@@ -37,17 +35,26 @@ const ResetPassword = () => {
           <h3 className="text-center pt-2 font-weight-bold">Reset Password</h3>
           <Formik
             initialValues={{
-              username: username,
+              otp: '',
               password: '',
               passwordConfirmation: '',
             }}
             validationSchema={schema}
             onSubmit={async (values) => {
+              const toastID = toast.loading('Changing your password');
               serverError.current = await dispatch(
-                resetPassword(id, values.username, values.password),
+                resetPassword(values.otp, email, values.password),
               );
               if (serverError.current === 'ok') {
                 navigate('/login');
+              } else {
+                toast.update(toastID, {
+                  render: 'Password not changed',
+                  type: 'error',
+                  hideProgressBar: true,
+                  isLoading: false,
+                  autoClose: 3000,
+                });
               }
             }}
           >
@@ -55,18 +62,16 @@ const ResetPassword = () => {
               <Form>
                 <div className="form-floating mb-3">
                   <Field
-                    name="username"
+                    name="otp"
                     type="string"
                     autoComplete="off"
-                    placeholder="daniel"
+                    placeholder="OTP"
                     className="form-control"
                   />
-                  <label htmlFor="username">username</label>
-                  <small className="form-text text-muted">
-                    only alphanumeric characters or underscores allowed
-                  </small>
+                  <label htmlFor="otp">OTP</label>
+                  <small className="form-text text-muted">6 digit Code</small>
                   <ErrorMessage
-                    name="username"
+                    name="otp"
                     render={(msg) => (
                       <div className="form-text text-danger">{msg}</div>
                     )}
@@ -125,6 +130,7 @@ const ResetPassword = () => {
           </Formik>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

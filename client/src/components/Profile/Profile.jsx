@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from '../NavBar/NavBar.jsx';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { followUser } from '../../actions/user.js';
+import { followUser, updateProfile } from '../../actions/user.js';
 import { useParams } from 'react-router-dom';
 import { options } from '../../utility/index.js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles.css';
 
 const Profile = () => {
@@ -14,13 +23,19 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [profileModal, setProfileModal] = useState(false);
+  const [userFile, setUserFile] = useState(null);
+
   const profile = useSelector((state) => state.profile);
   const allUsers = useSelector((state) => state.users);
   const posts = useSelector((state) =>
     state.posts.filter((post) => post.creator === username),
   );
 
-  const userDetails = allUsers.filter((user) => user.username === username)[0];
+  const userDetails =
+    profile.username === username
+      ? profile
+      : allUsers.filter((user) => user.username === username)[0];
   const followers = allUsers.reduce((total, user) => {
     if (user.username !== username && user.following.includes(username)) {
       return total + 1;
@@ -29,11 +44,43 @@ const Profile = () => {
   }, 0);
   const followingThisUser = (profile.following || []).includes(username);
 
-  const handleEditAndFollow = () => {
-    if (username === profile.username) {
-      return; //enable edit
-    }
+  const handleFollow = () => {
     dispatch(followUser(username, profile));
+  };
+
+  const handleEdit = async () => {
+    handleProfileModal();
+    const toastID = toast.loading('Updating your Profile');
+    dispatch(updateProfile(profile._id, userFile)).then((isExecuted) => {
+      if (isExecuted) {
+        toast.update(toastID, {
+          render: 'Profile Updated',
+          type: 'success',
+          hideProgressBar: true,
+          isLoading: false,
+          autoClose: 3000,
+        });
+      } else {
+        toast.update(toastID, {
+          render: 'Could not update your profile',
+          type: 'error',
+          hideProgressBar: true,
+          isLoading: false,
+          autoClose: 3000,
+        });
+      }
+    });
+  };
+
+  const handleProfileModal = () => {
+    if (profileModal === false) {
+      setUserFile(null);
+    }
+    setProfileModal(!profileModal);
+  };
+
+  const handleImageUpload = (e) => {
+    setUserFile(e.target.files[0]);
   };
 
   if (!userDetails) {
@@ -41,7 +88,6 @@ const Profile = () => {
       <div className="container-fluid p-0 bg-white vh-100">
         <NavBar disableSearch={true} />
         <h1 className="text-center fw-bolder p-3 font-monospace">
-          {' '}
           No Such Profile exists for the given username: {username}
         </h1>
       </div>
@@ -51,17 +97,55 @@ const Profile = () => {
   return (
     <div className="container-fluid p-0 bg-white vh-100">
       <NavBar disableSearch={true} />
+      {profileModal && (
+        <div>
+          <Dialog
+            open={profileModal}
+            onClose={handleProfileModal}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">
+              Upload your Profile
+            </DialogTitle>
+            <DialogContent>
+              <input
+                style={{ width: '100%' }}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+              {userFile && (
+                <div className="post-photo-container">
+                  <img
+                    className="user-photo"
+                    src={userFile ? URL.createObjectURL(userFile) : null}
+                    alt="snap uploaded by user"
+                  />
+                </div>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleProfileModal} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleEdit} color="primary">
+                Update
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )}
       <div className="profile-container">
         <div className="row justify-content-center py-4 w-100 m-0">
           <div
             className="card col-10 col-6-sm p-0"
             style={{ maxWidth: '540px' }}
           >
-            <div className="row g-0 align-items-center">
+            <div className="row g-0 align-items-center text-center">
               <div className="col-md-4">
                 <img
                   src={userDetails.profileImage.url}
-                  className="img-fluid rounded-start"
+                  className="img-fluid rounded-start p-2"
                   alt="user profile"
                 />
               </div>
@@ -82,22 +166,32 @@ const Profile = () => {
                       options,
                     )}
                   </p>
-                  <button
-                    className={`btn btn-${
-                      username === profile.username
-                        ? 'primary'
-                        : followingThisUser
-                        ? 'danger'
-                        : 'success'
-                    }`}
-                    onClick={handleEditAndFollow}
-                  >
-                    {username === profile.username
-                      ? 'Edit Profile'
-                      : followingThisUser
-                      ? 'UnFollow'
-                      : 'Follow'}
-                  </button>
+                  {username === profile.username && (
+                    <>
+                      <button
+                        className="btn btn-primary m-2 m-md-1"
+                        onClick={handleProfileModal}
+                      >
+                        Edit Profile Image
+                      </button>
+                      <button
+                        className="btn btn-primary m-2 m-md-1"
+                        onClick={() => navigate('/forgot-password')}
+                      >
+                        Change Password
+                      </button>
+                    </>
+                  )}
+                  {username !== profile.username && (
+                    <button
+                      className={`btn btn-${
+                        followingThisUser ? 'danger' : 'success'
+                      }`}
+                      onClick={handleFollow}
+                    >
+                      {followingThisUser ? 'UnFollow' : 'Follow'}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -128,6 +222,7 @@ const Profile = () => {
             ))}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

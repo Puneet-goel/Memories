@@ -72,6 +72,10 @@ export const updatePost = async (req, res) => {
       .select({ creator: 1, selectedFile: 1 })
       .lean();
 
+    if (!oldPost) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
+
     if (oldPost.creator !== req.body.username) {
       return res
         .status(403)
@@ -129,6 +133,10 @@ export const deletePost = async (req, res) => {
       .select({ creator: 1, selectedFile: 1 })
       .lean();
 
+    if (!oldPost) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
+
     if (oldPost.creator !== username) {
       return res
         .status(403)
@@ -158,6 +166,9 @@ export const likePost = async (req, res) => {
     }
 
     let post = await PostMessage.findById(_id).select({ likedBy: 1 }).lean();
+    if (!post) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
 
     const index = post.likedBy.indexOf(username);
 
@@ -192,6 +203,10 @@ export const getUserPost = async (req, res) => {
     }
 
     const post = await PostMessage.findById(_id).lean();
+    if (!post) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
+
     return res.status(200).json({
       message: 'ok',
       post: post,

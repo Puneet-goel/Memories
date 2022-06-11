@@ -4,6 +4,47 @@ import nodemailer from 'nodemailer';
 import User from '../models/user.js';
 import mongoose from 'mongoose';
 import { forgotURL } from './urls.js';
+import { google } from 'googleapis';
+import { totp } from 'otplib';
+
+totp.options = { step: 300 };
+
+const createTransporter = async () => {
+  const OAuth2 = google.auth.OAuth2;
+
+  const oauth2Client = new OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    'https://developers.google.com/oauthplayground',
+  );
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN,
+  });
+
+  const accessToken = await new Promise((resolve, reject) => {
+    oauth2Client.getAccessToken((err, token) => {
+      if (err) {
+        reject('Failed to create access token :(');
+      }
+      resolve(token);
+    });
+  });
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      type: 'OAuth2',
+      user: process.env.EMAIL,
+      accessToken,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+    },
+  });
+
+  return transporter;
+};
 
 export const login = async (req, res) => {
   try {
@@ -67,16 +108,16 @@ export const signup = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { id, username, password } = req.body;
+    const { email, password, otp } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.json({ message: 'Invalid Username or Link' });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({ message: 'Invalid Email' });
     }
 
-    const user = await User.findById(id);
-
-    if (!user || user.username !== username) {
-      return res.json({ message: 'Invalid Username or Link' });
+    const isValidOTP = totp.check(otp, process.env.OTP_SECRET);
+    if (!isValidOTP) {
+      return res.json({ message: 'Wrong OTP!' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -98,31 +139,31 @@ export const forgot = async (req, res) => {
       return res.json({ message: 'Invalid Email' });
     }
 
+    const sendEmail = async (emailOptions) => {
+      let emailTransporter = await createTransporter();
+      await emailTransporter.sendMail(emailOptions);
+    };
+
+    const token = totp.generate(process.env.OTP_SECRET);
+
     const html = `
       <h3>Hello ${user.username}, </h3>
-      <p>Please click on the link below to reset your password for ${email}.</p>
-      <p>Reset Link: ${forgotURL + user._id + '/' + user.username}</p>
+      <p>We have received a request for password reset for your account. Here, is the six-digit OTP to continue.</p>
+      <h1 style="text-align: center;">${token}</h1>
+      <p>It will be valid for the next five minutes. Please do not share OTP with anyone.</p>
       <br/>
-      <p> If you didn't request this, please ignore this email.</p>
+      <p>If you did not make this request, you can safely ignore this email.</p>
       <p>Thank You</p>
     `;
 
-    let mailTransporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'puneetvideomeet@gmail.com',
-        pass: process.env.VMEET_PASS,
-      },
-    });
-
-    let mailDetails = {
-      from: 'no-reply puneetvideomeet@gmail.com',
+    const mailDetails = {
+      from: `Memories ${process.env.EMAIL}`,
       to: email,
       subject: 'Password Change',
       html: html,
     };
 
-    await mailTransporter.sendMail(mailDetails);
+    await sendEmail(mailDetails);
     return res.status(200).json({ message: 'ok' });
   } catch (err) {
     return res.status(500).json({ message: err.message });

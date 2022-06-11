@@ -11,7 +11,7 @@ export const createUserImage = async (image, userId) => {
       return sanityClient.create({
         _type: 'usermedia',
         photo: { asset: { _ref: data._id } },
-        post_id: postId,
+        user_id: userId,
       });
     });
 };

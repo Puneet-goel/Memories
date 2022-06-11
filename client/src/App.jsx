@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,6 @@ import { getAllUsers } from './actions/user';
 import Login from './components/Login/Login.jsx';
 import Signup from './components/Signup/Signup.jsx';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword.jsx';
-import ResetPassword from './components/ResetPassword/ResetPassword.jsx';
 import Home from './components/Home/Home.jsx';
 import ViewPost from './components/ViewPost/ViewPost.jsx';
 import AuthenticationLoading from './components/AuthenticationLoading/AuthenticationLoading.jsx';
@@ -17,14 +16,16 @@ import Profile from './components/Profile/Profile.jsx';
 
 const App = () => {
   const isUserValid = useSelector((state) => state.profile);
+  const [isEverythingFetched, setIsEverythingFetched] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isUserValid) {
+    if (isUserValid && !isEverythingFetched) {
+      setIsEverythingFetched(true);
       dispatch(getPosts());
       dispatch(getAllUsers());
     }
-  }, [dispatch, isUserValid]);
+  }, [dispatch, isUserValid, isEverythingFetched]);
 
   return (
     <BrowserRouter>
@@ -44,10 +45,6 @@ const App = () => {
           element={isUserValid ? <Navigate to="/" /> : <Signup />}
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/reset-password/:id/:username"
-          element={<ResetPassword />}
-        />
         <Route
           path="/connect"
           element={

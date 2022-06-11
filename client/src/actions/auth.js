@@ -103,12 +103,12 @@ export const forgotPassword = (email) => async (dispatch) => {
   }
 };
 
-export const resetPassword = (id, username, password) => async (dispatch) => {
+export const resetPassword = (otp, email, password) => async (dispatch) => {
   try {
     const user = {
-      id: id,
+      otp: otp,
       password: password,
-      username: username,
+      email: email,
     };
 
     const { data } = await api.resetPasswordUser(user);

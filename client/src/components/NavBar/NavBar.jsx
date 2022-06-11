@@ -161,6 +161,14 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                     />
                   </ListItem>
                   <ListItem button>
+                    <a
+                      href="https://v-meet-puneet.netlify.app/"
+                      style={{ textDecoration: 'none', color: 'black' }}
+                    >
+                      V Meet: Video Text-Chat with your friend
+                    </a>
+                  </ListItem>
+                  <ListItem button>
                     <ListItemText
                       primary="Logout"
                       onClick={() => handleLogout()}

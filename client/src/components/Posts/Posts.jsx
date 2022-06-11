@@ -5,13 +5,25 @@ import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
 import useStyles from './styles';
 
-const Posts = ({ setCurrentId, searchText, toastID }) => {
+const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
   const classes = useStyles();
 
   const posts = useSelector((state) => state.posts);
   const profile = useSelector((state) => state.profile);
 
-  const searchedPosts = posts.filter((post) => {
+  /**
+   * @description filter network posts
+   */
+  const networkPosts = posts.filter((post) => {
+    if (!networkEnabled || post.creator === profile.username) return true;
+    const isCreatorFollowed = profile.following.includes(post.creator);
+    return isCreatorFollowed;
+  });
+
+  /**
+   * @description filter search posts
+   */
+  const searchedPosts = networkPosts.filter((post) => {
     const pattern = searchText.toLowerCase().trim();
     if (pattern === '') return true;
     if (post.title.includes(pattern)) return true;

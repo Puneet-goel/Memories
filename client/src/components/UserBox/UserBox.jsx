@@ -38,7 +38,7 @@ const UserBox = () => {
                     className="col-12 col-sm-6 pt-4 px-4"
                     key={user.username}
                   >
-                    <div className="card text-center h-100">
+                    <div className="card text-center">
                       <img
                         src={user.profileImage.url}
                         className="card-img-top user-image"

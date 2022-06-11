@@ -40,6 +40,10 @@ const Profile = () => {
     return (
       <div className="container-fluid p-0 bg-white vh-100">
         <NavBar disableSearch={true} />
+        <h1 className="text-center fw-bolder p-3 font-monospace">
+          {' '}
+          No Such Profile exists for the given username: {username}
+        </h1>
       </div>
     );
   }

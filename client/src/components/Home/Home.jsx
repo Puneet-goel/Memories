@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Container, Grid, Grow } from '@material-ui/core';
+import { Container, Grid, Grow, Switch } from '@material-ui/core';
 import CreatePost from '../CreatePost/CreatePost.jsx';
 import NavBar from '../NavBar/NavBar.jsx';
 import Posts from '../Posts/Posts.jsx';
@@ -12,8 +12,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const Home = () => {
   const [currentId, setCurrentId] = useState(null);
   const [searchText, setSearchText] = useState('');
+  const [switchState, setSwitchState] = useState(false);
+
   const toastID = useRef(null);
   const classes = useStyles();
+
+  const handleSwitchChange = (event) => {
+    setSwitchState(event.target.checked);
+  };
 
   return (
     <Container maxWidth="lg" className={classes.home}>
@@ -31,20 +37,34 @@ const Home = () => {
               setCurrentId={setCurrentId}
               searchText={searchText}
               toastID={toastID}
+              networkEnabled={switchState}
             />
           </Grid>
           <Grid item xs={12} sm={5} md={4} className={classes.userContainer}>
             <h2 className="fw-bolder my-3 font-monospace welcome-name">
               Hi {parseUsername()}, &nbsp;
             </h2>
+
             <h5 className="fw-bolder my-3 font-monospace welcome-name text-center">
               Welcome to Memories
             </h5>
+
             <CreatePost
               currentId={currentId}
               setCurrentId={setCurrentId}
               toastID={toastID}
             />
+
+            <div className="text-center mt-4">
+              <h5 className="font-monospace pt-3">Your Network Feed only?</h5>
+              <Switch
+                checked={switchState}
+                onChange={handleSwitchChange}
+                color="primary"
+                name="network-post"
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
+            </div>
           </Grid>
         </Grid>
       </Grow>

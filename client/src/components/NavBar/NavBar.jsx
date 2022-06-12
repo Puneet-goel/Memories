@@ -140,7 +140,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                 onKeyDown={toggleDrawer(false)}
               >
                 <h4 className="fw-bolder p-3 font-monospace"> MEMORIES </h4>
-                <Divider />
+                <Divider style={{ background: 'black' }} />
                 <List>
                   <ListItem button>
                     <ListItemText
@@ -152,6 +152,12 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                     <ListItemText
                       primary="Connect with your Friends"
                       onClick={() => navigate('/connect')}
+                    />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemText
+                      primary="Your Network"
+                      onClick={() => navigate('/network')}
                     />
                   </ListItem>
                   <ListItem button>
@@ -168,6 +174,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                       onClick={() => navigate(`/profile/${user.username}`)}
                     />
                   </ListItem>
+                  <Divider />
                   <ListItem button>
                     <ListItemText
                       primary="Change Password"
@@ -179,6 +186,15 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                       primary="Logout"
                       onClick={() => handleLogout()}
                     />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button>
+                    <a
+                      href="https://github.com/puneet-goel/"
+                      style={{ textDecoration: 'none', color: 'black' }}
+                    >
+                      Github
+                    </a>
                   </ListItem>
                 </List>
               </div>

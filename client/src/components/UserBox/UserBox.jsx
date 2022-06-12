@@ -5,7 +5,7 @@ import { followUser } from '../../actions/user.js';
 import { Link } from 'react-router-dom';
 import './style.css';
 
-const UserBox = () => {
+const UserBox = ({ onlyFollowers }) => {
   const profile = useSelector((state) => state.profile);
   const allUsers = useSelector((state) => state.users);
   const [searchUser, setSearchUser] = useState('');
@@ -15,7 +15,14 @@ const UserBox = () => {
     dispatch(followUser(whomToFollow, profile));
   };
 
-  const finalUsersToDispaly = allUsers.filter((user) => {
+  let users;
+  if(onlyFollowers){
+    users = allUsers.filter((user) => profile.following.includes(user.username));
+  }else{
+    users = allUsers.filter((user) => !profile.following.includes(user.username));
+  }
+
+  const finalUsersToDispaly = users.filter((user) => {
     const pattern = searchUser.toLowerCase().trim();
     if (pattern === '') return true;
     if (user.username.includes(pattern)) return true;
@@ -51,7 +58,7 @@ const UserBox = () => {
                           </span>
                         </Link>
                         <span className="fst-italic mb-2">{user.email}</span>
-                        {(profile.following || []).includes(user.username) ? (
+                        {onlyFollowers ? (
                           <button
                             className="btn btn-danger"
                             onClick={() => handleFollowUser(user.username)}

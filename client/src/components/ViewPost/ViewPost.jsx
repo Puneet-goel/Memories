@@ -3,20 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Skeleton from '@material-ui/lab/Skeleton';
 import SkeletonSpecificPost from './SkeletonSpecificPost';
-import { isValidImageURL, dummyPost, options } from '../../utility/index.js';
+import { isValidImageURL, options } from '../../utility/index.js';
 import NavBar from '../NavBar/NavBar.jsx';
 
 const ViewPost = () => {
   const params = useParams();
-
-  const post = useSelector((state) => {
-    const id = params.id;
-    let data = state.posts.filter((post) => post._id === id)[0];
-    if (!data) {
-      data = dummyPost;
-    }
-    return data;
-  });
+  const post = useSelector((state) => state.posts.filter((post) => post._id === params.id)[0] );
 
   return (
     <div
@@ -38,7 +30,7 @@ const ViewPost = () => {
         </ol>
       </nav>
 
-      {post.creator === '' ? (
+      {(!post || !post._id) ? (
         <SkeletonSpecificPost />
       ) : (
         <div className="px-3">

@@ -9,11 +9,11 @@ const SkeletonSpecificPost = () => {
         <Skeleton width="30%" />
       </div>
 
-      <div className="d-flex flex-column align-items-end mb-3">
+      <div className="d-flex flex-column align-items-end mb-3 pe-2">
         <Skeleton width="30%" />
       </div>
 
-      <div className="row">
+      <div className="row p-0 w-100 m-0">
         <div className="col-12 col-md-5 px-1">
           <Skeleton variant="rect" height={300} />
         </div>

@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { followUser, updateProfile } from '../../actions/user.js';
 import { useParams } from 'react-router-dom';
 import { options } from '../../utility/index.js';
@@ -36,12 +36,14 @@ const Profile = () => {
     profile.username === username
       ? profile
       : allUsers.filter((user) => user.username === username)[0];
+  
   const followers = allUsers.reduce((total, user) => {
     if (user.username !== username && user.following.includes(username)) {
       return total + 1;
     }
     return total;
   }, 0);
+
   const followingThisUser = (profile.following || []).includes(username);
 
   const handleFollow = () => {
@@ -151,14 +153,21 @@ const Profile = () => {
               </div>
               <div className="col-md-8 text-center">
                 <div className="card-body">
-                  <h5 className="card-title fw-bolder">
+                  <h4 className="card-title fw-bolder">
                     @{userDetails.username}
-                  </h5>
-                  <p className="card-text">Followers: {followers}</p>
-                  <p className="card-text">
-                    Following: {userDetails.following.length}
-                  </p>
-                  <p className="card-text">Email: {userDetails.email}</p>
+                  </h4>
+                  <p className="card-text mb-0">Followers: {followers}</p>
+                  {profile.username === username
+                    ?(
+                      <p className="card-text">
+                        <Link to="/network" className="fw-bolder">Following:</Link>
+                        <span>{' '}{userDetails.following.length}</span>
+                      </p>
+                    ):(
+                      <p className="card-text">Following: {userDetails.following.length}</p>
+                    )
+                  }
+                  <p className="card-text">{userDetails.email}</p>
                   <p className="card-text">
                     Joined Us:{' '}
                     {new Date(userDetails.joinedAt).toLocaleString(

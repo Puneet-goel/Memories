@@ -46,9 +46,15 @@ const App = () => {
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
+          path="/network"
+          element={
+            isUserValid ? <UserBox onlyFollowers={true} /> : <AuthenticationLoading failure="/" />
+          }
+        />
+        <Route
           path="/connect"
           element={
-            isUserValid ? <UserBox /> : <AuthenticationLoading failure="/" />
+            isUserValid ? <UserBox onlyFollowers={false} /> : <AuthenticationLoading failure="/" />
           }
         />
         <Route

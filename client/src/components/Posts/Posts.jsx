@@ -3,10 +3,8 @@ import { useSelector } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
-import useStyles from './styles';
 
 const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
-  const classes = useStyles();
 
   const posts = useSelector((state) => state.posts);
   const profile = useSelector((state) => state.profile);
@@ -35,28 +33,31 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
     return false;
   });
 
-  return !posts.length ? (
-    <Grid className={classes.container} container alignItems="stretch">
-      {[1, 2, 3, 4, 5].map((cur) => (
-        <Grid key={cur} item xs={12}>
-          <SkeletonPost />
-        </Grid>
-      ))}
+  return (
+    <Grid container>
+      <Grid item sm={2} />
+      <Grid item xs={12} sm={10}>
+        {!posts.length?(
+          [1, 2, 3, 4, 5].map((cur) => (
+            <Grid key={cur} >
+              <SkeletonPost />
+            </Grid>
+          ))
+        ): (
+          searchedPosts.map((post) => (
+            <Grid key={post._id} className="mb-4">
+              <Post
+                post={post}
+                toastID={toastID}
+                setCurrentId={setCurrentId}
+                username={profile.username}
+              />
+            </Grid>
+          ))
+        )}
+      </Grid>
     </Grid>
-  ) : (
-    <Grid className={classes.container} container alignItems="stretch">
-      {searchedPosts.map((post) => (
-        <Grid key={post._id} item xs={12} className="my-2">
-          <Post
-            post={post}
-            toastID={toastID}
-            setCurrentId={setCurrentId}
-            username={profile.username}
-          />
-        </Grid>
-      ))}
-    </Grid>
-  );
+  )
 };
 
 export default Posts;

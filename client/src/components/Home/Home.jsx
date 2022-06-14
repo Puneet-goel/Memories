@@ -31,8 +31,7 @@ const Home = () => {
           justifyContent="space-between"
           alignItems="stretch"
         >
-          <Grid item xs={1} />
-          <Grid item xs={12} sm={6} md={7} className={classes.postContainer}>
+          <Grid item xs={12} sm={7} md={8} className={classes.postContainer}>
             <Posts
               setCurrentId={setCurrentId}
               searchText={searchText}

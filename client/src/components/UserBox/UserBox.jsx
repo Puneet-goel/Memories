@@ -33,54 +33,50 @@ const UserBox = ({ onlyFollowers }) => {
   return (
     <div className="container-fluid p-0 bg-white vh-100">
       <NavBar searchText={searchUser} setSearchText={setSearchUser} />
-      <div className="row m-0">
-        <div className="col-1 col-sm-2 p-0" />
-        <div className="col-10 col-sm-8 p-0">
-          <div className="container-fluid overflow-auto p-0 users-container">
-            <div className="row">
-              {finalUsersToDispaly
-                .filter((user) => user.username !== profile.username)
-                .map((user) => (
-                  <div
-                    className="col-12 col-sm-6 pt-4 px-4"
-                    key={user.username}
-                  >
-                    <div className="card text-center">
-                      <img
-                        src={user.profileImage.url}
-                        className="card-img-top user-image"
-                        alt="user profile"
-                      />
-                      <div className="card-body d-flex flex-column">
-                        <Link to={`/profile/${user.username}`}>
-                          <span className="card-title fs-5 fw-bolder">
-                            @{user.username}
-                          </span>
-                        </Link>
-                        <span className="fst-italic mb-2">{user.email}</span>
-                        {onlyFollowers ? (
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => handleFollowUser(user.username)}
-                          >
-                            UnFollow
-                          </button>
-                        ) : (
-                          <button
-                            className="btn btn-success"
-                            onClick={() => handleFollowUser(user.username)}
-                          >
-                            Follow
-                          </button>
-                        )}
-                      </div>
+      <div className="row m-0 users-container overflow-auto">
+        <div className="col-10 col-sm-8 mx-auto">
+          <div className="row">
+            {finalUsersToDispaly
+              .filter((user) => user.username !== profile.username)
+              .map((user) => (
+                <div
+                  className="col-12 col-sm-6 pt-4 px-4"
+                  key={user.username}
+                >
+                  <div className="card text-center h-100">
+                    <img
+                      src={user.profileImage.url}
+                      className="card-img-top user-image"
+                      alt="user profile"
+                    />
+                    <div className="card-body d-flex flex-column">
+                      <Link to={`/profile/${user.username}`}>
+                        <span className="card-title fs-5 fw-bolder">
+                          @{user.username}
+                        </span>
+                      </Link>
+                      <span className="fst-italic mb-2">{user.email}</span>
+                      {onlyFollowers ? (
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleFollowUser(user.username)}
+                        >
+                          UnFollow
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleFollowUser(user.username)}
+                        >
+                          Follow
+                        </button>
+                      )}
                     </div>
                   </div>
-                ))}
-            </div>
+                </div>
+              ))}
           </div>
         </div>
-        <div className="col-1 col-sm-2 p-0" />
       </div>
     </div>
   );

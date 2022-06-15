@@ -3,6 +3,7 @@ import NavBar from '../NavBar/NavBar.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { followUser } from '../../actions/user.js';
 import { Link } from 'react-router-dom';
+import DiceBearAvatar from '../DiceBearAvatar/DiceBearAvatar.jsx';
 import './style.css';
 
 const UserBox = ({ onlyFollowers }) => {
@@ -44,11 +45,15 @@ const UserBox = ({ onlyFollowers }) => {
                   key={user.username}
                 >
                   <div className="card text-center h-100">
-                    <img
+                    {user.profileImage.url? (
+                      <img
                       src={user.profileImage.url}
                       className="card-img-top user-image"
                       alt="user profile"
                     />
+                    ) : (
+                      <DiceBearAvatar username={user.username} />
+                    )}
                     <div className="card-body d-flex flex-column">
                       <Link to={`/profile/${user.username}`}>
                         <span className="card-title fs-5 fw-bolder">

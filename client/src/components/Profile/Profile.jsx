@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import { options } from '../../utility/index.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DiceBearAvatar from '../DiceBearAvatar/DiceBearAvatar.jsx';
 import './styles.css';
 
 const Profile = () => {
@@ -145,11 +146,15 @@ const Profile = () => {
           >
             <div className="row g-0 align-items-center text-center">
               <div className="col-md-4">
-                <img
-                  src={userDetails.profileImage.url}
-                  className="img-fluid rounded-start p-2"
-                  alt="user profile"
-                />
+                {userDetails.profileImage.url?(
+                  <img
+                    src={userDetails.profileImage.url}
+                    className="img-fluid rounded-start p-2"
+                    alt="user profile"
+                  />
+                ):(
+                  <DiceBearAvatar username={userDetails.username} />
+                )}
               </div>
               <div className="col-md-8 text-center">
                 <div className="card-body">

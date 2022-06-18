@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import User from '../models/user.js';
-import mongoose from 'mongoose';
-import { forgotURL } from './urls.js';
 import { google } from 'googleapis';
 import { totp } from 'otplib';
 

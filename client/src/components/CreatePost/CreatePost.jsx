@@ -11,7 +11,7 @@ import './styles.css';
 
 const CreatePost = ({ currentId, setCurrentId, toastID }) => {
   const post = useSelector((state) =>
-    currentId ? state.posts.find((p) => p._id === currentId) : null,
+    currentId ? state.posts.find((p) => p._id === currentId) : null
   );
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const CreatePost = ({ currentId, setCurrentId, toastID }) => {
 
     toast.dismiss(toastID.current);
     toastID.current = toast.loading(
-      `${currentId ? 'Updating' : 'Creating'} your post`,
+      `${currentId ? 'Updating' : 'Creating'} your post`
     );
     if (currentId) {
       dispatch(updatePost(currentId, postData, file)).then((message) => {

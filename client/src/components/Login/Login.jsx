@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { login } from '../../actions/auth';
+import './login.css';
 
 const regex = /^[a-z0-9_]+$/;
 const schema = Yup.object().shape({
@@ -27,7 +28,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="container-fluid pt-3">
+    <div className="container-fluid pt-3 login-wrapper">
       <div className="row justify-content-center">
         <div className="col-8 col-sm-6 col-md-4 bg-white p-3">
           <h3 className="text-center pt-2 font-weight-bold">Log in</h3>
@@ -46,8 +47,8 @@ const Login = () => {
                   values.email,
                   values.password,
                   values.username,
-                  values.toggle,
-                ),
+                  values.toggle
+                )
               );
 
               if (serverError.current !== 'ok') {

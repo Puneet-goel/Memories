@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-
+import './newPassWord.css';
 import { forgotPassword } from '../../actions/auth';
 
 const schema = Yup.object().shape({
@@ -27,7 +27,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="container-fluid pt-5">
+    <div className="container-fluid pt-5 forgot-wrapper">
       <div className="row justify-content-center">
         <div className="col-8 col-sm-6 col-md-4 bg-white p-4">
           <h3 className="text-center pt-2 font-weight-bold">Forgot Password</h3>
@@ -39,7 +39,7 @@ const ForgotPassword = () => {
             onSubmit={async (values) => {
               const toastID = toast.loading('Sending Email');
               serverError.current = await dispatch(
-                forgotPassword(values.email),
+                forgotPassword(values.email)
               );
               if (serverError.current === 'ok') {
                 setEmail(values.email);

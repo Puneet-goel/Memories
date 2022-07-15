@@ -6,6 +6,7 @@ import {
   CardMedia,
   Button,
   Typography,
+  Paper,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
@@ -47,83 +48,88 @@ const Post = ({ post, setCurrentId, username, toastID }) => {
   };
 
   const isLikedByUser = (post?.likedBy || []).find((peer) => peer === username);
+  const validImage = isValidImageURL(post.selectedFile.url);
 
   return (
-    <Card className={classes.card}>
-      {!isValidImageURL(post.selectedFile.url) ? (
-        <Skeleton animation="wave" className={classes.media} variant="rect" />
-      ) : (
-        <CardMedia
-          className={classes.media}
-          image={post.selectedFile.url}
-          title={post.title}
-        />
-      )}
-      {!isValidImageURL(post.selectedFile.url) ? (
-        <div className={classes.overlay}>
-          <Typography variant="h6" className={classes.dark}>
-            {post.creator}
-          </Typography>
-          <Typography variant="body2" className={classes.dark}>
-            {moment(post.createdAt).fromNow()}
-          </Typography>
-        </div>
-      ) : (
-        <div className={classes.overlay}>
-          <Typography variant="h6">{post.creator}</Typography>
-          <Typography variant="body2">
-            {moment(post.createdAt).fromNow()}
-          </Typography>
-        </div>
-      )}
-      {post.creator === username ? (
-        <div className={classes.overlay2}>
-          <Button
-            style={{ color: 'white' }}
-            size="small"
-            onClick={() => setCurrentId(post._id)}
-          >
-            <EditIcon fontSize="medium" />
-          </Button>
-        </div>
-      ) : null}
-      <div className={classes.details}>
-        <Typography variant="body2" color="textSecondary">
-          {post.tags.map((tag) => `#${tag} `)}
-        </Typography>
-      </div>
-      <Typography className={classes.title} variant="h5" gutterBottom>
-        {post.title}
-      </Typography>
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {post.message
-            .replace(/<[^>]+>/g, '')
-            .split(' ')
-            .splice(0, 20)
-            .join(' ')}
-        </Typography>
-      </CardContent>
-      <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={handleLikePost}>
-          <ThumbUpAltIcon
-            style={{ color: isLikedByUser ? green[700] : blue[700] }}
-            fontSize="small"
+    <Paper elevation={10} className={classes.paper}>
+      <Card className={classes.card}>
+        {!validImage ? (
+          <Skeleton animation="wave" className={classes.media} variant="rect" />
+        ) : (
+          <CardMedia
+            className={classes.media}
+            image={post.selectedFile.url}
+            title={post.title}
           />
-          &nbsp; &nbsp;
-          {post.likedBy ? post.likedBy.length : 0}
-        </Button>
+        )}
+        <div className={classes.overlay}>
+          <Typography
+            variant="h6"
+            className={`${!validImage ? 'classes.dark' : ''}`}
+          >
+            <Link
+              to={`/profile/${post.creator}`}
+              style={{ textDecoration: 'none', color: 'white' }}
+            >
+              {post.creator}
+            </Link>
+          </Typography>
+          <Typography
+            variant="body2"
+            className={`${!validImage ? 'classes.dark' : ''}`}
+          >
+            {moment(post.createdAt).fromNow()}
+          </Typography>
+        </div>
         {post.creator === username ? (
-          <Button size="small" color="primary" onClick={handleDeletePost}>
-            <DeleteIcon fontSize="small" />
-            Delete
-          </Button>
+          <div className={classes.overlay2}>
+            <Button
+              style={{ color: 'white' }}
+              size="small"
+              onClick={() => setCurrentId(post._id)}
+            >
+              <EditIcon fontSize="medium" />
+            </Button>
+          </div>
         ) : null}
-        <Link to={`/post/${post._id}`} style={{ textDecoration: 'none' }}>
-          ...see more
-        </Link>
-      </CardActions>
-    </Card>
+        <div className={classes.details}>
+          <Typography variant="body2" color="textSecondary">
+            {post.tags.map((tag) => `#${tag} `)}
+          </Typography>
+        </div>
+        <Typography className={classes.title} variant="h5" gutterBottom>
+          {post.title}
+        </Typography>
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {post.message
+              .replace(/<[^>]+>/g, '')
+              .split(' ')
+              .splice(0, 20)
+              .join(' ')}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.cardActions}>
+          <Button size="small" color="primary" onClick={handleLikePost}>
+            <ThumbUpAltIcon
+              style={{ color: isLikedByUser ? green[700] : blue[700] }}
+              fontSize="small"
+            />
+            &nbsp; &nbsp;
+            {post.likedBy ? post.likedBy.length : 0}
+          </Button>
+          {post.creator === username ? (
+            <Button size="small" color="primary" onClick={handleDeletePost}>
+              <DeleteIcon fontSize="small" />
+              Delete
+            </Button>
+          ) : null}
+          <Link to={`/post/${post._id}`} style={{ textDecoration: 'none' }}>
+            ...see more
+          </Link>
+        </CardActions>
+      </Card>
+    </Paper>
   );
 };
 

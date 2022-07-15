@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-
+import './newPassWord.css';
 import { resetPassword } from '../../actions/auth';
 
 const regex = /^[0-9]+$/;
@@ -29,7 +29,7 @@ const ResetPassword = ({ email }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="container-fluid pt-3">
+    <div className="container-fluid pt-3 forgot-wrapper">
       <div className="row justify-content-center">
         <div className="col-8 col-sm-6 col-md-4 bg-white p-3">
           <h3 className="text-center pt-2 font-weight-bold">Reset Password</h3>
@@ -43,7 +43,7 @@ const ResetPassword = ({ email }) => {
             onSubmit={async (values) => {
               const toastID = toast.loading('Changing your password');
               serverError.current = await dispatch(
-                resetPassword(values.otp, email, values.password),
+                resetPassword(values.otp, email, values.password)
               );
               if (serverError.current === 'ok') {
                 navigate('/login');

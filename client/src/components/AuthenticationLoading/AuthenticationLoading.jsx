@@ -49,16 +49,23 @@ const AuthenticationLoading = ({ failure }) => {
       setProgress((prevProgress) => {
         const jumps = [2, 3, 4];
         const jump = jumps[Math.floor(Math.random() * jumps.length)];
-        return prevProgress + jump >= 100 ? 100 : prevProgress + jump;
+
+        if (prevProgress + jump >= 96) {
+          return prevProgress;
+        } else {
+          return prevProgress + jump;
+        }
       });
     }, 300);
 
-    //fix the React memory leak warning
+    //effect cleanup to prevent memory leak
+    //Cause: user is redirected to home page when user is authenticated therefore current component is unmounted from the DOM
+    //but below setProgress would try to update state on unmounted component.
     let cancel = false;
 
     dispatch(authenticate()).then((data) => {
       if (cancel) return;
-      setProgress(85);
+      navigate(failure);
       auth.current = data;
     });
 
@@ -66,20 +73,7 @@ const AuthenticationLoading = ({ failure }) => {
       cancel = true;
       clearInterval(timer);
     };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (progress >= 100) {
-      if (auth.current === false) {
-        navigate(failure);
-      } else if (auth.current === null) {
-        alert(
-          'There is some problem while loading resources for you. Check your Internet connection, and try again later.',
-        );
-        window.location.reload();
-      }
-    }
-  }, [progress, navigate, failure]);
+  }, [dispatch, navigate, failure]);
 
   return (
     <div className={classes.mainLine}>

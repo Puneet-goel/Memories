@@ -63,4 +63,9 @@ export default makeStyles((theme) => ({
       display: 'none',
     },
   },
+  userImage: {
+    height: '52px',
+    width: '52px',
+    borderRadius: '50%',
+  },
 }));

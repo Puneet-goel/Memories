@@ -43,7 +43,7 @@ export const likePost = (id, token) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    },
+    }
   );
 
 export const loginUser = (user) => axios.post(authUrl + '/login/', user);
@@ -64,7 +64,7 @@ export const authenticate = (token) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    },
+    }
   );
 
 export const getAllUsers = (token) =>

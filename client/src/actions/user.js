@@ -39,7 +39,7 @@ export const followUser = (whomToFollow, profile) => async (dispatch) => {
         whomToFollow: whomToFollow,
         id: profile._id,
       },
-      token,
+      token
     );
 
     if (data.message === 'ok') {

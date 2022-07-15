@@ -20,6 +20,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../actions/auth';
+import { isValidImageURL } from '../../utility/index.js';
 import useStyles from './styles';
 
 const NavBar = ({ searchText, setSearchText, disableSearch }) => {
@@ -76,6 +77,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
   };
 
   const menuId = 'primary-search-account-menu';
+  const validProfileImage = isValidImageURL(user.profileImage.url);
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -109,7 +111,15 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          {!validProfileImage ? (
+            <AccountCircle />
+          ) : (
+            <img
+              src={user.profileImage.url}
+              className={classes.userImage}
+              alt="user profile"
+            />
+          )}
         </IconButton>
         <span>Profile</span>
       </MenuItem>
@@ -230,7 +240,15 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle fontSize="large" />
+              {!validProfileImage ? (
+                <AccountCircle fontSize="large" />
+              ) : (
+                <img
+                  src={user.profileImage.url}
+                  className={classes.userImage}
+                  alt="user profile"
+                />
+              )}
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>

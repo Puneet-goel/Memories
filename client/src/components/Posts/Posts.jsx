@@ -5,7 +5,6 @@ import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
 
 const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
-
   const posts = useSelector((state) => state.posts);
   const profile = useSelector((state) => state.profile);
 
@@ -35,29 +34,27 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
 
   return (
     <Grid container>
-      <Grid item sm={2} />
-      <Grid item xs={12} sm={10}>
-        {!posts.length?(
-          [1, 2, 3, 4, 5].map((cur) => (
-            <Grid key={cur} >
-              <SkeletonPost />
-            </Grid>
-          ))
-        ): (
-          searchedPosts.map((post) => (
-            <Grid key={post._id} className="mb-4">
-              <Post
-                post={post}
-                toastID={toastID}
-                setCurrentId={setCurrentId}
-                username={profile.username}
-              />
-            </Grid>
-          ))
-        )}
+      <Grid item sm={4} />
+      <Grid item xs={12} sm={8}>
+        {!posts.length
+          ? [1, 2, 3, 4, 5].map((cur) => (
+              <Grid key={cur}>
+                <SkeletonPost />
+              </Grid>
+            ))
+          : searchedPosts.map((post) => (
+              <Grid key={post._id} className="mb-4">
+                <Post
+                  post={post}
+                  toastID={toastID}
+                  setCurrentId={setCurrentId}
+                  username={profile.username}
+                />
+              </Grid>
+            ))}
       </Grid>
     </Grid>
-  )
+  );
 };
 
 export default Posts;

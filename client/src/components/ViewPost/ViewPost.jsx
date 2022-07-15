@@ -8,7 +8,9 @@ import NavBar from '../NavBar/NavBar.jsx';
 
 const ViewPost = () => {
   const params = useParams();
-  const post = useSelector((state) => state.posts.filter((post) => post._id === params.id)[0] );
+  const post = useSelector(
+    (state) => state.posts.filter((post) => post._id === params.id)[0]
+  );
 
   return (
     <div
@@ -30,7 +32,7 @@ const ViewPost = () => {
         </ol>
       </nav>
 
-      {(!post || !post._id) ? (
+      {!post || !post._id ? (
         <SkeletonSpecificPost />
       ) : (
         <div className="px-3">

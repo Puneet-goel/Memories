@@ -19,25 +19,24 @@ import './styles.css';
 
 const Profile = () => {
   const params = useParams();
-  const username = params.username;
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const username = params.username;
   const [profileModal, setProfileModal] = useState(false);
   const [userFile, setUserFile] = useState(null);
 
   const profile = useSelector((state) => state.profile);
   const allUsers = useSelector((state) => state.users);
   const posts = useSelector((state) =>
-    state.posts.filter((post) => post.creator === username),
+    state.posts.filter((post) => post.creator === username)
   );
 
   const userDetails =
     profile.username === username
       ? profile
       : allUsers.filter((user) => user.username === username)[0];
-  
+
   const followers = allUsers.reduce((total, user) => {
     if (user.username !== username && user.following.includes(username)) {
       return total + 1;
@@ -90,9 +89,11 @@ const Profile = () => {
     return (
       <div className="container-fluid p-0 bg-white vh-100">
         <NavBar disableSearch={true} />
-        <h1 className="text-center fw-bolder p-3 font-monospace">
-          No Such Profile exists for the given username: {username}
-        </h1>
+        {allUsers.length ? (
+          <h1 className="text-center fw-bolder p-3 font-monospace">
+            No Such Profile exists for the given username: {username}
+          </h1>
+        ) : null}
       </div>
     );
   }
@@ -146,13 +147,13 @@ const Profile = () => {
           >
             <div className="row g-0 align-items-center text-center">
               <div className="col-md-4">
-                {userDetails.profileImage.url?(
+                {userDetails.profileImage.url ? (
                   <img
                     src={userDetails.profileImage.url}
                     className="img-fluid rounded-start p-2"
                     alt="user profile"
                   />
-                ):(
+                ) : (
                   <DiceBearAvatar username={userDetails.username} />
                 )}
               </div>
@@ -162,22 +163,24 @@ const Profile = () => {
                     @{userDetails.username}
                   </h4>
                   <p className="card-text mb-0">Followers: {followers}</p>
-                  {profile.username === username
-                    ?(
-                      <p className="card-text">
-                        <Link to="/network" className="fw-bolder">Following:</Link>
-                        <span>{' '}{userDetails.following.length}</span>
-                      </p>
-                    ):(
-                      <p className="card-text">Following: {userDetails.following.length}</p>
-                    )
-                  }
+                  {profile.username === username ? (
+                    <p className="card-text">
+                      <Link to="/network" className="fw-bolder">
+                        Following:
+                      </Link>
+                      <span>{(userDetails.following || []).length}</span>
+                    </p>
+                  ) : (
+                    <p className="card-text">
+                      Following: {(userDetails.following || []).length}
+                    </p>
+                  )}
                   <p className="card-text">{userDetails.email}</p>
                   <p className="card-text">
                     Joined Us:{' '}
                     {new Date(userDetails.joinedAt).toLocaleString(
                       'en-US',
-                      options,
+                      options
                     )}
                   </p>
                   {username === profile.username && (

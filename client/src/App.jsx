@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { getPosts } from './actions/posts';
 import { getAllUsers } from './actions/user';
 
-import Login from './components/Login/Login.jsx';
-import Signup from './components/Signup/Signup.jsx';
-import ForgotPassword from './components/ForgotPassword/ForgotPassword.jsx';
-import Home from './components/Home/Home.jsx';
-import ViewPost from './components/ViewPost/ViewPost.jsx';
-import AuthenticationLoading from './components/AuthenticationLoading/AuthenticationLoading.jsx';
-import UserBox from './components/UserBox/UserBox.jsx';
-import Profile from './components/Profile/Profile.jsx';
+//Lazy Loading
+const Login = lazy(() => import('./components/Login/Login.jsx'));
+const Signup = lazy(() => import('./components/Signup/Signup.jsx'));
+const ForgotPassword = lazy(() =>
+  import('./components/ForgotPassword/ForgotPassword.jsx')
+);
+const Home = lazy(() => import('./components/Home/Home.jsx'));
+const ViewPost = lazy(() => import('./components/ViewPost/ViewPost.jsx'));
+const AuthenticationLoading = lazy(() =>
+  import('./components/AuthenticationLoading/AuthenticationLoading.jsx')
+);
+const UserBox = lazy(() => import('./components/UserBox/UserBox.jsx'));
+const Profile = lazy(() => import('./components/Profile/Profile.jsx'));
 
 const App = () => {
   const isUserValid = useSelector((state) => state.profile);
@@ -27,49 +32,88 @@ const App = () => {
     }
   }, [dispatch, isUserValid, isEverythingFetched]);
 
+  //High Order components
+  const suspenseWrapper = (WrappedComponent) => (props) => {
+    return (
+      <Suspense fallback={<div />}>
+        <WrappedComponent {...props} />
+      </Suspense>
+    );
+  };
+
+  const LoginWithSuspense = suspenseWrapper(Login);
+  const SignupWithSuspense = suspenseWrapper(Signup);
+  const ForgotPasswordWithSuspense = suspenseWrapper(ForgotPassword);
+  const HomeWithSuspense = suspenseWrapper(Home);
+  const ViewPostWithSuspense = suspenseWrapper(ViewPost);
+  const AuthenticationLoadingWithSuspense = suspenseWrapper(
+    AuthenticationLoading
+  );
+  const UserBoxWithSuspense = suspenseWrapper(UserBox);
+  const ProfileWithSuspense = suspenseWrapper(Profile);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
           element={
-            isUserValid ? <Home /> : <AuthenticationLoading failure="/login" />
+            isUserValid ? (
+              <HomeWithSuspense />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/login" />
+            )
           }
         />
         <Route
           path="/login"
-          element={isUserValid ? <Navigate to="/" /> : <Login />}
+          element={isUserValid ? <Navigate to="/" /> : <LoginWithSuspense />}
         />
         <Route
           path="/signup"
-          element={isUserValid ? <Navigate to="/" /> : <Signup />}
+          element={isUserValid ? <Navigate to="/" /> : <SignupWithSuspense />}
         />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordWithSuspense />}
+        />
         <Route
           path="/network"
           element={
-            isUserValid ? <UserBox onlyFollowers={true} /> : <AuthenticationLoading failure="/" />
+            isUserValid ? (
+              <UserBoxWithSuspense onlyFollowers={true} />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/" />
+            )
           }
         />
         <Route
           path="/connect"
           element={
-            isUserValid ? <UserBox onlyFollowers={false} /> : <AuthenticationLoading failure="/" />
+            isUserValid ? (
+              <UserBoxWithSuspense onlyFollowers={false} />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/" />
+            )
           }
         />
         <Route
           path="/profile/:username"
           element={
-            isUserValid ? <Profile /> : <AuthenticationLoading failure="/" />
+            isUserValid ? (
+              <ProfileWithSuspense />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/" />
+            )
           }
         />
         <Route
           path="/post/:id"
           element={
             isUserValid ? (
-              <ViewPost />
+              <ViewPostWithSuspense />
             ) : (
-              <AuthenticationLoading failure="/login" />
+              <AuthenticationLoadingWithSuspense failure="/login" />
             )
           }
         />

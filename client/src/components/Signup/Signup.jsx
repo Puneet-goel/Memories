@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { register } from '../../actions/auth';
+import './signup.css';
 
 const regex = /^[a-z0-9_]+$/;
 const schema = Yup.object().shape({
@@ -31,7 +32,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="container-fluid pt-3">
+    <div className="container-fluid pt-3 signup-wrapper">
       <div className="row justify-content-center">
         <div className="col-8 col-sm-6 col-md-4 bg-white p-3">
           <h3 className="text-center pt-2 font-weight-bold">Sign up</h3>
@@ -46,7 +47,7 @@ const Signup = () => {
             onSubmit={async (values) => {
               const toastID = toast.loading('Creating your account');
               serverError.current = await dispatch(
-                register(values.email, values.password, values.username),
+                register(values.email, values.password, values.username)
               );
               if (serverError.current === 'ok') {
                 navigate('/login');

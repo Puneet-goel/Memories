@@ -6,6 +6,9 @@ export default makeStyles({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backgroundBlendMode: 'darken',
   },
+  paper: {
+    borderRadius: '15px',
+  },
   card: {
     display: 'flex',
     flexDirection: 'column',

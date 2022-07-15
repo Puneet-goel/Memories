@@ -17,10 +17,14 @@ const UserBox = ({ onlyFollowers }) => {
   };
 
   let users;
-  if(onlyFollowers){
-    users = allUsers.filter((user) => profile.following.includes(user.username));
-  }else{
-    users = allUsers.filter((user) => !profile.following.includes(user.username));
+  if (onlyFollowers) {
+    users = allUsers.filter((user) =>
+      profile.following.includes(user.username)
+    );
+  } else {
+    users = allUsers.filter(
+      (user) => !profile.following.includes(user.username)
+    );
   }
 
   const finalUsersToDispaly = users.filter((user) => {
@@ -40,17 +44,14 @@ const UserBox = ({ onlyFollowers }) => {
             {finalUsersToDispaly
               .filter((user) => user.username !== profile.username)
               .map((user) => (
-                <div
-                  className="col-12 col-sm-6 pt-4 px-4"
-                  key={user.username}
-                >
+                <div className="col-12 col-sm-6 pt-4 px-4" key={user.username}>
                   <div className="card text-center h-100">
-                    {user.profileImage.url? (
+                    {user.profileImage.url ? (
                       <img
-                      src={user.profileImage.url}
-                      className="card-img-top user-image"
-                      alt="user profile"
-                    />
+                        src={user.profileImage.url}
+                        className="card-img-top user-image"
+                        alt="user profile"
+                      />
                     ) : (
                       <DiceBearAvatar username={user.username} />
                     )}

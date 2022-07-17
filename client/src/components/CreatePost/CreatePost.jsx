@@ -4,12 +4,21 @@ import { Avatar, Modal } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from './styles';
 import { createPost, updatePost } from '../../actions/posts';
+import { updateCategory } from '../../actions/category.js';
 import { parseUsernameInitials } from '../../utility/index.js';
 import { toast } from 'react-toastify';
 import PostEditor from './PostEditor.jsx';
 import './styles.css';
 
-const CreatePost = ({ currentId, setCurrentId, toastID }) => {
+const CreatePost = ({
+  currentId,
+  setCurrentId,
+  toastID,
+  file,
+  setFile,
+  modal,
+  setModal,
+}) => {
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null
   );
@@ -21,8 +30,6 @@ const CreatePost = ({ currentId, setCurrentId, toastID }) => {
     message: '',
     tags: '',
   });
-  const [file, setFile] = useState(null);
-  const [modal, setModal] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -30,7 +37,7 @@ const CreatePost = ({ currentId, setCurrentId, toastID }) => {
       setPostData(post);
       setModal(true);
     }
-  }, [post]);
+  }, [post, setModal]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -96,6 +103,7 @@ const CreatePost = ({ currentId, setCurrentId, toastID }) => {
       message: '',
       tags: '',
     });
+    dispatch(updateCategory(''));
     setFile(null);
   };
 

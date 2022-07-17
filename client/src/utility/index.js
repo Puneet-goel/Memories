@@ -52,6 +52,38 @@ export const findToken = () => {
   return token;
 };
 
+/**
+ * Modern browsers can download files that aren't from same origin this is a workaround to download a remote file
+ * @param `url` Remote URL for the file to be downloaded
+ */
+export const fileToBlobtoFile = async (url, name) => {
+  try {
+    if (!url) {
+      throw new Error('Resource URL not provided! You need to provide one');
+    }
+
+    const urlData = await fetch(url);
+    const blob = await urlData.blob();
+    const file = new File([blob], name);
+
+    return file;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const trendingData = [
+  'Gaming',
+  'Nature',
+  'Fashion',
+  'Fitness',
+  'Expedition',
+  'Food',
+  'Education',
+  'Festival',
+  'Pets',
+];
+
 export const dummyUser = {
   username: '',
   email: '',

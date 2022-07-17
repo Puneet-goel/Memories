@@ -168,7 +168,7 @@ const Profile = () => {
                       <Link to="/network" className="fw-bolder">
                         Following:
                       </Link>
-                      <span>{(userDetails.following || []).length}</span>
+                      <span>{' ' + (userDetails.following || []).length}</span>
                     </p>
                   ) : (
                     <p className="card-text">

@@ -33,26 +33,23 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
   });
 
   return (
-    <Grid container>
-      <Grid item sm={4} />
-      <Grid item xs={12} sm={8}>
-        {!posts.length
-          ? [1, 2, 3, 4, 5].map((cur) => (
-              <Grid key={cur}>
-                <SkeletonPost />
-              </Grid>
-            ))
-          : searchedPosts.map((post) => (
-              <Grid key={post._id} className="mb-4">
-                <Post
-                  post={post}
-                  toastID={toastID}
-                  setCurrentId={setCurrentId}
-                  username={profile.username}
-                />
-              </Grid>
-            ))}
-      </Grid>
+    <Grid item sm={10} className="m-auto">
+      {!posts.length
+        ? [1, 2, 3, 4, 5].map((cur) => (
+            <Grid key={cur}>
+              <SkeletonPost />
+            </Grid>
+          ))
+        : searchedPosts.map((post) => (
+            <Grid key={post._id} className="mb-4">
+              <Post
+                post={post}
+                toastID={toastID}
+                setCurrentId={setCurrentId}
+                username={profile.username}
+              />
+            </Grid>
+          ))}
     </Grid>
   );
 };

@@ -53,6 +53,7 @@ export default makeStyles((theme) => ({
   },
   sectionDesktop: {
     display: 'none',
+    columnGap: '8px',
     [theme.breakpoints.up('sm')]: {
       display: 'flex',
     },

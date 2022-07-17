@@ -15,6 +15,11 @@ export default makeStyles((theme) => ({
   userContainer: {
     padding: '10px',
   },
+  categoryContainer: {
+    overflow: 'scroll',
+    height: 'calc(100vh - 70px)',
+    padding: '10px',
+  },
   [theme.breakpoints.down('xs')]: {
     mainContainer: {
       flexDirection: 'column-reverse',

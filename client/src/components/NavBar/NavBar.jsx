@@ -12,10 +12,16 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
+  Badge,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import PermMediaIcon from '@material-ui/icons/PermMedia';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
+import VoiceChatIcon from '@material-ui/icons/VoiceChat';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +37,13 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const user = useSelector((state) => state.profile);
+
+  const userMemories = useSelector((state) =>
+    state.posts.reduce(
+      (prevCnt, post) => (prevCnt += post.creator === user.username),
+      0
+    )
+  );
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -171,12 +184,12 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                     />
                   </ListItem>
                   <ListItem button>
-                    <a
-                      href="https://v-meet-puneet.netlify.app/"
-                      style={{ textDecoration: 'none', color: 'black' }}
-                    >
-                      V Meet: Video Text-Chat with your friend
-                    </a>
+                    <ListItemText
+                      primary="V Meet: Video Text-Chat with your friend"
+                      onClick={() =>
+                        window.open('https://v-meet-puneet.netlify.app/')
+                      }
+                    />
                   </ListItem>
                   <ListItem button>
                     <ListItemText
@@ -210,7 +223,13 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
               </div>
             </Drawer>
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            className={classes.title}
+            variant="h6"
+            noWrap
+            onClick={() => navigate('/')}
+            type="button"
+          >
             Memories
           </Typography>
           {!disableSearch && (
@@ -232,24 +251,77 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
           )}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              {!validProfileImage ? (
-                <AccountCircle fontSize="large" />
-              ) : (
-                <img
-                  src={user.profileImage.url}
-                  className={classes.userImage}
-                  alt="user profile"
-                />
-              )}
-            </IconButton>
+            <Tooltip title="Follow" placement="bottom">
+              <IconButton
+                edge="end"
+                aria-label="Follow"
+                onClick={() => navigate('/connect')}
+                color="inherit"
+              >
+                <PersonAddIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Video chat" placement="bottom">
+              <IconButton
+                edge="end"
+                aria-label="Video chat"
+                onClick={() =>
+                  window.open('https://v-meet-puneet.netlify.app/')
+                }
+                color="inherit"
+              >
+                <VoiceChatIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Your Memories" placement="bottom">
+              <IconButton edge="end" aria-label="Your memories" color="inherit">
+                <Badge
+                  overlap="rectangular"
+                  badgeContent={userMemories}
+                  color="secondary"
+                  showZero
+                >
+                  <PermMediaIcon fontSize="large" />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="UnFollow" placement="bottom">
+              <IconButton
+                edge="end"
+                aria-label="UnFollow"
+                onClick={() => navigate('/network')}
+                color="inherit"
+              >
+                <Badge
+                  overlap="rectangular"
+                  badgeContent={(user.following || []).length}
+                  color="secondary"
+                  showZero
+                >
+                  <PersonAddDisabledIcon fontSize="large" />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Account" placement="bottom">
+              <IconButton
+                edge="end"
+                aria-label="Account"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                {!validProfileImage ? (
+                  <AccountCircle fontSize="large" />
+                ) : (
+                  <img
+                    src={user.profileImage.url}
+                    className={classes.userImage}
+                    alt="user profile"
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

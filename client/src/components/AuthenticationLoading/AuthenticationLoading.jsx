@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { LinearProgress, Typography } from '@material-ui/core';
 import memoriesText from './memoriesText.png';
@@ -39,7 +39,6 @@ const BorderLinearProgress = withStyles((theme) => ({
 const AuthenticationLoading = ({ failure }) => {
   const classes = useStyles();
   const [progress, setProgress] = useState(0);
-  const auth = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,8 +64,7 @@ const AuthenticationLoading = ({ failure }) => {
 
     dispatch(authenticate()).then((data) => {
       if (cancel) return;
-      navigate(failure);
-      auth.current = data;
+      if (!data) navigate(failure);
     });
 
     return () => {

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
+import memoriesVideo from '../../assets/videos/photography.mp4';
 
 const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
   const posts = useSelector((state) => state.posts);
@@ -40,8 +41,20 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
               <SkeletonPost />
             </Grid>
           ))
-        : searchedPosts.map((post) => (
+        : searchedPosts.map((post, index) => (
             <Grid key={post._id} className="mb-4">
+              {index === 1 && (
+                <video
+                  className="w-100 mb-4"
+                  controls
+                  autoPlay={true}
+                  muted
+                  loop
+                >
+                  <source src={memoriesVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
               <Post
                 post={post}
                 toastID={toastID}

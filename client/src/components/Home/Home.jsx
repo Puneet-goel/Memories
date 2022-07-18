@@ -11,6 +11,7 @@ import './styles.css';
 import { parseUsername } from '../../utility/index.js';
 import { updateCategory } from '../../actions/category.js';
 import { ToastContainer } from 'react-toastify';
+import PhotoCarousel from './PhotoCarousel.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
@@ -91,7 +92,7 @@ const Home = () => {
               toastID={toastID}
             />
 
-            <div className="text-center mt-4">
+            <div className="text-center mt-2">
               <h5 className="font-monospace pt-3">
                 {categoryTrend.length === 0
                   ? 'Your Network Feed only?'
@@ -109,6 +110,9 @@ const Home = () => {
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
             </div>
+            <Grid item xs={12}>
+              <PhotoCarousel />
+            </Grid>
           </Grid>
         </Grid>
       </Grow>

@@ -6,6 +6,7 @@ const URL = 'https://memories-backend-mern.herokuapp.com';
 const postUrl = URL + '/posts';
 const authUrl = URL + '/auth';
 const userUrl = URL + '/user';
+const trendUrl = URL + '/trends';
 
 export const fetchPosts = (token) =>
   axios.get(`${postUrl}/`, {
@@ -83,6 +84,14 @@ export const followUser = (data, token) =>
 
 export const updateProfile = (id, updatedUser, token) =>
   axios.patch(`${userUrl}/${id}/`, updatedUser, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+//Trending
+export const fetchCategoryPhotos = (category, token) =>
+  axios.get(`${trendUrl}?trend=${category}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

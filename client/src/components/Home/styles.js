@@ -13,6 +13,8 @@ export default makeStyles((theme) => ({
     padding: '10px',
   },
   userContainer: {
+    overflow: 'scroll',
+    height: 'calc(100vh - 70px)',
     padding: '10px',
   },
   categoryContainer: {

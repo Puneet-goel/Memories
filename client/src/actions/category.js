@@ -1,30 +1,28 @@
 import { UPDATE_CATEGORY, UPDATE_PHOTOS } from '../constants/actionTypes';
 import * as api from '../api';
+import { findToken } from '../utility/index.js';
 
 // Action Creators
 export const updatePhotos = (category) => async (dispatch) => {
-  return api
-    .fetchCategoryPhotos(category)
-    .then((res) => {
-      const categoryImages = res.data.photos.map((photo) => {
-        return {
-          _id: photo.id,
-          alt: photo.alt,
-          src: photo.src.medium,
-        };
-      });
+  try {
+    const token = findToken();
+    if (token === null) {
+      throw new Error('Not authorized');
+    }
 
+    const { data } = await api.fetchCategoryPhotos(category, token);
+    if (data.message === 'ok') {
       dispatch({
         type: UPDATE_PHOTOS,
         payload: {
           category: category,
-          photos: categoryImages,
+          photos: data.photos,
         },
       });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const updateCategory = (category) => (dispatch) => {

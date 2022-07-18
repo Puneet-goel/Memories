@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { LinearProgress, Typography } from '@material-ui/core';
-import memoriesText from './memoriesText.png';
+import memoriesText from '../../assets/photos/memoriesText.png';
 import { authenticate } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

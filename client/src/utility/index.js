@@ -77,7 +77,7 @@ export const trendingData = [
   'Nature',
   'Fashion',
   'Fitness',
-  'Expedition',
+  'Travel',
   'Food',
   'Education',
   'Festival',

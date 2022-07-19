@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import NavBar from '../NavBar/NavBar.jsx';
 import {
   Button,
@@ -13,7 +13,6 @@ import { followUser, updateProfile } from '../../actions/user.js';
 import { useParams } from 'react-router-dom';
 import { options } from '../../utility/index.js';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import DiceBearAvatar from '../DiceBearAvatar/DiceBearAvatar.jsx';
 import './styles.css';
 
@@ -32,17 +31,20 @@ const Profile = () => {
     state.posts.filter((post) => post.creator === username)
   );
 
-  const userDetails =
-    profile.username === username
+  const userDetails = useMemo(() => {
+    return profile.username === username
       ? profile
       : allUsers.filter((user) => user.username === username)[0];
+  }, [username, profile, allUsers]);
 
-  const followers = allUsers.reduce((total, user) => {
-    if (user.username !== username && user.following.includes(username)) {
-      return total + 1;
-    }
-    return total;
-  }, 0);
+  const followers = useMemo(() => {
+    return allUsers.reduce((total, user) => {
+      if (user.username !== username && user.following.includes(username)) {
+        return total + 1;
+      }
+      return total;
+    }, 0);
+  }, [allUsers, username]);
 
   const followingThisUser = (profile.following || []).includes(username);
 

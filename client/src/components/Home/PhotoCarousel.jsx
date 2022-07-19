@@ -1,9 +1,16 @@
 import React, { useEffect, memo } from 'react';
-import { photoArr } from '../../assets/photos/index.js';
+import photo1 from '../../assets/photos/1.jpg';
+import photo2 from '../../assets/photos/2.jpg';
+import photo3 from '../../assets/photos/3.jpg';
+import photo4 from '../../assets/photos/4.jpg';
+import photo5 from '../../assets/photos/5.jpg';
+import photo6 from '../../assets/photos/6.jpg';
+import photo7 from '../../assets/photos/7.jpg';
 import './styles.css';
 
-const PhotoCarousel = () => {
+const PhotoCarousel = memo(() => {
   const arr = [1, 2, 3, 4, 5, 6, 7];
+  const photoArr = [photo1, photo2, photo3, photo4, photo5, photo6, photo7];
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -48,7 +55,6 @@ const PhotoCarousel = () => {
         data-bs-target="#footerCaraousel"
         data-bs-slide="prev"
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Previous</span>
       </button>
       <button
@@ -57,11 +63,10 @@ const PhotoCarousel = () => {
         data-bs-target="#footerCaraousel"
         data-bs-slide="next"
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
         <span className="visually-hidden">Next</span>
       </button>
     </div>
   );
-};
+});
 
-export default memo(PhotoCarousel);
+export default PhotoCarousel;

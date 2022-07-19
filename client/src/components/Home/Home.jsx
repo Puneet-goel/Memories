@@ -12,7 +12,6 @@ import { parseUsername } from '../../utility/index.js';
 import { updateCategory } from '../../actions/category.js';
 import { ToastContainer } from 'react-toastify';
 import PhotoCarousel from './PhotoCarousel.jsx';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
   const [currentId, setCurrentId] = useState(null);

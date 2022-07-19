@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage, Field, Form } from 'formik';
 import ResetPassword from './ResetPassword.jsx';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import './newPassWord.css';

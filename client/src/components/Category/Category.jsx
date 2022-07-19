@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { List, ListItem, ListItemText, Grid } from '@material-ui/core';
 import ForwardIcon from '@material-ui/icons/Forward';
 import { useSelector, useDispatch } from 'react-redux';
@@ -66,4 +66,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default memo(Category);

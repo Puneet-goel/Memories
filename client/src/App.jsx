@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getPosts } from './actions/posts';
 import { getAllUsers } from './actions/user';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles.css';
 
 //Lazy Loading
 const Login = lazy(() => import('./components/Login/Login.jsx'));

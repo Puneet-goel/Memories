@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   AppBar,
   Typography,
@@ -342,4 +342,4 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
   );
 };
 
-export default NavBar;
+export default memo(NavBar);

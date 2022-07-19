@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import SkeletonPost from './SkeletonPost/SkeletonPost.jsx';
 import Post from './Post/Post.jsx';
-import memoriesVideo from '../../assets/videos/photography.mp4';
+import video1 from '../../assets/videos/1.mp4';
+import video2 from '../../assets/videos/2.mp4';
 
 const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
   const posts = useSelector((state) => state.posts);
@@ -12,26 +13,36 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
   /**
    * @description filter network posts
    */
-  const networkPosts = posts.filter((post) => {
-    if (!networkEnabled || post.creator === profile.username) return true;
-    const isCreatorFollowed = profile.following.includes(post.creator);
-    return isCreatorFollowed;
-  });
+  const networkPosts = useMemo(() => {
+    return posts.filter((post) => {
+      if (!networkEnabled || post.creator === profile.username) return true;
+      const isCreatorFollowed = profile.following.includes(post.creator);
+      return isCreatorFollowed;
+    });
+  }, [networkEnabled, profile, posts]);
 
   /**
    * @description filter search posts
    */
-  const searchedPosts = networkPosts.filter((post) => {
-    const pattern = searchText.toLowerCase().trim();
-    if (pattern === '') return true;
-    if (post.title.includes(pattern)) return true;
-    if (post.message.includes(pattern)) return true;
-    if (post.creator.includes(pattern)) return true;
-    for (let i = 0; i < post.tags.length; i++) {
-      if (post.tags[i].includes(pattern)) return true;
-    }
-    return false;
-  });
+  const searchedPosts = useMemo(() => {
+    return networkPosts.filter((post) => {
+      const pattern = searchText.toLowerCase().trim();
+      if (pattern === '') return true;
+      if (post.title.includes(pattern)) return true;
+      if (post.message.includes(pattern)) return true;
+      if (post.creator.includes(pattern)) return true;
+      for (let i = 0; i < post.tags.length; i++) {
+        if (post.tags[i].includes(pattern)) return true;
+      }
+      return false;
+    });
+  }, [searchText, networkPosts]);
+
+  const randomVideo = useMemo(() => {
+    const random = Math.floor(Math.random() * 2);
+    if (random === 0) return video1;
+    return video2;
+  }, []);
 
   return (
     <Grid item sm={10} className="m-auto">
@@ -44,14 +55,8 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
         : searchedPosts.map((post, index) => (
             <Grid key={post._id} className="mb-4">
               {index === 1 && (
-                <video
-                  className="w-100 mb-4"
-                  controls
-                  autoPlay={true}
-                  muted
-                  loop
-                >
-                  <source src={memoriesVideo} type="video/mp4" />
+                <video className="w-100 mb-4" autoPlay muted loop>
+                  <source src={randomVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}

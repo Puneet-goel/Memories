@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const URL = 'https://memories-backend-mern.herokuapp.com';
+const URL = 'https://memories-backend-jqpk.onrender.com';
+// const URL = 'https://memories-backend-mern.herokuapp.com';
 // const URL = 'http://localhost:5000';
 
 const postUrl = URL + '/posts';

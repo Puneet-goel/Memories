@@ -6,9 +6,9 @@ A Responsive MERN app that allows the users to view, create, edit or delete post
 <br/>
 https://memories-puneet.netlify.app
 
-(Heroku) Backend Link:
+(Render) Backend Link:
 <br />
-https://memories-backend-mern.herokuapp.com
+https://memories-backend-jqpk.onrender.com
 
 <!--  Features -->
 # Features

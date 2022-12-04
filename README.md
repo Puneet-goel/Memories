@@ -26,19 +26,20 @@ https://memories-backend-jqpk.onrender.com
 | Frontend     | Backend             | DataBase              |
 | ------------ | ------------------- | --------------------- |
 | React        | NodeJS              | MongoDB               | 
-| Redux        | ExpressJS           |                       | 
+| Redux        | ExpressJS           | Sanity                | 
 | CSS          | bcrypt              |                       | 
 | Bootstrap    | nodemailer          |                       | 
 | Material UI  | jsonwebtoken (JWT)  |                       |
-| Formik , yup |                     |                       |
+| Formik, yup  |                     |                       |
 | Axios        |                     |                       |
 
 <!-- Snippets -->
 # Snippets
 ## Home Page
-![Attractive Loading](https://user-images.githubusercontent.com/55274410/151668643-f706785c-2af5-45be-a0ad-403667dfa12c.png)
+![Home Page](https://user-images.githubusercontent.com/55274410/205503915-2fed0d50-97bd-47cc-aac0-7719997414bc.png)
 <br />
-![Home Page](https://user-images.githubusercontent.com/55274410/151668298-72cee1b2-9f19-4cf2-b9b8-6685e8da30e8.png)
+![Attractive Loading](https://user-images.githubusercontent.com/55274410/151668643-f706785c-2af5-45be-a0ad-403667dfa12c.png)
+
  
 ## Login Page
 ![Login Page](https://user-images.githubusercontent.com/55274410/151668111-358e429c-6240-4232-b8c3-31139940db81.png)

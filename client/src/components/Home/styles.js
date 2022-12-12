@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles((theme) => ({
   home: {
     padding: '0',
-    backgroundColor: 'white',
     minHeight: '100vh',
     minWidth: '100vw',
   },

@@ -101,7 +101,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="container-fluid p-0 bg-white vh-100">
+    <div className="container-fluid p-0 vh-100">
       <NavBar disableSearch={true} />
       {profileModal && (
         <div>

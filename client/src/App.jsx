@@ -13,7 +13,7 @@ const ForgotPassword = lazy(() =>
   import('./components/ForgotPassword/ForgotPassword.jsx')
 );
 const Home = lazy(() => import('./components/Home/Home.jsx'));
-const ViewPost = lazy(() => import('./components/ViewPost/ViewPost.jsx'));
+const PostTabs = lazy(() => import('./components/ViewPost'));
 const AuthenticationLoading = lazy(() =>
   import('./components/AuthenticationLoading/AuthenticationLoading.jsx')
 );
@@ -46,7 +46,7 @@ const App = () => {
   const SignupWithSuspense = suspenseWrapper(Signup);
   const ForgotPasswordWithSuspense = suspenseWrapper(ForgotPassword);
   const HomeWithSuspense = suspenseWrapper(Home);
-  const ViewPostWithSuspense = suspenseWrapper(ViewPost);
+  const ViewPostWithSuspense = suspenseWrapper(PostTabs);
   const AuthenticationLoadingWithSuspense = suspenseWrapper(
     AuthenticationLoading
   );

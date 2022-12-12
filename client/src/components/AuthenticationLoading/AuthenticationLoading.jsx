@@ -74,7 +74,7 @@ const AuthenticationLoading = ({ failure }) => {
   }, [dispatch, navigate, failure]);
 
   return (
-    <div className={classes.mainLine}>
+    <div className={`${classes.mainLine} background`}>
       <img src={memoriesText} alt="icon" width="100%" />
       <br />
       <BorderLinearProgress variant="determinate" value={progress} />

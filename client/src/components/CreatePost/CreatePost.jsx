@@ -123,7 +123,7 @@ const CreatePost = ({
         aria-labelledby="modal"
         aria-describedby="modal"
       >
-        <div className="form-container p-3 p-md-5">
+        <div className="form-container p-3 p-md-5 background">
           <h4 className="form-header text-center fw-bolder header-modal-form">
             {currentId ? 'Edit' : 'Add A'} SNAP
           </h4>

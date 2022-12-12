@@ -3,7 +3,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 const SkeletonSpecificPost = () => {
   return (
-    <div>
+    <div className="px-3 pt-3">
       <div className="d-flex flex-column align-items-center">
         <Skeleton width="50%" />
         <Skeleton width="30%" />

@@ -20,8 +20,8 @@ const CategoryPhotos = ({ photos, setFile, setModal }) => {
             onClick={() => handleImageClick(photo.src, photo.alt)}
           >
             <div
-              className="card m-1 justify-content-center card-hover"
-              style={{ minHeight: '150px' }}
+              className="card m-1 justify-content-center card-hover background"
+              style={{ minHeight: '150px', border: 'none' }}
             >
               <img src={photo.src} alt={photo.alt} loading="lazy" />
               <div className="middle">Click photo to add it to your memory</div>

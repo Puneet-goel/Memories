@@ -9,12 +9,13 @@ export const fixAllPost = async (req, res) => {
       const curIndex = postMessages[i]._id;
       let post = await PostMessage.findById(curIndex).lean();
 
-      post.createdAt = new Date(post.createdAt);
-      post.selectedFile = {
-        url: '',
-        imageId: '',
-        sanityId: '',
-      };
+      // post.createdAt = new Date(post.createdAt);
+      post.createdAt = new Date();
+      // post.selectedFile = {
+      //   url: '',
+      //   imageId: '',
+      //   sanityId: '',
+      // };
 
       await PostMessage.findByIdAndUpdate(curIndex, {
         ...post,

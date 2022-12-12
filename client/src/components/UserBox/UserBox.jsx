@@ -36,7 +36,7 @@ const UserBox = ({ onlyFollowers }) => {
   });
 
   return (
-    <div className="container-fluid p-0 bg-white vh-100">
+    <div className="container-fluid p-0 vh-100">
       <NavBar searchText={searchUser} setSearchText={setSearchUser} />
       <div className="row m-0 users-container overflow-auto">
         <div className="col-10 col-sm-8 mx-auto">
@@ -45,7 +45,7 @@ const UserBox = ({ onlyFollowers }) => {
               .filter((user) => user.username !== profile.username)
               .map((user) => (
                 <div className="col-12 col-sm-6 pt-4 px-4" key={user.username}>
-                  <div className="card text-center h-100 p-1">
+                  <div className="card text-center h-100 p-2">
                     {user.profileImage.url ? (
                       <img
                         src={user.profileImage.url}

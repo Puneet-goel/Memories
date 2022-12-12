@@ -43,13 +43,13 @@
   height: 300px;
 }
 
-.createPostAvatar{
-  width: 45px;
-  height: 45px;
+.createPostAvatar {
+  width: 45px !important;
+  height: 45px !important;
   margin-right: 5px;
 }
 
-.createPostAvatar p{
+.createPostAvatar p {
   left: 15%;
   top: 14%;
   font-size: 20px;

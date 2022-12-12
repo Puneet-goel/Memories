@@ -1,6 +1,8 @@
 body,
 html,
-#root {
+#root,
+.background {
+  background-color: aliceblue !important;
   padding: 0;
   margin: 0;
 }

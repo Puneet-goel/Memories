@@ -13,7 +13,7 @@ import { followUser, updateProfile } from '../../actions/user.js';
 import { useParams } from 'react-router-dom';
 import { options } from '../../utility/index.js';
 import { ToastContainer, toast } from 'react-toastify';
-import DiceBearAvatar from '../DiceBearAvatar/DiceBearAvatar.jsx';
+import Avatar from '../Avatar/Avatar.jsx';
 import './styles.css';
 
 const Profile = () => {
@@ -148,7 +148,7 @@ const Profile = () => {
             style={{ maxWidth: '540px' }}
           >
             <div className="row g-0 align-items-center text-center">
-              <div className="col-md-4">
+              <div className="col-md-4 d-flex justify-content-center">
                 {userDetails.profileImage.url ? (
                   <img
                     src={userDetails.profileImage.url}
@@ -156,7 +156,7 @@ const Profile = () => {
                     alt="user profile"
                   />
                 ) : (
-                  <DiceBearAvatar username={userDetails.username} />
+                  <Avatar username={username}></Avatar>
                 )}
               </div>
               <div className="col-md-8 text-center">

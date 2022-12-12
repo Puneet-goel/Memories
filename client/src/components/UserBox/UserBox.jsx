@@ -3,7 +3,7 @@ import NavBar from '../NavBar/NavBar.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { followUser } from '../../actions/user.js';
 import { Link } from 'react-router-dom';
-import DiceBearAvatar from '../DiceBearAvatar/DiceBearAvatar.jsx';
+import Avatar from '../Avatar/Avatar.jsx';
 import './style.css';
 
 const UserBox = ({ onlyFollowers }) => {
@@ -45,7 +45,7 @@ const UserBox = ({ onlyFollowers }) => {
               .filter((user) => user.username !== profile.username)
               .map((user) => (
                 <div className="col-12 col-sm-6 pt-4 px-4" key={user.username}>
-                  <div className="card text-center h-100">
+                  <div className="card text-center h-100 p-1">
                     {user.profileImage.url ? (
                       <img
                         src={user.profileImage.url}
@@ -53,7 +53,7 @@ const UserBox = ({ onlyFollowers }) => {
                         alt="user profile"
                       />
                     ) : (
-                      <DiceBearAvatar username={user.username} />
+                      <Avatar username={user.username} className="user-image" />
                     )}
                     <div className="card-body d-flex flex-column">
                       <Link to={`/profile/${user.username}`}>

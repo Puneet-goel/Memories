@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Modal } from '@material-ui/core';
+import { Modal } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import useStyles from './styles';
 import { createPost, updatePost } from '../../actions/posts';
 import { updateCategory } from '../../actions/category.js';
-import { parseUsernameInitials } from '../../utility/index.js';
 import { toast } from 'react-toastify';
 import PostEditor from './PostEditor.jsx';
+import Avatar from '../Avatar/Avatar.jsx';
 import './styles.css';
 
 const CreatePost = ({
@@ -109,7 +109,7 @@ const CreatePost = ({
 
   return (
     <div className="create-post d-flex justify-content-between p-3 my-2">
-      <Avatar className={classes.avatar}>{parseUsernameInitials()}</Avatar>
+      <Avatar className="createPostAvatar" />
       <div
         className="create-post-button d-flex justify-content-center align-items-center p-1"
         onClick={handleModal}

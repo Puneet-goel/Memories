@@ -1,5 +1,5 @@
-export const stringToColor = () => {
-  const string = localStorage.getItem('username');
+export const stringToColor = (username = null) => {
+  let string = username ? username : localStorage.getItem('username');
   let hash = 0;
   let i;
 
@@ -9,17 +9,19 @@ export const stringToColor = () => {
   }
 
   let color = '#';
-
+  //0xff = 255
   for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
+    const value = (hash >> (i * 5)) & 0xff;
     color += `00${value.toString(16)}`.substr(-2);
   }
   /* eslint-enable no-bitwise */
   return color;
 };
 
-export const parseUsernameInitials = () => {
-  const nameArray = localStorage.getItem('username').split('_');
+export const parseUsernameInitials = (username = null) => {
+  let nameArray = username ? username : localStorage.getItem('username');
+  nameArray = nameArray.split('_');
+
   const initials =
     (nameArray.length ? nameArray[0][0] : '') +
     (nameArray.length > 1 ? nameArray[nameArray.length - 1][0] : '');

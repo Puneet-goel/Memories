@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import NavBar from '../NavBar/NavBar.jsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,23 +25,27 @@ function a11yProps(index) {
 
 const PostTabs = () => {
   const params = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const post = useSelector(
     (state) => state.posts.filter((post) => post._id === params.id)[0]
   );
 
   const classes = useStyles();
-  const [value, setValue] = useState(1);
-
+  const [value, setValue] = useState(() => {
+    const curPath = location.pathname.substring(1, 13);
+    if (curPath === 'post/likedBy') {
+      return 2;
+    }
+    return 1;
+  });
+  console.log(value);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <div
-      className="container-fluid bg-white p-0"
-      style={{ backgroundColor: '#f1f1f1' }}
-    >
+    <div className="container-fluid bg-white p-0">
       <NavBar disableSearch={true} />
 
       <div className="posttabs">
@@ -61,12 +65,24 @@ const PostTabs = () => {
               }}
               {...a11yProps(0)}
             />
-            <Tab label="View Post" {...a11yProps(1)} />
-            <Tab label="Liked By" {...a11yProps(2)} />
+            <Tab
+              label="View Post"
+              {...a11yProps(1)}
+              onClick={(e) => {
+                navigate(`/post/${params.id}`);
+              }}
+            />
+            <Tab
+              label="Liked By"
+              {...a11yProps(2)}
+              onClick={(e) => {
+                navigate(`/post/likedBy/${params.id}`);
+              }}
+            />
             <Tab
               label="Edit Post"
               onClick={(e) => {
-                navigate('/');
+                navigate('/createPost', { state: { postId: params.id } });
               }}
               {...a11yProps(3)}
             />

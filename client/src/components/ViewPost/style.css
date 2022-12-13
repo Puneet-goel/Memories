@@ -3,3 +3,7 @@
   padding: 10px;
   overflow: scroll;
 }
+
+.post-heading {
+  font-family: 'Proxima Nova';
+}

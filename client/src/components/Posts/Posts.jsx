@@ -6,7 +6,7 @@ import Post from './Post/Post.jsx';
 import video1 from '../../assets/videos/1.mp4';
 import video2 from '../../assets/videos/2.mp4';
 
-const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
+const Posts = ({ searchText, toastID, networkEnabled }) => {
   const posts = useSelector((state) => state.posts);
   const profile = useSelector((state) => state.profile);
 
@@ -38,11 +38,11 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
     });
   }, [searchText, networkPosts]);
 
-  const randomVideo = useMemo(() => {
-    const random = Math.floor(Math.random() * 2);
-    if (random === 0) return video1;
-    return video2;
-  }, []);
+  // const randomVideo = useMemo(() => {
+  //   const random = Math.floor(Math.random() * 2);
+  //   if (random === 0) return video1;
+  //   return video2;
+  // }, []);
 
   return (
     <Grid item sm={10} className="m-auto">
@@ -56,16 +56,17 @@ const Posts = ({ setCurrentId, searchText, toastID, networkEnabled }) => {
             <Grid key={post._id} className="mb-4">
               {index === 1 && (
                 <video className="w-100 mb-4" autoPlay muted loop>
-                  <source src={randomVideo} type="video/mp4" />
+                  <source src={video1} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}
-              <Post
-                post={post}
-                toastID={toastID}
-                setCurrentId={setCurrentId}
-                username={profile.username}
-              />
+              {index === 2 && (
+                <video className="w-100 mb-4" autoPlay muted loop>
+                  <source src={video2} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+              <Post post={post} toastID={toastID} username={profile.username} />
             </Grid>
           ))}
     </Grid>

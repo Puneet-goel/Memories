@@ -12,7 +12,9 @@ const ViewPost = ({ post }) => {
   return (
     <div className="px-3 pt-3">
       <div className="d-flex flex-column align-items-center">
-        <h2 className="fs-1 fw-bolder fst-italic text-primary">{post.title}</h2>
+        <h2 className="fs-1 fw-bolder fst-italic text-primary post-heading">
+          {post.title}
+        </h2>
         <p className="fw-light">
           {new Date(post.createdAt).toLocaleString('en-US', options)}
         </p>

@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fileToBlobtoFile } from '../../utility/index.js';
 import '../Profile/styles.css';
 
-const CategoryPhotos = ({ photos, setFile, setModal }) => {
+const CategoryPhotos = ({ photos }) => {
+  const navigate = useNavigate();
+
   const handleImageClick = async (url, name) => {
     const file = await fileToBlobtoFile(url, name);
-    setFile(file);
-    setModal(true);
+    navigate('/createPost', { state: { file } });
   };
 
   return (

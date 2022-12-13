@@ -8,7 +8,7 @@ import {
   Typography,
   Paper,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -21,8 +21,9 @@ import useStyles from './styles';
 import { isValidImageURL } from '../../../utility/index.js';
 import { toast } from 'react-toastify';
 
-const Post = ({ post, setCurrentId, username, toastID }) => {
+const Post = ({ post, username, toastID }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLikePost = () => {
@@ -45,6 +46,11 @@ const Post = ({ post, setCurrentId, username, toastID }) => {
         autoClose: 3000,
       });
     });
+  };
+
+  const handleEdit = (event) => {
+    event.preventDefault();
+    navigate('/createPost', { state: { postId: post._id } });
   };
 
   const isLikedByUser = (post?.likedBy || []).find((peer) => peer === username);
@@ -86,7 +92,7 @@ const Post = ({ post, setCurrentId, username, toastID }) => {
             <Button
               style={{ color: 'white' }}
               size="small"
-              onClick={() => setCurrentId(post._id)}
+              onClick={handleEdit}
             >
               <EditIcon fontSize="medium" />
             </Button>

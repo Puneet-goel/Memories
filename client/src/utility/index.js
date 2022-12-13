@@ -36,6 +36,8 @@ export const parseUsername = () => {
   return initial;
 };
 
+export const parseFullUsername = () => localStorage.getItem('username');
+
 export const isValidImageURL = (url) => {
   if (url === '' || typeof url !== 'string') {
     return false;

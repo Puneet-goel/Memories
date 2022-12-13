@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Container, Grid, Grow, Switch } from '@material-ui/core';
-import CreatePost from '../CreatePost/CreatePost.jsx';
 import NavBar from '../NavBar/NavBar.jsx';
 import Posts from '../Posts/Posts.jsx';
 import Category from '../Category/Category.jsx';
@@ -12,17 +12,16 @@ import { parseUsername } from '../../utility/index.js';
 import { updateCategory } from '../../actions/category.js';
 import { ToastContainer } from 'react-toastify';
 import PhotoCarousel from './PhotoCarousel.jsx';
+import Avatar from '../Avatar/Avatar.jsx';
 
 const Home = () => {
-  const [currentId, setCurrentId] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [switchState, setSwitchState] = useState(false);
-  const [file, setFile] = useState(null);
-  const [modal, setModal] = useState(false);
 
   const toastID = useRef(null);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSwitchChange = (event) => {
     setSwitchState(event.target.checked);
@@ -59,17 +58,12 @@ const Home = () => {
           <Grid item xs={12} sm={5} md={6} className={classes.postContainer}>
             {categoryTrend.length === 0 ? (
               <Posts
-                setCurrentId={setCurrentId}
                 searchText={searchText}
                 toastID={toastID}
                 networkEnabled={switchState}
               />
             ) : (
-              <CategoryPhotos
-                photos={categoryPhotos}
-                setFile={setFile}
-                setModal={setModal}
-              />
+              <CategoryPhotos photos={categoryPhotos} />
             )}
           </Grid>
           <Grid item xs={12} sm={4} className={classes.userContainer}>
@@ -81,15 +75,15 @@ const Home = () => {
               Welcome to Memories
             </h5>
 
-            <CreatePost
-              currentId={currentId}
-              setCurrentId={setCurrentId}
-              file={file}
-              setFile={setFile}
-              modal={modal}
-              setModal={setModal}
-              toastID={toastID}
-            />
+            <div className="create-post d-flex justify-content-between p-3 my-2">
+              <Avatar className="createPostAvatar" />
+              <div
+                className="create-post-button d-flex justify-content-center align-items-center p-1"
+                onClick={(e) => navigate('/createPost')}
+              >
+                Want to share a Snap?
+              </div>
+            </div>
 
             <div className="text-center mt-2">
               <h5 className="font-monospace pt-3">

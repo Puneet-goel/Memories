@@ -185,6 +185,12 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                   </ListItem>
                   <ListItem button>
                     <ListItemText
+                      primary="Create Post"
+                      onClick={() => navigate('/createPost')}
+                    />
+                  </ListItem>
+                  <ListItem button>
+                    <ListItemText
                       primary="V Meet: Video Text-Chat with your friend"
                       onClick={() =>
                         window.open('https://v-meet-puneet.netlify.app/')

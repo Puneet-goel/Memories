@@ -13,12 +13,14 @@ const ForgotPassword = lazy(() =>
   import('./components/ForgotPassword/ForgotPassword.jsx')
 );
 const Home = lazy(() => import('./components/Home/Home.jsx'));
-const PostTabs = lazy(() => import('./components/ViewPost'));
+const ViewPost = lazy(() => import('./components/ViewPost'));
+const ViewPostLikedBy = lazy(() => import('./components/ViewPost'));
 const AuthenticationLoading = lazy(() =>
   import('./components/AuthenticationLoading/AuthenticationLoading.jsx')
 );
 const UserBox = lazy(() => import('./components/UserBox/UserBox.jsx'));
 const Profile = lazy(() => import('./components/Profile/Profile.jsx'));
+const EditPost = lazy(() => import('./components/CreatePost/CreatePost.jsx'));
 
 const App = () => {
   const isUserValid = useSelector((state) => state.profile);
@@ -46,12 +48,14 @@ const App = () => {
   const SignupWithSuspense = suspenseWrapper(Signup);
   const ForgotPasswordWithSuspense = suspenseWrapper(ForgotPassword);
   const HomeWithSuspense = suspenseWrapper(Home);
-  const ViewPostWithSuspense = suspenseWrapper(PostTabs);
+  const ViewPostWithSuspense = suspenseWrapper(ViewPost);
+  const ViewPostLikedByWithSuspense = suspenseWrapper(ViewPostLikedBy);
   const AuthenticationLoadingWithSuspense = suspenseWrapper(
     AuthenticationLoading
   );
   const UserBoxWithSuspense = suspenseWrapper(UserBox);
   const ProfileWithSuspense = suspenseWrapper(Profile);
+  const EditPostWithSuspense = suspenseWrapper(EditPost);
 
   return (
     <BrowserRouter>
@@ -114,7 +118,27 @@ const App = () => {
             isUserValid ? (
               <ViewPostWithSuspense />
             ) : (
-              <AuthenticationLoadingWithSuspense failure="/login" />
+              <AuthenticationLoadingWithSuspense failure="/" />
+            )
+          }
+        />
+        <Route
+          path="/post/likedBy/:id"
+          element={
+            isUserValid ? (
+              <ViewPostLikedByWithSuspense />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/" />
+            )
+          }
+        />
+        <Route
+          path="/createPost"
+          element={
+            isUserValid ? (
+              <EditPostWithSuspense />
+            ) : (
+              <AuthenticationLoadingWithSuspense failure="/" />
             )
           }
         />

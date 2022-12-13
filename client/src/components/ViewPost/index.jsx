@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import NavBar from '../NavBar/NavBar.jsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { parseFullUsername } from '../../utility/index.js';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -32,6 +33,7 @@ const PostTabs = () => {
   );
 
   const classes = useStyles();
+  const username = parseFullUsername();
   const [value, setValue] = useState(() => {
     const curPath = location.pathname.substring(1, 13);
     if (curPath === 'post/likedBy') {
@@ -39,7 +41,6 @@ const PostTabs = () => {
     }
     return 1;
   });
-  console.log(value);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -79,13 +80,15 @@ const PostTabs = () => {
                 navigate(`/post/likedBy/${params.id}`);
               }}
             />
-            <Tab
-              label="Edit Post"
-              onClick={(e) => {
-                navigate('/createPost', { state: { postId: params.id } });
-              }}
-              {...a11yProps(3)}
-            />
+            {post && post.creator === username && (
+              <Tab
+                label="Edit Post"
+                onClick={(e) => {
+                  navigate('/createPost', { state: { postId: params.id } });
+                }}
+                {...a11yProps(3)}
+              />
+            )}
           </Tabs>
         </Paper>
 

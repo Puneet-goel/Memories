@@ -4,9 +4,9 @@ import { Formik, ErrorMessage, Field, Form } from 'formik';
 import ResetPassword from './ResetPassword.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import * as Yup from 'yup';
-import './newPassWord.css';
 import { forgotPassword } from '../../actions/auth';
+import * as Yup from 'yup';
+import './newPassword.css';
 
 const schema = Yup.object().shape({
   email: Yup.string('Enter your email')
@@ -16,13 +16,13 @@ const schema = Yup.object().shape({
 
 const ForgotPassword = () => {
   const [reset, setReset] = useState(false);
-  const [email, setEmail] = useState('');
+  const userEmail = useRef('');
   const serverError = useRef('');
 
   const dispatch = useDispatch();
 
   if (reset) {
-    return <ResetPassword email={email} />;
+    return <ResetPassword email={userEmail} />;
   }
 
   return (
@@ -37,21 +37,21 @@ const ForgotPassword = () => {
             validationSchema={schema}
             onSubmit={async (values) => {
               const toastID = toast.loading('Sending Email');
-              serverError.current = await dispatch(
-                forgotPassword(values.email)
-              );
-              if (serverError.current === 'ok') {
-                setEmail(values.email);
-                setReset(true);
-              } else {
-                toast.update(toastID, {
-                  render: 'An error occurred while sending you an email',
-                  type: 'error',
-                  hideProgressBar: true,
-                  isLoading: false,
-                  autoClose: 3000,
-                });
-              }
+              dispatch(forgotPassword(values.email)).then((res) => {
+                serverError.current = res;
+                if (res === 'ok') {
+                  userEmail.current = values.email;
+                  setReset(true);
+                } else {
+                  toast.update(toastID, {
+                    render: 'An error occurred while sending you an email',
+                    type: 'error',
+                    hideProgressBar: true,
+                    isLoading: false,
+                    autoClose: 3000,
+                  });
+                }
+              });
             }}
           >
             {() => (

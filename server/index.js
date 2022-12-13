@@ -21,7 +21,7 @@ app.use('/user', userRoutes);
 app.use('/trends', trendRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello to Memories API');
+  res.send('Hello to Social Media API');
 });
 
 const PORT = process.env.PORT || 5000;

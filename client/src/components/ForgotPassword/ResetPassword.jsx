@@ -4,8 +4,8 @@ import { Formik, ErrorMessage, Field, Form } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import './newPassWord.css';
 import { resetPassword } from '../../actions/auth';
+import './newPassword.css';
 
 const regex = /^[0-9]+$/;
 const schema = Yup.object().shape({
@@ -41,20 +41,22 @@ const ResetPassword = ({ email }) => {
             validationSchema={schema}
             onSubmit={async (values) => {
               const toastID = toast.loading('Changing your password');
-              serverError.current = await dispatch(
-                resetPassword(values.otp, email, values.password)
-              );
-              if (serverError.current === 'ok') {
-                navigate('/login');
-              } else {
-                toast.update(toastID, {
-                  render: 'Password not changed',
-                  type: 'error',
-                  hideProgressBar: true,
-                  isLoading: false,
-                  autoClose: 3000,
-                });
-              }
+              dispatch(
+                resetPassword(values.otp, email.current, values.password)
+              ).then((res) => {
+                serverError.current = res;
+                if (res === 'ok') {
+                  navigate('/login');
+                } else {
+                  toast.update(toastID, {
+                    render: 'Password not changed',
+                    type: 'error',
+                    hideProgressBar: true,
+                    isLoading: false,
+                    autoClose: 3000,
+                  });
+                }
+              });
             }}
           >
             {() => (

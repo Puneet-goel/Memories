@@ -38,7 +38,7 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const user = useSelector((state) => state.profile);
 
-  const userMemories = useSelector((state) =>
+  const userPost = useSelector((state) =>
     state.posts.reduce(
       (prevCnt, post) => (prevCnt += post.creator === user.username),
       0
@@ -279,11 +279,11 @@ const NavBar = ({ searchText, setSearchText, disableSearch }) => {
                 <VoiceChatIcon fontSize="large" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Your Memories" placement="bottom">
-              <IconButton edge="end" aria-label="Your memories" color="inherit">
+            <Tooltip title="Your Post" placement="bottom">
+              <IconButton edge="end" aria-label="Your Post" color="inherit">
                 <Badge
                   overlap="rectangular"
-                  badgeContent={userMemories}
+                  badgeContent={userPost}
                   color="secondary"
                   showZero
                 >

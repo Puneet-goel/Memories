@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { LinearProgress, Typography } from '@material-ui/core';
-import memoriesText from '../../assets/photos/memoriesText.png';
+import Text from '../../assets/photos/Text.png';
 import { authenticate } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -75,7 +75,7 @@ const AuthenticationLoading = ({ failure }) => {
 
   return (
     <div className={`${classes.mainLine} background`}>
-      <img src={memoriesText} alt="icon" width="100%" />
+      <img src={Text} alt="icon" width="100%" />
       <br />
       <BorderLinearProgress variant="determinate" value={progress} />
       <br />

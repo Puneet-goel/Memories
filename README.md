@@ -1,4 +1,4 @@
-# Memories 
+# Social Media Application 
 A Responsive MERN app that allows the users to view, create, edit or delete posts related to their best moments in life.
 
 <!-- Deployed Links -->
@@ -8,7 +8,7 @@ https://memories-puneet.netlify.app
 
 (Render) Backend Link:
 <br />
-https://memories-backend-jqpk.onrender.com
+https://social-media-ctxa.onrender.com
 
 <!--  Features -->
 # Features

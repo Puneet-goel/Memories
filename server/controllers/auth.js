@@ -2,47 +2,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import User from '../models/user.js';
-import { google } from 'googleapis';
 import { totp } from 'otplib';
 
 totp.options = { step: 300 };
-
-const createTransporter = async () => {
-  const OAuth2 = google.auth.OAuth2;
-
-  const oauth2Client = new OAuth2(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
-    'https://developers.google.com/oauthplayground',
-  );
-
-  oauth2Client.setCredentials({
-    refresh_token: process.env.REFRESH_TOKEN,
-  });
-
-  const accessToken = await new Promise((resolve, reject) => {
-    oauth2Client.getAccessToken((err, token) => {
-      if (err) {
-        reject('Failed to create access token :(');
-      }
-      resolve(token);
-    });
-  });
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      type: 'OAuth2',
-      user: process.env.EMAIL,
-      accessToken,
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      refreshToken: process.env.REFRESH_TOKEN,
-    },
-  });
-
-  return transporter;
-};
 
 export const login = async (req, res) => {
   try {
@@ -137,13 +99,7 @@ export const forgot = async (req, res) => {
       return res.json({ message: 'Invalid Email' });
     }
 
-    const sendEmail = async (emailOptions) => {
-      let emailTransporter = await createTransporter();
-      await emailTransporter.sendMail(emailOptions);
-    };
-
     const token = totp.generate(process.env.OTP_SECRET);
-
     const html = `
       <h3>Hello ${user.username}, </h3>
       <p>We have received a request for password reset for your account. Here, is the six-digit OTP to continue.</p>
@@ -155,13 +111,21 @@ export const forgot = async (req, res) => {
     `;
 
     const mailDetails = {
-      from: `Memories ${process.env.EMAIL}`,
+      from: `"Security Alert" ${process.env.EMAIL}`,
       to: email,
       subject: 'Password Change',
       html: html,
     };
 
-    await sendEmail(mailDetails);
+    const emailTransporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.APP_PASSWORD,
+      },
+    });
+
+    await emailTransporter.sendMail(mailDetails);
     return res.status(200).json({ message: 'ok' });
   } catch (err) {
     return res.status(500).json({ message: err.message });

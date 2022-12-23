@@ -66,7 +66,7 @@ const App = () => {
             isUserValid ? (
               <HomeWithSuspense />
             ) : (
-              <AuthenticationLoadingWithSuspense failure="/login" />
+              <AuthenticationLoadingWithSuspense failure="/signup" />
             )
           }
         />

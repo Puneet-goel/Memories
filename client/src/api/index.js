@@ -47,6 +47,23 @@ export const likePost = (id, token) =>
     }
   );
 
+export const addComment = (postId, newComment, token) =>
+  axios.patch(`${postUrl}/${postId}/comment/`, newComment, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+export const deleteComment = (postId, commentId, token) =>
+  axios.delete(`${postUrl}/${postId}/comment/`, {
+    data: {
+      id: commentId,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
 export const loginUser = (user) => axios.post(authUrl + '/login/', user);
 
 export const signupUser = (user) => axios.post(authUrl + '/signup/', user);
